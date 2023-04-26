@@ -1,24 +1,26 @@
-import React from 'react';
-import './App.css';
+import { useSelector } from 'react-redux';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          This is admin page
-        </a>
-      </header>
-    </div>
-  );
-}
+import { ThemeProvider } from '@mui/material/styles';
+import { CssBaseline, StyledEngineProvider } from '@mui/material';
+import themes from './themes/Theme';
+import NavigationScroll from './layout/NavigationScroll';
+
+
+// ==============================|| APP ||============================== //
+
+const App = () => {
+    const customization = useSelector((state: any) => state.customization);
+
+    return (
+        <StyledEngineProvider injectFirst>
+            {/* <ThemeProvider theme={themes(customization)}> */}
+                <CssBaseline />
+                <NavigationScroll>
+                    Hello
+                </NavigationScroll>
+            {/* </ThemeProvider> */}
+        </StyledEngineProvider>
+    );
+};
 
 export default App;
