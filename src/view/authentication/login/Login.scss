@@ -1,8 +1,12 @@
+$body-bg: #f5fffb;
+$body-font: Arial, sans-serif;
+$body-size: 16px;
+
 .body {
     margin: 0;
     width: 100vw;
     height: 100vh;
-    background: #f5fffb;
+    background: $body-bg;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -40,14 +44,14 @@
     padding: 30px 35px;
     background-image: linear-gradient(#ebebf9, rgb(245, 253, 255));
     border-radius: 20px;
-    box-shadow: 0px 0px 20px #00000056;
+    box-shadow: 0 0 20px #00000056;
     z-index: 1;
-}
 
-.card-login h1 {
-    color: #000000;
-    font-weight: 800;
-    margin: 0;
+    h1 {
+        color: #000000;
+        font-weight: 800;
+        margin: 0;
+    }
 }
 
 .chart {
@@ -61,7 +65,12 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    margin: 10px 0px;
+    margin: 10px 0;
+
+    label {
+        color: #000000de;
+        margin-bottom: 10px;
+    }
 }
 
 .form-field {
@@ -72,14 +81,13 @@
     background-color: #ffffff;
     color: #000000de;
     font-size: 12pt;
-    box-shadow: 0px 0px 10px #00000056;
+    box-shadow: 0 0 10px #00000056;
     box-sizing: border-box;
     outline: none;
-}
 
-.form-group label {
-    color: #000000de;
-    margin-bottom: 10px;
+    &::placeholder {
+        color: #f0ffff94;
+    }
 }
 
 .form-error {
@@ -88,13 +96,9 @@
     font-size: 0.8em;
 }
 
-.form-field ::placeholder {
-    color: #f0ffff94;
-}
-
 .button {
     width: 100%;
-    padding: 16px 0px;
+    padding: 16px 0;
     border: none;
     border-radius: 6px;
     outline: none;
@@ -148,7 +152,6 @@
     top: -100px;
     z-index: 0;
 }
-
 .right-login .center1 {
     background: #a2d9f9;
     width: 100px;

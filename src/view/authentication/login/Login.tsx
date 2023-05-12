@@ -80,7 +80,7 @@ function Login() {
             <div>Đăng nhập</div>
           </button>
           <div className="register">
-            Nếu chưa có tài khoản, hãy {<Link to="/register">Đăng ký</Link>} tại
+            Nếu chưa có tài khoản, hãy {<Link to="/auth/register">Đăng ký</Link>} tại
             đây
           </div>
         </div>
