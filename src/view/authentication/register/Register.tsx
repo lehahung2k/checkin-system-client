@@ -17,6 +17,7 @@ import './Register.scss'
 interface RegisterFormValues {
     username: string;
     password: string;
+    confirmPass: string;
     fullName: string;
     active: number;
     role: string;
@@ -35,6 +36,7 @@ function Register() {
     const initialValues: RegisterFormValues = {
         username: "",
         password: "",
+        confirmPass: "",
         fullName: "",
         active: 0,
         role: "poc",
@@ -47,6 +49,7 @@ function Register() {
     const validationSchema = Yup.object().shape({
         username: Yup.string().required(),
         password: Yup.string().required(),
+        confirmPass: Yup.string().required(),
         tenantCode: Yup.string().required(),
     });
 
@@ -61,7 +64,7 @@ function Register() {
         <div className="body">
             <div className="right-login">
                 <div className="card-login">
-                    <h1>REGISTER</h1>
+                    <h1>ĐĂNG KÝ</h1>
                     <Formik
                         initialValues={initialValues}
                         onSubmit={onSubmit}
@@ -82,8 +85,8 @@ function Register() {
                                     className="errorMsg"
                                     render={(msg) => (
                                         <span className="errorMsg">
-                      Tên đăng nhập không được để trống
-                    </span>
+                                            Tên đăng nhập không được để trống
+                                        </span>
                                     )}
                                 />
                             </div>
@@ -103,8 +106,29 @@ function Register() {
                                     className="errorMsg"
                                     render={(msg) => (
                                         <span className="errorMsg">
-                      Mật khẩu không được để trống
-                    </span>
+                                            Mật khẩu không được để trống
+                                        </span>
+                                    )}
+                                ></ErrorMessage>
+                            </div>
+
+                            <div className="form-group">
+                                <Field
+                                    autoComplete="off"
+                                    type="password"
+                                    id="inputCreatePost"
+                                    name="confirmPass"
+                                    className="form-field"
+                                    placeholder="Nhập lại mật khẩu"
+                                />
+                                <ErrorMessage
+                                    name="confirmPass"
+                                    component="span"
+                                    className="errorMsg"
+                                    render={(msg) => (
+                                        <span className="errorMsg">
+                                            Mật khẩu không khớp
+                                        </span>
                                     )}
                                 ></ErrorMessage>
                             </div>
@@ -183,8 +207,8 @@ function Register() {
                                     className="errorMsg"
                                     render={(msg) => (
                                         <span className="errorMsg">
-                      Mã ban tổ chức không được để trống
-                    </span>
+                                            Mã ban tổ chức không được để trống
+                                        </span>
                                     )}
                                 />
                             </div>
@@ -214,7 +238,7 @@ function Register() {
                 open={openSuccess}
                 onClose={() => {
                     setOpenSuccess(false);
-                    navigate("/login");
+                    navigate("auth/login");
                 }}
                 aria-labelledby="responsive-dialog-title"
                 maxWidth="sm"
@@ -248,7 +272,7 @@ function Register() {
             >
                 <DialogContent>
                     <DialogContentText>
-                        Đã đăng ký tài khoản không thành công, xin hãy thử lại
+                        Đăng ký tài khoản không thành công, xin hãy thử lại
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

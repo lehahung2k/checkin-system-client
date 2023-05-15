@@ -3,19 +3,21 @@ import { Link } from "react-router-dom";
 import Img from "../../../assets/images/Frame-1729.webp";
 import './Login.scss'
 // import authApi from "../../../api/AuthApi";
-// import axios from "axios";
-// import { FakeAccount } from "../../../assets/fakeData/fakeAccount";
 
-function Login() {
+const Login = () => {
   const [username, setUsername] = useState<string>("");
-  const [passwd, setPasswd] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [formErrors, setFormErrors] = useState({ username: "", password: "" });
 
 //   const navigate = useNavigate();
 
-  const login = () => {    
-    const data = { username: username, password: passwd };
-    console.log(data);
-    
+  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {    
+    event.preventDefault();
+    if (validateForm()) {
+      const data = { username: username, password: password };
+      console.log(data);
+      // Handle login request
+    }
     // authApi
     //   .loginApi(data)
     //   .then((response) => {
@@ -44,16 +46,37 @@ function Login() {
     //     alert(error.message);
     //   });
   };
+
+  const validateForm = () => {
+    let errors = { username: "", password: "" };
+    let formIsValid = true;
+
+    // Validate username
+    if (!username) {
+      formIsValid = false;
+      errors.username = "Vui lòng nhập tên đăng nhập";
+    }
+
+    // Validate password
+    if (!password) {
+      formIsValid = false;
+      errors.password = "Vui lòng nhập mật khẩu";
+    }
+
+    setFormErrors(errors);
+    return formIsValid;
+  };
+
   return (
     <div className="body">
       <div className="left-login">
-        <h1 className="chart">EVENT CHECK-IN MANAGEMENT</h1>
+        <h1 className="pageName">EVENT CHECK-IN MANAGEMENT</h1>
         <img src={Img} alt="Logo web" className="chart" />
         <div className="center"></div>
       </div>
-      <div className="right-login">
+      <form className="right-login" onSubmit={handleLogin}>
         <div className="card-login">
-          <h1>Đăng nhập</h1>
+          <h1>ĐĂNG NHẬP</h1>
 
           <div className="form-group">
             <input
@@ -64,6 +87,9 @@ function Login() {
                 setUsername(event.target.value);
               }}
             />
+            {formErrors.username && (
+              <div className="invalid-feedback">{formErrors.username}</div>
+            )}
           </div>
 
           <div className="form-group">
@@ -72,12 +98,15 @@ function Login() {
               type="password"
               placeholder="Mật khẩu"
               onChange={(event) => {
-                setPasswd(event.target.value);
+                setPassword(event.target.value);
               }}
             />
+            {formErrors.password && (
+              <div className="invalid-feedback">{formErrors.password}</div>
+            )}
           </div>
-          <button className="button" onClick={login}>
-            <div>Đăng nhập</div>
+          <button className="button">
+            <div>ĐĂNG NHẬP</div>
           </button>
           <div className="register">
             Nếu chưa có tài khoản, hãy {<Link to="/auth/register">Đăng ký</Link>} tại
@@ -85,7 +114,7 @@ function Login() {
           </div>
         </div>
         <div className="center1"></div>
-      </div>
+      </form>
     </div>
   );
 }
