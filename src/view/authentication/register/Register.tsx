@@ -209,8 +209,8 @@ function Register() {
                                     className="form-field"
                                 >
                                     <option value="" disabled>Bạn là: </option>
-                                    <option value="admin">Đối tác</option>
-                                    <option value="user">Quản lý gian hàng</option>
+                                    <option value="tenant">Đối tác</option>
+                                    <option value="poc">Quản lý gian hàng</option>
                                 </Field>
                                 <ErrorMessage
                                     name="role"
