@@ -1,5 +1,4 @@
 $body-bg: #f5fffb;
-$body-font: Arial, sans-serif;
 $body-size: 16px;
 
 .body {
@@ -21,10 +20,13 @@ $body-size: 16px;
     flex-direction: column;
 }
 
-.left-login h1 {
+.pageName {
     color: #000000;
-    font-weight: bold;
+    font-weight: bolder;
     font-size: xx-large;
+    margin: 0;
+    padding-left: 0;
+    z-index: 1;
 }
 
 .right-login {
@@ -49,8 +51,9 @@ $body-size: 16px;
 
     h1 {
         color: #000000;
-        font-weight: 800;
+        font-weight: bold;
         margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
     }
 }
 
@@ -85,7 +88,7 @@ $body-size: 16px;
     box-sizing: border-box;
     outline: none;
 
-    &::placeholder {
+    ::placeholder {
         color: #f0ffff94;
     }
 }
@@ -103,7 +106,7 @@ $body-size: 16px;
     border-radius: 6px;
     outline: none;
     text-transform: uppercase;
-    font-weight: 900;
+    font-weight: bolder;
     letter-spacing: 3px;
     cursor: pointer;
     margin-top: 15px;
@@ -162,4 +165,10 @@ $body-size: 16px;
     z-index: 0;
     top: 100px;
     right: 100px;
+}
+
+.invalid-feedback {
+    padding: 0.5rem;
+    color:#c62828;
+    font-size: small;
 }
