@@ -66,6 +66,17 @@
           }
         }
 
+        select.form-field {
+          appearance: none; /* Remove default appearance */
+          background-position: right 15px center; /* Adjust arrow position */
+          background-size: 12px; /* Adjust arrow size */
+          padding-right: 30px; /* Make space for the arrow */
+
+          option[disabled] {
+            color: #999999; // Add a different color for the placeholder option
+          }
+        }
+
         .form-error {
           display: block;
           color: #fff;
@@ -138,7 +149,7 @@
   z-index: 0;
 }
 
-.center1 {
+.center-1 {
   background: #A2D9F9;
   width: 500px;
   height: 500px;
