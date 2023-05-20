@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import './Register.scss'
+import authApi from "../../../api/authApi";
 
 interface RegisterFormValues {
     username: string;
@@ -20,11 +21,11 @@ interface RegisterFormValues {
     confirmPass: string;
     fullName: string;
     active: number;
-    role: string;
     companyName: string;
     phoneNumber: string;
     email: string;
     tenantCode: string;
+    role: string;
 }
 
 function Register() {
@@ -38,25 +39,32 @@ function Register() {
         password: "",
         confirmPass: "",
         fullName: "",
-        active: 0,
-        role: "poc",
+        active: 1,
         companyName: "",
         phoneNumber: "",
         email: "",
         tenantCode: "",
+        role: "",
     };
 
     const validationSchema = Yup.object().shape({
-        username: Yup.string().required(),
-        password: Yup.string().required(),
-        confirmPass: Yup.string().required(),
-        tenantCode: Yup.string().required(),
+        username: Yup.string().required("Tên đăng nhập không được để trống"),
+        password: Yup.string().required("Mật khẩu không được để trống"),
+        confirmPass: Yup.string().required("Nhập lại chính xác mật khẩu"),
+        tenantCode: Yup.string().required("Mã ban tổ chức không được để trống"),
+        role: Yup.string().required("Role không được để trống")
     });
 
-    const onSubmit = (data: RegisterFormValues) => {
+    const handleRegister = (data: RegisterFormValues) => {
         console.log(data);
         setLoading(true);
-        console.log('Register work!')
+        authApi
+            .registerApi(data)
+            .then((res) => {
+                setLoading(false);
+                setOpenSuccess(true);
+                console.log(res.data.message);
+            })
     };
 
     // @ts-ignore
@@ -67,7 +75,7 @@ function Register() {
                     <h1>ĐĂNG KÝ</h1>
                     <Formik
                         initialValues={initialValues}
-                        onSubmit={onSubmit}
+                        onSubmit={handleRegister}
                         validationSchema={validationSchema}
                     >
                         <Form className="login-form">
@@ -83,11 +91,6 @@ function Register() {
                                     name="username"
                                     component="span"
                                     className="errorMsg"
-                                    render={(msg) => (
-                                        <span className="errorMsg">
-                                            Tên đăng nhập không được để trống
-                                        </span>
-                                    )}
                                 />
                             </div>
 
@@ -104,11 +107,6 @@ function Register() {
                                     name="password"
                                     component="span"
                                     className="errorMsg"
-                                    render={(msg) => (
-                                        <span className="errorMsg">
-                                            Mật khẩu không được để trống
-                                        </span>
-                                    )}
                                 ></ErrorMessage>
                             </div>
 
@@ -125,11 +123,6 @@ function Register() {
                                     name="confirmPass"
                                     component="span"
                                     className="errorMsg"
-                                    render={(msg) => (
-                                        <span className="errorMsg">
-                                            Mật khẩu không khớp
-                                        </span>
-                                    )}
                                 ></ErrorMessage>
                             </div>
 
@@ -205,11 +198,24 @@ function Register() {
                                     name="tenantCode"
                                     component="span"
                                     className="errorMsg"
-                                    render={(msg) => (
-                                        <span className="errorMsg">
-                                            Mã ban tổ chức không được để trống
-                                        </span>
-                                    )}
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <Field
+                                    as="select"
+                                    id="inputCreatePost"
+                                    name="role"
+                                    className="form-field"
+                                >
+                                    <option value="" disabled>Bạn là: </option>
+                                    <option value="admin">Đối tác</option>
+                                    <option value="user">Quản lý gian hàng</option>
+                                </Field>
+                                <ErrorMessage
+                                    name="role"
+                                    component="span"
+                                    className="errorMsg"
                                 />
                             </div>
 
@@ -224,7 +230,7 @@ function Register() {
                     </Formik>
                 </div>
                 <div className="center"></div>
-                <div className="center1"></div>
+                <div className="center-1"></div>
                 <div className="center2"></div>
             </div>
             <Backdrop
@@ -253,7 +259,7 @@ function Register() {
                     <Button
                         onClick={() => {
                             setOpenSuccess(false);
-                            navigate("/login");
+                            navigate("auth/login");
                         }}
                         autoFocus
                     >
