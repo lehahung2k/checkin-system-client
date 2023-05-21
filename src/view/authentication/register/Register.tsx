@@ -65,6 +65,10 @@ function Register() {
                 setOpenSuccess(true);
                 console.log(res.data.message);
             })
+            .catch((e) => {
+                alert(e.message);
+                setOpenFailure(true);
+            })
     };
 
     // @ts-ignore
@@ -162,7 +166,7 @@ function Register() {
                                     id="inputCreatePost"
                                     name="email"
                                     className="form-field"
-                                    placeholder="Mail"
+                                    placeholder="Email"
                                 />
                                 <ErrorMessage
                                     name="email"
@@ -244,7 +248,7 @@ function Register() {
                 open={openSuccess}
                 onClose={() => {
                     setOpenSuccess(false);
-                    navigate("auth/login");
+                    navigate("");
                 }}
                 aria-labelledby="responsive-dialog-title"
                 maxWidth="sm"
@@ -285,6 +289,7 @@ function Register() {
                     <Button
                         onClick={() => {
                             setOpenFailure(false);
+                            setLoading(false);
                         }}
                         autoFocus
                     >

@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Img from "../../../assets/images/Frame-1729.webp";
 import './Login.scss'
 import authApi from "../../../api/authApi";
@@ -9,7 +9,7 @@ const Login = () => {
     const [password, setPassword] = useState<string>("");
     const [formErrors, setFormErrors] = useState({username: "", password: ""});
 
-//   const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -19,11 +19,13 @@ const Login = () => {
             authApi
                 .loginApi(data)
                 .then((res) => {
-                    if (res.data.error)
-                        return alert("Mật khẩu hoặc tên đăng nhập không đúng");
+                    sessionStorage.setItem('accessToken', res.data.token);
+                    sessionStorage.setItem('role', res.data.role);
+                    sessionStorage.setItem('name', res.data.fullName);
+                    navigate('/');
                 })
                 .catch((e) => {
-                    alert(e.message)
+                    alert(e.response.data.message);
                 })
         }
         // authApi
