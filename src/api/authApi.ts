@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
-const baseUrl = 'localhost:1103/api/auth';
+const baseUrl = `${process.env.REACT_APP_BASE_URL}/auth`;
 
 interface LoginData {
     username: string;
@@ -21,12 +21,12 @@ interface RegisterData {
 
 class AuthApi {
     loginApi = (data: LoginData): Promise<AxiosResponse> => {
-        const loginUrl = baseUrl + "/login";
+        const loginUrl = `${baseUrl}/login`;
         return axios.post(loginUrl, data);
     };
 
     registerApi = (data: RegisterData): Promise<AxiosResponse> => {
-        const registerUrl = baseUrl + "/register";
+        const registerUrl = `${baseUrl}/register`;
         return axios.post(registerUrl, data);
     };
 
