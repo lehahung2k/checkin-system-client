@@ -25,7 +25,8 @@ const Login = () => {
                     navigate('/');
                 })
                 .catch((e) => {
-                    alert(e.response.data.message);
+                    if (e.response === undefined) alert('Network error');
+                    else alert(e.response.data.message);
                 })
         }
         // authApi
