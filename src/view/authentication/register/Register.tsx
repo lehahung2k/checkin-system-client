@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import React, {useState} from "react";
+import {Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {
     Backdrop,
     CircularProgress,
@@ -11,7 +11,7 @@ import {
     DialogActions,
     Button
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import './Register.scss'
 import authApi from "../../../api/authApi";
 
@@ -66,12 +66,12 @@ function Register() {
                 console.log(res.data.message);
             })
             .catch((e) => {
-                alert(e.message);
+                if (e.response === undefined) alert('Network error')
+                else alert(e.response.data.message);
                 setOpenFailure(true);
             })
     };
 
-    // @ts-ignore
     return (
         <div className="body">
             <div className="right-login">
@@ -192,6 +192,24 @@ function Register() {
 
                             <div className="form-group">
                                 <Field
+                                    as="select"
+                                    id="inputCreatePost"
+                                    name="role"
+                                    className="form-field"
+                                >
+                                    <option value="" disabled>Bạn là:</option>
+                                    <option value="tenant">Đối tác</option>
+                                    <option value="poc">Quản lý gian hàng</option>
+                                </Field>
+                                <ErrorMessage
+                                    name="role"
+                                    component="span"
+                                    className="errorMsg"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <Field
                                     autoComplete="off"
                                     id="inputCreatePost"
                                     name="tenantCode"
@@ -200,24 +218,6 @@ function Register() {
                                 />
                                 <ErrorMessage
                                     name="tenantCode"
-                                    component="span"
-                                    className="errorMsg"
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <Field
-                                    as="select"
-                                    id="inputCreatePost"
-                                    name="role"
-                                    className="form-field"
-                                >
-                                    <option value="" disabled>Bạn là: </option>
-                                    <option value="tenant">Đối tác</option>
-                                    <option value="poc">Quản lý gian hàng</option>
-                                </Field>
-                                <ErrorMessage
-                                    name="role"
                                     component="span"
                                     className="errorMsg"
                                 />
@@ -238,10 +238,10 @@ function Register() {
                 <div className="center2"></div>
             </div>
             <Backdrop
-                sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                sx={{color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1}}
                 open={loading}
             >
-                <CircularProgress color="inherit" />
+                <CircularProgress color="inherit"/>
             </Backdrop>
 
             <Dialog
@@ -255,8 +255,7 @@ function Register() {
             >
                 <DialogContent>
                     <DialogContentText>
-                        Đã đăng ký tài khoản thành công, xin liên hệ với ban tổ chức để kích
-                        hoạt tài khoản
+                        Đã đăng ký tài khoản thành công!
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
