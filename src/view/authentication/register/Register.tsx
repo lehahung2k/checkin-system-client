@@ -24,14 +24,15 @@ interface RegisterFormValues {
     companyName: string;
     phoneNumber: string;
     email: string;
-    tenantCode: string;
     role: string;
+    tenantCode: string;
 }
 
 function Register() {
     const [openSuccess, setOpenSuccess] = useState(false);
     const [openFailure, setOpenFailure] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [isPoc, setIsPoc] = useState(false);
     const navigate = useNavigate();
 
     const initialValues: RegisterFormValues = {
@@ -43,16 +44,15 @@ function Register() {
         companyName: "",
         phoneNumber: "",
         email: "",
-        tenantCode: "",
         role: "",
+        tenantCode: "",
     };
 
     const validationSchema = Yup.object().shape({
         username: Yup.string().required("Tên đăng nhập không được để trống"),
         password: Yup.string().required("Mật khẩu không được để trống"),
         confirmPass: Yup.string().required("Nhập lại chính xác mật khẩu"),
-        tenantCode: Yup.string().required("Mã ban tổ chức không được để trống"),
-        role: Yup.string().required("Role không được để trống")
+        role: Yup.string().required("Role không được để trống"),
     });
 
     const handleRegister = (data: RegisterFormValues) => {
@@ -82,155 +82,164 @@ function Register() {
                         onSubmit={handleRegister}
                         validationSchema={validationSchema}
                     >
-                        <Form className="login-form">
-                            <div className="form-group">
-                                <Field
-                                    autoComplete="off"
-                                    id="inputCreatePost"
-                                    name="username"
-                                    className="form-field"
-                                    placeholder="Tên đăng nhập"
-                                />
-                                <ErrorMessage
-                                    name="username"
-                                    component="span"
-                                    className="errorMsg"
-                                />
-                            </div>
+                        {({setFieldValue}) => (
+                            <Form className="login-form">
+                                <div className="form-group">
+                                    <Field
+                                        autoComplete="off"
+                                        id="inputCreatePost"
+                                        name="username"
+                                        className="form-field"
+                                        placeholder="Tên đăng nhập"
+                                    />
+                                    <ErrorMessage
+                                        name="username"
+                                        component="span"
+                                        className="errorMsg"
+                                    />
+                                </div>
 
-                            <div className="form-group">
-                                <Field
-                                    autoComplete="off"
-                                    type="password"
-                                    id="inputCreatePost"
-                                    name="password"
-                                    className="form-field"
-                                    placeholder="Mật khẩu"
-                                />
-                                <ErrorMessage
-                                    name="password"
-                                    component="span"
-                                    className="errorMsg"
-                                ></ErrorMessage>
-                            </div>
+                                <div className="form-group">
+                                    <Field
+                                        autoComplete="off"
+                                        type="password"
+                                        id="inputCreatePost"
+                                        name="password"
+                                        className="form-field"
+                                        placeholder="Mật khẩu"
+                                    />
+                                    <ErrorMessage
+                                        name="password"
+                                        component="span"
+                                        className="errorMsg"
+                                    ></ErrorMessage>
+                                </div>
 
-                            <div className="form-group">
-                                <Field
-                                    autoComplete="off"
-                                    type="password"
-                                    id="inputCreatePost"
-                                    name="confirmPass"
-                                    className="form-field"
-                                    placeholder="Nhập lại mật khẩu"
-                                />
-                                <ErrorMessage
-                                    name="confirmPass"
-                                    component="span"
-                                    className="errorMsg"
-                                ></ErrorMessage>
-                            </div>
+                                <div className="form-group">
+                                    <Field
+                                        autoComplete="off"
+                                        type="password"
+                                        id="inputCreatePost"
+                                        name="confirmPass"
+                                        className="form-field"
+                                        placeholder="Nhập lại mật khẩu"
+                                    />
+                                    <ErrorMessage
+                                        name="confirmPass"
+                                        component="span"
+                                        className="errorMsg"
+                                    ></ErrorMessage>
+                                </div>
 
-                            <div className="form-group">
-                                <Field
-                                    autoComplete="off"
-                                    id="inputCreatePost"
-                                    name="fullName"
-                                    className="form-field"
-                                    placeholder="Họ và tên"
-                                />
-                                <ErrorMessage
-                                    name="fullName"
-                                    component="span"
-                                    className="errorMsg"
-                                />
-                            </div>
+                                <div className="form-group">
+                                    <Field
+                                        autoComplete="off"
+                                        id="inputCreatePost"
+                                        name="fullName"
+                                        className="form-field"
+                                        placeholder="Họ và tên"
+                                    />
+                                    <ErrorMessage
+                                        name="fullName"
+                                        component="span"
+                                        className="errorMsg"
+                                    />
+                                </div>
 
-                            <div className="form-group">
-                                <Field
-                                    autoComplete="off"
-                                    id="inputCreatePost"
-                                    name="phoneNumber"
-                                    className="form-field"
-                                    placeholder="Số điện thoại"
-                                />
-                                <ErrorMessage
-                                    name="phoneNumber"
-                                    component="span"
-                                    className="errorMsg"
-                                />
-                            </div>
+                                <div className="form-group">
+                                    <Field
+                                        autoComplete="off"
+                                        id="inputCreatePost"
+                                        name="phoneNumber"
+                                        className="form-field"
+                                        placeholder="Số điện thoại"
+                                    />
+                                    <ErrorMessage
+                                        name="phoneNumber"
+                                        component="span"
+                                        className="errorMsg"
+                                    />
+                                </div>
 
-                            <div className="form-group">
-                                <Field
-                                    autoComplete="off"
-                                    id="inputCreatePost"
-                                    name="email"
-                                    className="form-field"
-                                    placeholder="Email"
-                                />
-                                <ErrorMessage
-                                    name="email"
-                                    component="span"
-                                    className="errorMsg"
-                                />
-                            </div>
+                                <div className="form-group">
+                                    <Field
+                                        autoComplete="off"
+                                        id="inputCreatePost"
+                                        name="email"
+                                        className="form-field"
+                                        placeholder="Email"
+                                    />
+                                    <ErrorMessage
+                                        name="email"
+                                        component="span"
+                                        className="errorMsg"
+                                    />
+                                </div>
 
-                            <div className="form-group">
-                                <Field
-                                    autoComplete="off"
-                                    id="inputCreatePost"
-                                    name="companyName"
-                                    className="form-field"
-                                    placeholder="Tên công ty"
-                                />
-                                <ErrorMessage
-                                    name="companyName"
-                                    component="span"
-                                    className="errorMsg"
-                                />
-                            </div>
+                                <div className="form-group">
+                                    <Field
+                                        autoComplete="off"
+                                        id="inputCreatePost"
+                                        name="companyName"
+                                        className="form-field"
+                                        placeholder="Tên công ty"
+                                    />
+                                    <ErrorMessage
+                                        name="companyName"
+                                        component="span"
+                                        className="errorMsg"
+                                    />
+                                </div>
 
-                            <div className="form-group">
-                                <Field
-                                    as="select"
-                                    id="inputCreatePost"
-                                    name="role"
-                                    className="form-field"
-                                >
-                                    <option value="" disabled>Bạn là:</option>
-                                    <option value="tenant">Đối tác</option>
-                                    <option value="poc">Quản lý gian hàng</option>
-                                </Field>
-                                <ErrorMessage
-                                    name="role"
-                                    component="span"
-                                    className="errorMsg"
-                                />
-                            </div>
+                                <div className="form-group">
+                                    <Field
+                                        as="select"
+                                        id="inputCreatePost"
+                                        name="role"
+                                        className="form-field"
+                                        onChange={(e: { target: { value: any; }; }) => {
+                                            const selectedRole = e.target.value;
+                                            setFieldValue("role", selectedRole);
+                                            if (selectedRole === 'poc') setIsPoc(true);
+                                            else setIsPoc(false);
+                                        }}
+                                    >
+                                        <option value="" disabled>Bạn là:</option>
+                                        <option value="tenant">Đối tác</option>
+                                        <option value="poc">Quản lý gian hàng</option>
+                                    </Field>
+                                    <ErrorMessage
+                                        name="role"
+                                        component="span"
+                                        className="errorMsg"
+                                    />
+                                </div>
+                                {isPoc && (
+                                    <div className="form-group">
+                                        <Field
+                                            autoComplete="off"
+                                            id="inputCreatePost"
+                                            name="tenantCode"
+                                            className="form-field"
+                                            placeholder="Mã ban tổ chức"
+                                        />
+                                        <ErrorMessage
+                                            name="tenantCode"
+                                            component="span"
+                                            className="errorMsg"
+                                        />
+                                    </div>
+                                )}
 
-                            <div className="form-group">
-                                <Field
-                                    autoComplete="off"
-                                    id="inputCreatePost"
-                                    name="tenantCode"
-                                    className="form-field"
-                                    placeholder="Mã ban tổ chức"
-                                />
-                                <ErrorMessage
-                                    name="tenantCode"
-                                    component="span"
-                                    className="errorMsg"
-                                />
-                            </div>
-
-                            <button className="button" type="submit">
-                                Đăng ký
-                            </button>
-                            <div className="register">
-                                Nếu đã có tài khoản, hãy {<Link to="/auth/login">Đăng nhập</Link>}{" "}
-                                tại đây
-                            </div>
-                        </Form>
+                                <button className="button" type="submit">
+                                    Đăng ký
+                                </button>
+                                <div className="register">
+                                    Nếu đã có tài khoản, hãy {<Link to="/auth/login">Đăng nhập</Link>}{" "}
+                                    tại đây
+                                </div>
+                            </Form>
+                        )}
                     </Formik>
                 </div>
                 <div className="center"></div>
