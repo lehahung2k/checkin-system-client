@@ -1,13 +1,19 @@
-import React, {useState} from "react";
+import React, {createContext, useContext, useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import Img from "../../../assets/images/Frame-1729.webp";
 import './Login.scss'
 import authApi from "../../../api/authApi";
 
+const AccessTokenContext = createContext<string | null>(null);
+
+const useAccessToken = () => useContext(AccessTokenContext);
+
+
 const Login = () => {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [formErrors, setFormErrors] = useState({username: "", password: ""});
+    const [accessToken, setAccessToken] = useState<string | null>(null);
 
     const navigate = useNavigate();
 
@@ -19,9 +25,8 @@ const Login = () => {
             authApi
                 .loginApi(data)
                 .then((res) => {
-                    sessionStorage.setItem('accessToken', res.data.token);
-                    sessionStorage.setItem('role', res.data.role);
-                    sessionStorage.setItem('name', res.data.fullName);
+                    const { accessToken, user } = res.data;
+                    setAccessToken(accessToken);
                     navigate('/');
                 })
                 .catch((e) => {
@@ -57,6 +62,13 @@ const Login = () => {
         //     alert(error.message);
         //   });
     };
+
+    useEffect(() => {
+        // Do something with the access token when it changes, e.g., redirect the user to a logged-in page
+        if (accessToken) {
+            navigate('/');
+        }
+    }, [accessToken]);
 
     const validateForm = () => {
         let errors = {username: "", password: ""};
