@@ -2,6 +2,8 @@ import { createTheme, Theme } from '@mui/material/styles';
 import colors from '../assets/scss/themes-vars.module.scss';
 import themePalette from './palette';
 import componentStyleOverrides from './componentStyleOverride';
+import themeTypography from "./typography";
+import {JsonObject} from "type-fest";
 
 
 /**
@@ -9,39 +11,10 @@ import componentStyleOverrides from './componentStyleOverride';
  * @param {JsonObject} customization customization parameter object
  */
 
-interface ThemeOption {
-    colors: Record<string, string>;
-    heading: string;
-    paper: string;
-    backgroundDefault: string;
-    background: string;
-    darkTextPrimary: string;
-    darkTextSecondary: string;
-    textDark: string;
-    menuSelected: string;
-    menuSelectedBack: string;
-    divider: string;
-    customization: Record<string, any>;
-}
-
-interface ThemeOptions {
-    direction: 'ltr' | 'rtl';
-    palette: ReturnType<typeof themePalette>;
-    mixins: {
-        toolbar: {
-            minHeight: string;
-            padding: string;
-            '@media (min-width: 600px)': {
-                minHeight: string;
-            };
-        };
-    };
-}
-
-const theme = (customization: Record<string, any>): Theme => {
+export const theme = (customization: JsonObject): import('@mui/material/styles').Theme => {
     const color = colors;
 
-    const themeOption: ThemeOption = {
+    const themeOption = {
         colors: color,
         heading: color.grey900,
         paper: color.paper,
@@ -53,10 +26,10 @@ const theme = (customization: Record<string, any>): Theme => {
         menuSelected: color.secondaryDark,
         menuSelectedBack: color.secondaryLight,
         divider: color.grey200,
-        customization
+        customization,
     };
 
-    const themeOptions: ThemeOptions = {
+    const themeOptions: import('@mui/material/styles').ThemeOptions = {
         direction: 'ltr',
         palette: themePalette(themeOption),
         mixins: {
@@ -64,13 +37,14 @@ const theme = (customization: Record<string, any>): Theme => {
                 minHeight: '48px',
                 padding: '16px',
                 '@media (min-width: 600px)': {
-                    minHeight: '48px'
-                }
-            }
+                    minHeight: '48px',
+                },
+            },
         },
+        typography: themeTypography(themeOption),
     };
 
-    const themes: Theme = createTheme(themeOptions);
+    const themes = createTheme(themeOptions);
     themes.components = componentStyleOverrides(themeOption);
 
     return themes;
