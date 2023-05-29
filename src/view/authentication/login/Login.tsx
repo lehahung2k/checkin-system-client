@@ -1,13 +1,20 @@
-import React, {useState} from "react";
+import React, {createContext, useContext, useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
+import Cookies from 'js-cookie';
 import Img from "../../../assets/images/Frame-1729.webp";
 import './Login.scss'
 import authApi from "../../../api/authApi";
+
+const AccessTokenContext = createContext<string | null>(null);
+
+const useAccessToken = () => useContext(AccessTokenContext);
+
 
 const Login = () => {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [formErrors, setFormErrors] = useState({username: "", password: ""});
+    const [accessToken, setAccessToken] = useState<string | null>(null);
 
     const navigate = useNavigate();
 
@@ -15,48 +22,34 @@ const Login = () => {
         event.preventDefault();
         if (validateForm()) {
             const data = {username: username, password: password};
-            console.log(data);
             authApi
                 .loginApi(data)
                 .then((res) => {
-                    sessionStorage.setItem('accessToken', res.data.token);
-                    sessionStorage.setItem('role', res.data.role);
-                    sessionStorage.setItem('name', res.data.fullName);
-                    navigate('/');
+                    const { accessToken, user } = res.data.payload;
+                    setAccessToken(accessToken);
+                    // Save accessToken to cookie and other to storage
+                    Cookies.set('accessToken', accessToken);
+                    localStorage.setItem('fullName', user.fullName);
+                    switch (user.role) {
+                        case 'admin': return navigate('/admin');
+                        case 'tenant': return navigate('/tenant');
+                        case 'poc': return  navigate('/poc');
+                        default: return navigate('/');
+                    }
                 })
                 .catch((e) => {
                     if (e.response === undefined) alert('Network error');
                     else alert(e.response.data.message);
                 })
         }
-        // authApi
-        //   .loginApi(data)
-        //   .then((response) => {
-        //     if (response.data.error)
-        //       return alert("Mật khẩu hoặc tên đăng nhập không đúng");
-        //     sessionStorage.setItem("accessToken", response.data.accessToken);
-        //     sessionStorage.setItem("role", response.data.userRole);
-        //     console.log("Access token: " + response.data.accessToken);
-        //     console.log("User Role: " + response.data.userRole);
-        //     switch (response.data.userRole) {
-        //       case "admin": {
-        //         return navigate("/admin");
-        //       }
-        //       case "tenant": {
-        //         return navigate("/event-admin");
-        //       }
-        //       case "poc": {
-        //         return navigate("/poc");
-        //       }
-        //       default: {
-        //         return navigate("/");
-        //       }
-        //     }
-        //   })
-        //   .catch((error) => {
-        //     alert(error.message);
-        //   });
     };
+
+    useEffect(() => {
+        // Do something with the access token when it changes, e.g., redirect the user to a logged-in page
+        if (accessToken) {
+            navigate('/');
+        }
+    }, [accessToken]);
 
     const validateForm = () => {
         let errors = {username: "", password: ""};
