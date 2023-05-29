@@ -1,5 +1,6 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
+import Cookies from 'js-cookie';
 import Img from "../../../assets/images/Frame-1729.webp";
 import './Login.scss'
 import authApi from "../../../api/authApi";
@@ -21,46 +22,26 @@ const Login = () => {
         event.preventDefault();
         if (validateForm()) {
             const data = {username: username, password: password};
-            console.log(data);
             authApi
                 .loginApi(data)
                 .then((res) => {
-                    const { accessToken, user } = res.data;
+                    const { accessToken, user } = res.data.payload;
                     setAccessToken(accessToken);
-                    navigate('/');
+                    // Save accessToken to cookie and other to storage
+                    Cookies.set('accessToken', accessToken);
+                    localStorage.setItem('fullName', user.fullName);
+                    switch (user.role) {
+                        case 'admin': return navigate('/admin');
+                        case 'tenant': return navigate('/tenant');
+                        case 'poc': return  navigate('/poc');
+                        default: return navigate('/');
+                    }
                 })
                 .catch((e) => {
                     if (e.response === undefined) alert('Network error');
                     else alert(e.response.data.message);
                 })
         }
-        // authApi
-        //   .loginApi(data)
-        //   .then((response) => {
-        //     if (response.data.error)
-        //       return alert("Mật khẩu hoặc tên đăng nhập không đúng");
-        //     sessionStorage.setItem("accessToken", response.data.accessToken);
-        //     sessionStorage.setItem("role", response.data.userRole);
-        //     console.log("Access token: " + response.data.accessToken);
-        //     console.log("User Role: " + response.data.userRole);
-        //     switch (response.data.userRole) {
-        //       case "admin": {
-        //         return navigate("/admin");
-        //       }
-        //       case "tenant": {
-        //         return navigate("/event-admin");
-        //       }
-        //       case "poc": {
-        //         return navigate("/poc");
-        //       }
-        //       default: {
-        //         return navigate("/");
-        //       }
-        //     }
-        //   })
-        //   .catch((error) => {
-        //     alert(error.message);
-        //   });
     };
 
     useEffect(() => {

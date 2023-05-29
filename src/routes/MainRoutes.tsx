@@ -33,6 +33,10 @@ const MainRoutes: MainRoutesProps = {
         //     element: <DashboardDefault />
         // },
         // {
+        //     path: '/admin',
+        //     element: <Das
+        // }
+        // {
         //     path: 'dashboard',
         //     children: [
         //         {
