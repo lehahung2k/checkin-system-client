@@ -1,9 +1,10 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { Outlet } from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
+import {Outlet} from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 // material-ui
-import { styled, useTheme } from '@mui/material/styles';
-import { AppBar, Box, CssBaseline, Toolbar, useMediaQuery } from '@mui/material';
+import {styled, useTheme} from '@mui/material/styles';
+import {AppBar, Box, CssBaseline, Toolbar, useMediaQuery} from '@mui/material';
 
 // project imports
 import Breadcrumbs from '../../components/extended/Breadcrumbs';
@@ -11,14 +12,15 @@ import Header from './Header/Header';
 import Sidebar from './Sidebar/Sidebar';
 import Customization from '../Customization';
 // import navigation from 'menu-items';
-import { drawerWidth } from '../../store/constant';
-import { SET_MENU } from '../../store/actions';
+import {drawerWidth} from '../../store/constant';
+import {SET_MENU} from '../../store/actions';
 import {IconChevronRight} from "@tabler/icons-react";
+import Welcome from "../../view/unauthen/Welcome";
 
 // assets
 
 // styles
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
+const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})(({theme, open}) => ({
     ...theme.typography.mainContent,
     ...(!open && {
         borderBottomLeftRadius: 0,
@@ -69,40 +71,45 @@ const MainLayout = () => {
     // Handle left drawer
     const leftDrawerOpened = useSelector((state) => state.customization.opened);
     const dispatch = useDispatch();
+
+    const accessToken = Cookies.get('accessToken');
     const handleLeftDrawerToggle = () => {
-        dispatch({ type: SET_MENU, opened: !leftDrawerOpened });
+        dispatch({type: SET_MENU, opened: !leftDrawerOpened});
     };
 
     return (
-        <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            {/* header */}
-            <AppBar
-                enableColorOnDark
-                position="fixed"
-                color="inherit"
-                elevation={0}
-                sx={{
-                    bgcolor: theme.palette.background.default,
-                    transition: leftDrawerOpened ? theme.transitions.create('width') : 'none'
-                }}
-            >
-                <Toolbar>
-                    <Header handleLeftDrawerToggle={handleLeftDrawerToggle} />
-                </Toolbar>
-            </AppBar>
+        <>
+            {!accessToken ? (<Welcome/>) : (<Box sx={{display: 'flex'}}>
+                <CssBaseline/>
+                {/* header */}
+                <AppBar
+                    enableColorOnDark
+                    position="fixed"
+                    color="inherit"
+                    elevation={0}
+                    sx={{
+                        bgcolor: theme.palette.background.default,
+                        transition: leftDrawerOpened ? theme.transitions.create('width') : 'none'
+                    }}
+                >
+                    <Toolbar>
+                        <Header handleLeftDrawerToggle={handleLeftDrawerToggle}/>
+                    </Toolbar>
+                </AppBar>
 
-            {/* drawer */}
-            <Sidebar drawerOpen={!matchDownMd ? leftDrawerOpened : !leftDrawerOpened} drawerToggle={handleLeftDrawerToggle} />
+                {/* drawer */}
+                <Sidebar drawerOpen={!matchDownMd ? leftDrawerOpened : !leftDrawerOpened}
+                         drawerToggle={handleLeftDrawerToggle}/>
 
-            {/* main content */}
-            <Main theme={theme} open={leftDrawerOpened}>
-                {/* breadcrumb */}
-                <Breadcrumbs separator={IconChevronRight} icon title rightAlign />
-                <Outlet />
-            </Main>
-            <Customization />
-        </Box>
+                {/*/!* main content *!/*/}
+                <Main theme={theme} open={leftDrawerOpened}>
+                    {/* breadcrumb */}
+                    <Breadcrumbs separator={IconChevronRight} icon title rightAlign/>
+                    <Outlet/>
+                </Main>
+                <Customization/>
+            </Box>)}
+        </>
     );
 };
 

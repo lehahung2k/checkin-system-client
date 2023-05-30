@@ -5,10 +5,11 @@ import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, ButtonBase } from '@mui/material';
 
 // project imports
-// import LogoSection from '../LogoSection';
-// import SearchSection from './SearchSection';
+//  SearchBox from './SearchBox';
 import ProfileSection from './Profile/Profile';
 import {IconMenu2} from "@tabler/icons-react";
+import LogoSection from "./LogoSection/LogoSection";
+import SearchBox from "./SearchBox/SearchBox";
 // import NotificationSection from './NotificationSection';
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
@@ -29,7 +30,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
 				}}
 			>
 				<Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 1 }}>
-					{/*<LogoSection />*/}
+					<LogoSection />
 				</Box>
 				<ButtonBase sx={{ borderRadius: '12px', overflow: 'hidden' }}>
 					<Avatar
@@ -54,7 +55,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
 			</Box>
 
 			{/* header search */}
-			{/*<SearchSection />*/}
+			<SearchBox />
 			<Box sx={{ flexGrow: 1 }} />
 			<Box sx={{ flexGrow: 1 }} />
 

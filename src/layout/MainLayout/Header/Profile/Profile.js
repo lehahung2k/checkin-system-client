@@ -57,7 +57,7 @@ const Profile = () => {
 	const fullName = localStorage.getItem('fullName');
     const handleLogout = async () => {
         localStorage.removeItem('fullName');
-        Cookie.removeItem('accessToken');
+        Cookie.remove('accessToken');
         console.log('Logout');
     };
 
@@ -100,8 +100,8 @@ const Profile = () => {
                     borderColor: theme.palette.primary.light,
                     backgroundColor: theme.palette.primary.light,
                     '&[aria-controls="menu-list-grow"], &:hover': {
-                        borderColor: theme.palette.primary.main,
-                        background: `${theme.palette.primary.main}!important`,
+                        borderColor: theme.palette.secondary.main,
+                        background: `${theme.palette.secondary.main}!important`,
                         color: theme.palette.primary.light,
                         '& svg': {
                             stroke: theme.palette.primary.light
@@ -165,7 +165,6 @@ const Profile = () => {
 													{fullName}
                                                 </Typography>
                                             </Stack>
-                                            <Typography variant="subtitle2">Project Admin</Typography>
                                         </Stack>
                                         <OutlinedInput
                                             sx={{width: '100%', pr: 1, pl: 2, my: 2}}
@@ -195,7 +194,7 @@ const Profile = () => {
                                                     width: '100%',
                                                     maxWidth: 350,
                                                     minWidth: 300,
-                                                    backgroundColor: theme.palette.background.paper,
+                                                    backgroundColor: theme.palette.primary.light,
                                                     borderRadius: '10px',
                                                     [theme.breakpoints.down('md')]: {
                                                         minWidth: '100%'
