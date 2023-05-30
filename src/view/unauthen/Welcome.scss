@@ -1,0 +1,38 @@
+.welcome-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.welcome-header {
+  /* Add styles for your cover image */
+}
+
+.welcome-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.description {
+  /* Add styles for your system description */
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.login-button {
+  /* Add styles for the login button */
+}
+
+.register-button {
+  /* Add styles for the register button */
+}
+
+.welcome-footer {
+  /* Add styles for the footer */
+}

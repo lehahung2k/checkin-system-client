@@ -8,8 +8,6 @@ import {useTheme} from '@mui/material/styles';
 import {
     Avatar,
     Box,
-    Card,
-    CardContent,
     Chip,
     ClickAwayListener,
     Divider,
@@ -23,7 +21,6 @@ import {
     Paper,
     Popper,
     Stack,
-    Switch,
     Typography
 } from '@mui/material';
 
@@ -33,7 +30,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 // project imports
 import MainCard from '../../../../components/cards/MainCard';
 import Transitions from '../../../../components/extended/Transitions';
-import User1 from '../../../../assets/images/admin-png.webp';
+import User1 from '../../../../assets/images/admin.jpg';
 import {IconLogout, IconSearch, IconUser, IconSettings} from "@tabler/icons-react";
 import Cookie from "js-cookie";
 
@@ -44,9 +41,7 @@ const Profile = () => {
     const customization = useSelector((state) => state.customization);
     const navigate = useNavigate();
 
-    const [sdm, setSdm] = useState(true);
     const [value, setValue] = useState('');
-    const [notification, setNotification] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const [open, setOpen] = useState(false);
     /**
@@ -59,6 +54,7 @@ const Profile = () => {
         localStorage.removeItem('fullName');
         Cookie.remove('accessToken');
         console.log('Logout');
+        navigate('/');
     };
 
     const handleClose = (event) => {
@@ -125,7 +121,7 @@ const Profile = () => {
                         color="inherit"
                     />
                 }
-                label={<IconSettings stroke={1.5} size="1.5rem" color={theme.palette.primary.main}/>}
+                label={<IconSettings stroke={1.5} size="1.5rem" color={theme.palette.secondary.main}/>}
                 variant="outlined"
                 ref={anchorRef}
                 aria-controls={open ? 'menu-list-grow' : undefined}
