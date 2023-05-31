@@ -1,13 +1,13 @@
-import React, {createContext, useContext, useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {Link, useNavigate} from "react-router-dom";
 import Cookies from 'js-cookie';
 import Img from "../../../../assets/images/Frame-1729.webp";
 import './Login.scss'
 import authApi from "../../../../services/authApi";
 
-const AccessTokenContext = createContext<string | null>(null);
+// const AccessTokenContext = createContext<string | null>(null);
 
-const useAccessToken = () => useContext(AccessTokenContext);
+// const useAccessToken = () => useContext(AccessTokenContext);
 
 
 const Login = () => {
@@ -49,7 +49,7 @@ const Login = () => {
         if (accessToken) {
             navigate('/');
         }
-    }, [accessToken]);
+    }, [accessToken, navigate]);
 
     const validateForm = () => {
         let errors = {username: "", password: ""};
@@ -80,7 +80,7 @@ const Login = () => {
             </div>
             <form className="right-login" onSubmit={handleLogin}>
                 <div className="card-login">
-                    <h1>ĐĂNG NHẬP</h1>
+                    <h1 style={{marginBottom: "1rem"}}>ĐĂNG NHẬP</h1>
 
                     <div className="form-group">
                         <input

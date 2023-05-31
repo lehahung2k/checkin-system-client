@@ -76,7 +76,7 @@ function Register() {
         <div className="body">
             <div className="right-login">
                 <div className="card-login">
-                    <h1>ĐĂNG KÝ</h1>
+                    <h1 style={{marginBottom: "1rem"}}>ĐĂNG KÝ</h1>
                     <Formik
                         initialValues={initialValues}
                         onSubmit={handleRegister}
