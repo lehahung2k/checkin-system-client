@@ -1,9 +1,9 @@
 // assets
 
 // constant
-import { IconBuilding, IconCheckbox, IconCalendarEvent } from "@tabler/icons-react";
+import { IconBuilding, IconCheckbox, IconCalendarEvent, IconSum } from "@tabler/icons-react";
 
-const icons = { IconBuilding, IconCheckbox, IconCalendarEvent };
+const icons = { IconBuilding, IconCheckbox, IconCalendarEvent, IconSum };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 // url phải có / ở trước để breadcrumb hoạt động
@@ -46,13 +46,6 @@ const adminRole = {
                     type: 'item',
                     url: '/admin/tenant-lists',
                     breadcrumbs: true
-                },
-                {
-                    id: 'create-tenant',
-                    title: 'Tạo mới ban tổ chức',
-                    type: 'item',
-                    url: '/admin/create-tenant',
-                    breadcrumbs: true
                 }
             ]
         },
@@ -67,6 +60,21 @@ const adminRole = {
                     title: 'Danh sách quầy',
                     type: 'item',
                     url: '/admin/poc-lists',
+                    breadcrumbs: true
+                }
+            ]
+        },
+        {
+            id: 'summary',
+            title: 'Thống kê',
+            type: 'collapse',
+            icon: icons.IconSum,
+            children: [
+                {
+                    id: 'summary',
+                    title: 'Thống kê',
+                    type: 'item',
+                    url: '/admin/summary',
                     breadcrumbs: true
                 }
             ]

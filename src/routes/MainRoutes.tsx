@@ -18,6 +18,11 @@ const CreateEvent = Loadable(lazy(() => import('../view/admin/create-event/Creat
 // admin routing
 const TenantLists = Loadable(lazy(() => import('../view/admin/tenants/TenantLists')));
 const PocLists = Loadable(lazy(() => import('../view/admin/poc/PocLists')));
+const Summary = Loadable(lazy(() => import('../view/admin/sumary/SummaryAll')));
+
+// tenant routing
+const TenantView = Loadable(lazy(() => import('../view/tenant/tenant-view/TenantView')));
+const ManagePoc = Loadable(lazy(() => import('../view/tenant/mange-poc/ManagePoc')));
 
 // poc routing
 const CheckinPage = Loadable(lazy(() => import('../view/poc/Checkin')));
@@ -63,11 +68,12 @@ const MainRoutes = {
                     element: <TenantLists />
                 },
                 {
-                    path: 'create-tenant',
-                },
-                {
                     path: 'poc-lists',
                     element: <PocLists/>
+                },
+                {
+                    path: 'summary',
+                    element: <Summary/>
                 }
             ]
         },
@@ -88,7 +94,12 @@ const MainRoutes = {
             path: 'tenant',
             children: [
                 {
-                    path: 'view-tenants',
+                    path: 'view-tenant',
+                    element: <TenantView />
+                },
+                {
+                    path: 'manage-poc',
+                    element: <ManagePoc />
                 }
             ]
         },

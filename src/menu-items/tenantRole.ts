@@ -43,7 +43,22 @@ const tenantRole = {
                     id: 'view-tenant',
                     title: 'Thông tin ban tổ chức',
                     type: 'item',
-                    url: '/tenant/view-tenants',
+                    url: '/tenant/view-tenant',
+                    breadcrumbs: true
+                }
+            ]
+        },
+        {
+            id: 'manage-poc',
+            title: 'Quản lý điểm checkin',
+            type: 'collapse',
+            icon: icons.IconCheckbox,
+            children: [
+                {
+                    id: 'poc-lists',
+                    title: 'Danh sách điểm check-in',
+                    type: 'item',
+                    url: '/tenant/manage-poc',
                     breadcrumbs: true
                 }
             ]

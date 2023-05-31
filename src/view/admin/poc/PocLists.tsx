@@ -1,8 +1,13 @@
+import MainCard from "../../../components/cards/MainCard";
+import {Typography} from "@mui/material";
+
 const PocLists = () => {
     return (
-        <div>
-            <h1>PocLists</h1>
-        </div>
+        <MainCard title="Danh sách quầy checkin">
+            <Typography>
+                Danh sách quầy checkin
+            </Typography>
+        </MainCard>
     );
 }
 

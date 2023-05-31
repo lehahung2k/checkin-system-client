@@ -9,12 +9,16 @@
 
 ## Cấu trúc template
 
-- Layout: Header, Sidebar, Footer.
-- Menu Items: Các chức năng của hệ thống
+- Layout: Header, Sidebar, Footer, MainLayout.
+- Menu Items: Routing sidebar
+  - adminRole: Routing page giành cho admin
+  - tenantRole: Routing page giành cho tenant
+  - pocRole: Routing page giành cho poc
 - Routes: Đường dẫn các chức năng của hệ thống
-- Themes: Giao diện của hệ thống
+- Themes: Giao diện chính của hệ thống
 - Components: Các thành phần cơ bản: Card, BreadCrumb, Button, ...
 - View: Các giao diện người dùng: admin, tenant, poc
+- Store: thư mục của redux để chứa toàn bộ dữ liệu của ứng dụng
 
 ## Cài đặt giao diện
 ```bash
