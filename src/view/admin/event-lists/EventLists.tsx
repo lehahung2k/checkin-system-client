@@ -1,8 +1,11 @@
+import MainCard from "../../../components/cards/MainCard";
+import {Typography} from "@mui/material";
+
 const EventLists = () => {
     return (
-        <div>
-        <h1>Event Lists</h1>
-        </div>
+        <MainCard title="Danh sách sự kiện:">
+            <Typography variant="body2">Event Lists</Typography>
+        </MainCard>
     );
 }
 export default EventLists;

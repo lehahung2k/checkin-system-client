@@ -1,8 +1,13 @@
+import MainCard from "../../../components/cards/MainCard";
+import {Typography} from "@mui/material";
+
 const TenantLists = () => {
     return (
-        <div>
-            TenantLists
-        </div>
+        <MainCard title="Danh sách đối tác">
+            <Typography>
+                Danh sách tenants
+            </Typography>
+        </MainCard>
     );
 }
 
