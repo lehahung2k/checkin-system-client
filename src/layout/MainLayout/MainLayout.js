@@ -15,7 +15,7 @@ import navigation from '../../menu-items/menuItems';
 import { drawerWidth } from '../../store/constant';
 import { SET_MENU } from '../../store/actions';
 import { IconChevronRight } from "@tabler/icons-react";
-import Welcome from "../../view/unauthen/Welcome";
+import Welcome from "../../view/common/unauthen/Welcome";
 import jwtDecode from 'jwt-decode'; // Import the JWT decoding library
 
 // assets
@@ -108,6 +108,35 @@ const MainLayout = () => {
     };
 
     const accessToken = getAccessToken();
+
+    const isAccessTokenExpired = () => {
+        const accessToken = Cookies.get('accessToken');
+
+        if (!accessToken) {
+            // Access token is not available
+            return true;
+        }
+
+        try {
+            const decodedToken = jwtDecode(accessToken);
+            const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+
+            return decodedToken.exp < currentTime; // Compare expiration time with current time
+        } catch (error) {
+            // Invalid token
+            return true;
+        }
+    };
+
+    // Function to remove the access token from Cookies
+    const removeAccessToken = () => {
+        Cookies.remove('accessToken');
+    };
+
+// Example usage: Check if the access token has expired and remove it if expired
+    if (isAccessTokenExpired()) {
+        removeAccessToken();
+    }
 
     return (
         <>

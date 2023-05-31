@@ -1,7 +1,7 @@
 import React from 'react';
 import './Welcome.scss';
 import { Box, Container, Grid, Typography, Button } from "@mui/material";
-import coverImg from '../../assets/images/welcome/Welcome background 02.png'
+import coverImg from '../../../assets/images/welcome/Welcome background 02.png'
 import { Link } from 'react-router-dom';
 
 const Welcome = () => {

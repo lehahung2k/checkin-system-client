@@ -117,7 +117,7 @@ const Breadcrumbs = ({ card, divider, icon, icons, maxItems, navigation, rightAl
                     sx={{
                         marginBottom: card === false ? 0 : theme.spacing(gridSpacing),
                         border: card === false ? 'none' : '1px solid',
-                        borderColor: theme.palette.primary[200] + 75,
+                        borderColor: theme.palette.primary.light,
                         background: card === false ? 'transparent' : theme.palette.background.default
                     }}
                     {...others}
@@ -130,13 +130,6 @@ const Breadcrumbs = ({ card, divider, icon, icons, maxItems, navigation, rightAl
                             alignItems={rightAlign ? 'center' : 'flex-start'}
                             spacing={1}
                         >
-                            {title && !titleBottom && (
-                                <Grid item>
-                                    <Typography variant="h3" sx={{ fontWeight: 500 }}>
-                                        {item.title}
-                                    </Typography>
-                                </Grid>
-                            )}
                             <Grid item>
                                 <MuiBreadcrumbs
                                     sx={{ '& .MuiBreadcrumbs-separator': { width: 16, ml: 1.25, mr: 1.25 } }}
