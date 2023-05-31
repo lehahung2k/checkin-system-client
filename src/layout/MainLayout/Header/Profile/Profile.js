@@ -53,7 +53,6 @@ const Profile = () => {
     const handleLogout = async () => {
         localStorage.removeItem('fullName');
         Cookie.remove('accessToken');
-        console.log('Logout');
         navigate('/');
     };
 

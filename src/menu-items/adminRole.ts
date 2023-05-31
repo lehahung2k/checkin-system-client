@@ -6,9 +6,10 @@ import { IconBuilding, IconCheckbox, IconCalendarEvent } from "@tabler/icons-rea
 const icons = { IconBuilding, IconCheckbox, IconCalendarEvent };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
+// url phải có / ở trước để breadcrumb hoạt động
 
 const adminRole = {
-    id: 'tenant-role',
+    id: 'admin-role',
     type: 'group',
     children: [
         {
@@ -43,8 +44,15 @@ const adminRole = {
                     id: 'tenant-list',
                     title: 'Danh sách ban tổ chức',
                     type: 'item',
-                    url: '/tenant/list',
-                    breadcrumbs: false
+                    url: '/admin/tenant-lists',
+                    breadcrumbs: true
+                },
+                {
+                    id: 'create-tenant',
+                    title: 'Tạo mới ban tổ chức',
+                    type: 'item',
+                    url: '/admin/create-tenant',
+                    breadcrumbs: true
                 }
             ]
         },
@@ -58,8 +66,8 @@ const adminRole = {
                     id: 'poc-list',
                     title: 'Danh sách quầy',
                     type: 'item',
-                    url: '/poc/list',
-                    breadcrumbs: false
+                    url: '/admin/poc-lists',
+                    breadcrumbs: true
                 }
             ]
         }

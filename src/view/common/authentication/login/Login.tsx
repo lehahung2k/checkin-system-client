@@ -31,7 +31,7 @@ const Login = () => {
                     Cookies.set('accessToken', accessToken);
                     localStorage.setItem('fullName', user.fullName);
                     switch (user.role) {
-                        case 'admin': return navigate('/admin');
+                        case 'admin': return navigate('');
                         case 'tenant': return navigate('/tenant');
                         case 'poc': return  navigate('/poc');
                         default: return navigate('/');

@@ -9,7 +9,6 @@ const icons = { IconHome };
 
 const homeAdmin = {
     id: 'home',
-    title: 'Trang chủ',
     type: 'group',
     children: [
         {

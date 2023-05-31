@@ -17,15 +17,15 @@ const otherPages = {
             type: 'item',
             url: '/other/about-us',
             icon: icons.IconHelp,
-            breadcrumbs: false
+            breadcrumbs: true
         },
         {
             id: 'documents',
             title: 'Tài liệu hướng dẫn',
             type: 'item',
-            url: '/other/documents',
+            url: '/other/helps',
             icon: icons.IconHelp,
-            breadcrumbs: false
+            breadcrumbs: true
         }
     ]
 };

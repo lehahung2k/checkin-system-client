@@ -1,5 +1,4 @@
 import { lazy, ReactElement } from 'react';
-import { Route, Navigate } from 'react-router-dom';
 
 // project imports
 import MainLayout from '../layout/MainLayout/MainLayout';
@@ -9,21 +8,20 @@ import Loadable from '../components/Loadable';
 const UpdateProfile = Loadable(lazy(() => import('../view/common/profile/UpdateProfile')));
 const ViewProfile = Loadable(lazy(() => import('../view/common/profile/ViewProfile')));
 const DashboardDefault = Loadable(lazy(() => import('../view/dashboard/Dashboard')));
+const AboutUs = Loadable(lazy(() => import('../view/common/about-us/AboutUs')));
+const Helps = Loadable(lazy(() => import('../view/common/help/Helps')))
 
 // admin and tenant routing
 const EventLists = Loadable(lazy(() => import('../view/admin/event-lists/EventLists')));
 const CreateEvent = Loadable(lazy(() => import('../view/admin/create-event/CreateEvent')));
 
+// admin routing
+const TenantLists = Loadable(lazy(() => import('../view/admin/tenants/TenantLists')));
+const PocLists = Loadable(lazy(() => import('../view/admin/poc/PocLists')));
+
 // poc routing
 const CheckinPage = Loadable(lazy(() => import('../view/poc/Checkin')));
 const ViewGuests = Loadable(lazy(() => import('../view/poc/ViewGuests')));
-// const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
-// const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
-// const UtilsMaterialIcons = Loadable(lazy(() => import('views/utilities/MaterialIcons')));
-// const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
-
-// // sample page routing
-// const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -58,6 +56,22 @@ const MainRoutes = {
             ]
         },
         {
+            path: 'admin',
+            children: [
+                {
+                    path: 'tenant-lists',
+                    element: <TenantLists />
+                },
+                {
+                    path: 'create-tenant',
+                },
+                {
+                    path: 'poc-lists',
+                    element: <PocLists/>
+                }
+            ]
+        },
+        {
             path: 'poc',
             children: [
                 {
@@ -67,6 +81,14 @@ const MainRoutes = {
                 {
                     path: 'view-guests',
                     element: <ViewGuests />
+                }
+            ]
+        },
+        {
+            path: 'tenant',
+            children: [
+                {
+                    path: 'view-tenants',
                 }
             ]
         },
@@ -83,24 +105,19 @@ const MainRoutes = {
                 }
             ]
         },
-        // {
-        //     path: 'icons',
-        //     children: [
-        //         {
-        //             path: 'tabler-icons',
-        //             element: <UtilsTablerIcons />
-        //         }
-        //     ]
-        // },
-        // {
-        //     path: 'icons',
-        //     children: [
-        //         {
-        //             path: 'material-icons',
-        //             element: <UtilsMaterialIcons />
-        //         }
-        //     ]
-        // },
+        {
+            path: 'other',
+            children: [
+                {
+                    path: 'about-us',
+                    element: <AboutUs />
+                },
+                {
+                    path: 'helps',
+                    element: <Helps/>
+                }
+            ]
+        },
         // {
         //     path: 'sample-page',
         //     element: <SamplePage />
