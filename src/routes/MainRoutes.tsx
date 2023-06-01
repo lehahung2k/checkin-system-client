@@ -1,8 +1,9 @@
-import { lazy, ReactElement } from 'react';
+import { lazy } from 'react';
 
 // project imports
 import MainLayout from '../layout/MainLayout/MainLayout';
 import Loadable from '../components/Loadable';
+import checkRole from "../services/checkRole";
 
 // common routing
 const UpdateProfile = Loadable(lazy(() => import('../view/common/profile/UpdateProfile')));
@@ -30,6 +31,58 @@ const ViewGuests = Loadable(lazy(() => import('../view/poc/ViewGuests')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
+// admin routes
+const adminRoutes = checkRole.getRole() === 'admin' && [
+    {
+        path: 'tenant-lists',
+        element: <TenantLists />,
+    },
+    {
+        path: 'poc-lists',
+        element: <PocLists />,
+    },
+    {
+        path: 'summary',
+        element: <Summary />,
+    },
+];
+
+// tenant routes
+const tenantRoutes = checkRole.getRole() === 'tenant' && [
+    {
+        path: 'view-tenant',
+        element: <TenantView />
+    },
+    {
+        path: 'manage-poc',
+        element: <ManagePoc />
+    }
+]
+
+// poc routes
+const pocRoutes = checkRole.getRole() === 'poc' && [
+    {
+        path: 'checkin',
+        element: <CheckinPage />
+    },
+    {
+        path: 'view-guests',
+        element: <ViewGuests />
+    }
+]
+
+// admin and tenant routes
+const adminAndTenantRoutes = (checkRole.getRole() === 'admin' || checkRole.getRole() === 'tenant') && [
+    {
+        path: 'lists',
+        element: <EventLists />
+    },
+    {
+        path: 'create',
+        element: <CreateEvent />
+    }
+]
+
 const MainRoutes = {
     path: '/',
     element: <MainLayout/>,
@@ -47,6 +100,35 @@ const MainRoutes = {
                 }
             ]
         },
+        // only admin can access these routes
+        {
+            path: 'admin',
+            children: [
+                ...(adminRoutes || [])
+            ]
+        },
+        // only poc can access these routes
+        {
+            path: 'poc',
+            children: [
+                ...(pocRoutes || [])
+            ]
+        },
+        // only tenant can access these routes
+        {
+            path: 'tenant',
+            children: [
+                ...(tenantRoutes || [])
+            ]
+        },
+        // admin and tenant can access these routes
+        {
+            path: 'event',
+            children: [
+                ...(adminAndTenantRoutes || [])
+            ]
+        },
+        // all roles can access these routes
         {
             path: 'user',
             children: [
@@ -57,62 +139,6 @@ const MainRoutes = {
                 {
                     path: 'account/settings',
                     element: <UpdateProfile />
-                }
-            ]
-        },
-        {
-            path: 'admin',
-            children: [
-                {
-                    path: 'tenant-lists',
-                    element: <TenantLists />
-                },
-                {
-                    path: 'poc-lists',
-                    element: <PocLists/>
-                },
-                {
-                    path: 'summary',
-                    element: <Summary/>
-                }
-            ]
-        },
-        {
-            path: 'poc',
-            children: [
-                {
-                    path: 'checkin',
-                    element: <CheckinPage />
-                },
-                {
-                    path: 'view-guests',
-                    element: <ViewGuests />
-                }
-            ]
-        },
-        {
-            path: 'tenant',
-            children: [
-                {
-                    path: 'view-tenant',
-                    element: <TenantView />
-                },
-                {
-                    path: 'manage-poc',
-                    element: <ManagePoc />
-                }
-            ]
-        },
-        {
-            path: 'event',
-            children: [
-                {
-                    path: 'lists',
-                    element: <EventLists />
-                },
-                {
-                    path: 'create',
-                    element: <CreateEvent />
                 }
             ]
         },

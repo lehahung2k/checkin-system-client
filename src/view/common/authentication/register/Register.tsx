@@ -271,11 +271,10 @@ function Register() {
                     <Button
                         onClick={() => {
                             setOpenSuccess(false);
-                            navigate("auth/login");
                         }}
                         autoFocus
                     >
-                        OK
+                        <Link to="/auth/login">OK</Link>
                     </Button>
                 </DialogActions>
             </Dialog>
