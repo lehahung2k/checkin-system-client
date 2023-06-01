@@ -17,6 +17,9 @@ const Login = () => {
     const [accessToken, setAccessToken] = useState<string | null>(null);
 
     const navigate = useNavigate();
+    if (Cookies.get('accessToken'))  {
+        navigate('/');
+    }
 
     const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -34,7 +37,7 @@ const Login = () => {
                         case 'admin': return navigate('');
                         case 'tenant': return navigate('/tenant');
                         case 'poc': return  navigate('/poc');
-                        default: return navigate('/');
+                        default: return navigate('/auth/login');
                     }
                 })
                 .catch((e) => {
@@ -47,6 +50,7 @@ const Login = () => {
     useEffect(() => {
         // Do something with the access token when it changes, e.g., redirect the user to a logged-in page
         if (accessToken) {
+            window.location.reload();
             navigate('/');
         }
     }, [accessToken, navigate]);

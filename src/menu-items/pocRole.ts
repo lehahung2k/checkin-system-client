@@ -19,7 +19,7 @@ const pocRole = {
             children: [
                 {
                     id: 'poc-lists',
-                    title: 'Danh sách sự kiện',
+                    title: 'Check-in',
                     type: 'item',
                     url: '/poc/checkin',
                     breadcrumbs: true

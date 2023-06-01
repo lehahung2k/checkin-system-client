@@ -98,7 +98,6 @@ const MainLayout = () => {
                 navigate('/error'); // Invalid role, redirect to an error page or handle accordingly
                 return null;
             }
-            console.log(role);
             return accessToken;
         } catch (error) {
             // Invalid token, redirect to login page or handle accordingly
