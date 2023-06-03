@@ -40,9 +40,10 @@ const Login = () => {
                     Cookies.set('accessToken', accessToken);
                     localStorage.setItem('fullName', user.fullName);
                     switch (user.role) {
-                        case 'admin': return navigate('');
-                        case 'tenant': return navigate('/tenant');
-                        case 'poc': return  navigate('/poc');
+                        case 'admin':
+                        case 'tenant':
+                        case 'poc': 
+                            return  navigate('');
                         default: return navigate('/auth/login');
                     }
                 })
