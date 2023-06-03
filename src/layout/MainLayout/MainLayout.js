@@ -1,26 +1,27 @@
-import {useDispatch, useSelector} from 'react-redux';
-import {Outlet} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 // material-ui
-import {styled, useTheme} from '@mui/material/styles';
-import {AppBar, Box, CssBaseline, Toolbar, useMediaQuery} from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
+import { AppBar, Box, CssBaseline, Toolbar, useMediaQuery } from '@mui/material';
 
 // project imports
 import Breadcrumbs from '../../components/extended/Breadcrumbs';
 import Header from './Header/Header';
 import Sidebar from './Sidebar/Sidebar';
 import Customization from '../Customization';
-// import navigation from 'menu-items';
-import {drawerWidth} from '../../store/constant';
-import {SET_MENU} from '../../store/actions';
-import {IconChevronRight} from "@tabler/icons-react";
-import Welcome from "../../view/unauthen/Welcome";
+import navigation from '../../menu-items/menuItems';
+import { drawerWidth } from '../../store/constant';
+import { SET_MENU } from '../../store/actions';
+import { IconChevronRight } from "@tabler/icons-react";
+import Welcome from "../../view/common/unauthen/Welcome";
+import jwtDecode from 'jwt-decode'; // Import the JWT decoding library
 
 // assets
 
 // styles
-const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})(({theme, open}) => ({
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
     ...theme.typography.mainContent,
     ...(!open && {
         borderBottomLeftRadius: 0,
@@ -71,16 +72,76 @@ const MainLayout = () => {
     // Handle left drawer
     const leftDrawerOpened = useSelector((state) => state.customization.opened);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const accessToken = Cookies.get('accessToken');
     const handleLeftDrawerToggle = () => {
-        dispatch({type: SET_MENU, opened: !leftDrawerOpened});
+        dispatch({ type: SET_MENU, opened: !leftDrawerOpened });
     };
+
+    // Utility function to retrieve and validate the access token
+    const getAccessToken = () => {
+        const accessToken = Cookies.get('accessToken');
+
+        if (!accessToken) {
+            // Access token is not available, redirect to login page or handle accordingly
+            navigate('auth/login');
+            return null;
+        }
+
+        // Decode the access token
+        try {
+            const decodedToken = jwtDecode(accessToken);
+            const { role } = decodedToken;
+
+            // Additional client-side validation for the role
+            if (role !== 'admin' && role !== 'tenant' && role !== 'poc') {
+                navigate('/error'); // Invalid role, redirect to an error page or handle accordingly
+                return null;
+            }
+            console.log(role);
+            return accessToken;
+        } catch (error) {
+            // Invalid token, redirect to login page or handle accordingly
+            navigate('auth/login');
+            return null;
+        }
+    };
+
+    const accessToken = getAccessToken();
+
+    const isAccessTokenExpired = () => {
+        const accessToken = Cookies.get('accessToken');
+
+        if (!accessToken) {
+            // Access token is not available
+            return true;
+        }
+
+        try {
+            const decodedToken = jwtDecode(accessToken);
+            const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+
+            return decodedToken.exp < currentTime; // Compare expiration time with current time
+        } catch (error) {
+            // Invalid token
+            return true;
+        }
+    };
+
+    // Function to remove the access token from Cookies
+    const removeAccessToken = () => {
+        Cookies.remove('accessToken');
+    };
+
+// Example usage: Check if the access token has expired and remove it if expired
+    if (isAccessTokenExpired()) {
+        removeAccessToken();
+    }
 
     return (
         <>
-            {!accessToken ? (<Welcome/>) : (<Box sx={{display: 'flex'}}>
-                <CssBaseline/>
+            {!accessToken ? (<Welcome />) : (<Box sx={{ display: 'flex' }}>
+                <CssBaseline />
                 {/* header */}
                 <AppBar
                     enableColorOnDark
@@ -93,21 +154,21 @@ const MainLayout = () => {
                     }}
                 >
                     <Toolbar>
-                        <Header handleLeftDrawerToggle={handleLeftDrawerToggle}/>
+                        <Header handleLeftDrawerToggle={handleLeftDrawerToggle} />
                     </Toolbar>
                 </AppBar>
 
                 {/* drawer */}
                 <Sidebar drawerOpen={!matchDownMd ? leftDrawerOpened : !leftDrawerOpened}
-                         drawerToggle={handleLeftDrawerToggle}/>
+                    drawerToggle={handleLeftDrawerToggle} />
 
                 {/*/!* main content *!/*/}
                 <Main theme={theme} open={leftDrawerOpened}>
                     {/* breadcrumb */}
-                    <Breadcrumbs separator={IconChevronRight} icon title rightAlign/>
-                    <Outlet/>
+                    <Breadcrumbs separator={IconChevronRight} navigation={navigation} icon title rightAlign />
+                    <Outlet />
                 </Main>
-                <Customization/>
+                <Customization />
             </Box>)}
         </>
     );

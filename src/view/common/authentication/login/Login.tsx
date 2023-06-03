@@ -1,9 +1,9 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import Cookies from 'js-cookie';
-import Img from "../../../assets/images/Frame-1729.webp";
+import Img from "../../../../assets/images/Frame-1729.webp";
 import './Login.scss'
-import authApi from "../../../services/authApi";
+import authApi from "../../../../services/authApi";
 
 const AccessTokenContext = createContext<string | null>(null);
 
@@ -31,7 +31,7 @@ const Login = () => {
                     Cookies.set('accessToken', accessToken);
                     localStorage.setItem('fullName', user.fullName);
                     switch (user.role) {
-                        case 'admin': return navigate('/admin');
+                        case 'admin': return navigate('');
                         case 'tenant': return navigate('/tenant');
                         case 'poc': return  navigate('/poc');
                         default: return navigate('/');

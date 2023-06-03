@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import {Link} from "react-router-dom";
 import './Register.scss'
-import authApi from "../../../services/authApi";
+import authApi from "../../../../services/authApi";
 
 interface RegisterFormValues {
     username: string;
