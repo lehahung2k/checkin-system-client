@@ -1,13 +1,13 @@
-import React, {createContext, useContext, useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {Link, useNavigate} from "react-router-dom";
 import Cookies from 'js-cookie';
 import Img from "../../../../assets/images/Frame-1729.webp";
 import './Login.scss'
 import authApi from "../../../../services/authApi";
 
-const AccessTokenContext = createContext<string | null>(null);
+// const AccessTokenContext = createContext<string | null>(null);
 
-const useAccessToken = () => useContext(AccessTokenContext);
+// const useAccessToken = () => useContext(AccessTokenContext);
 
 
 const Login = () => {
@@ -17,6 +17,9 @@ const Login = () => {
     const [accessToken, setAccessToken] = useState<string | null>(null);
 
     const navigate = useNavigate();
+    if (Cookies.get('accessToken'))  {
+        navigate('/');
+    }
 
     const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -34,7 +37,7 @@ const Login = () => {
                         case 'admin': return navigate('');
                         case 'tenant': return navigate('/tenant');
                         case 'poc': return  navigate('/poc');
-                        default: return navigate('/');
+                        default: return navigate('/auth/login');
                     }
                 })
                 .catch((e) => {
@@ -47,9 +50,10 @@ const Login = () => {
     useEffect(() => {
         // Do something with the access token when it changes, e.g., redirect the user to a logged-in page
         if (accessToken) {
+            window.location.reload();
             navigate('/');
         }
-    }, [accessToken]);
+    }, [accessToken, navigate]);
 
     const validateForm = () => {
         let errors = {username: "", password: ""};
@@ -80,7 +84,7 @@ const Login = () => {
             </div>
             <form className="right-login" onSubmit={handleLogin}>
                 <div className="card-login">
-                    <h1>ĐĂNG NHẬP</h1>
+                    <h1 style={{marginBottom: "1rem"}}>ĐĂNG NHẬP</h1>
 
                     <div className="form-group">
                         <input

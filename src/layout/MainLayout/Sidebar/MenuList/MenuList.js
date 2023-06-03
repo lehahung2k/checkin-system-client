@@ -2,38 +2,19 @@ import { Typography } from '@mui/material';
 import NavGroup from './NavGroup/NavGroup';
 import menuItems from '../../../../menu-items/menuItems';
 import menuItemAdmin from '../../../../menu-items/menuItemAdmin';
-import Cookies from 'js-cookie';
-import jwtDecode from 'jwt-decode';
 import menuItemPoc from '../../../../menu-items/menuItemPoc';
 import menuItemTenant from "../../../../menu-items/menuItemTenant";
+import checkRole from "../../../../services/checkRole";
 
 // ==============================|| SIDEBAR MENU LIST ||============================== //
-
-// Check role to navigate the sidebar
-const checkRole = () => {
-    const accessToken = Cookies.get('accessToken');
-
-    try {
-        if (accessToken != null) {
-            const decodedToken = jwtDecode(accessToken);
-            const role = decodedToken.role;
-            if (role !== 'admin' && role !== 'tenant' && role !== 'poc') {
-                return null;
-            }
-            console.log(role);
-            return role;
-        }
-    } catch (error) {
-        return null;
-    }
-};
 
 const menuItemDefault = {
     items: []
 };
 
 const MenuList = () => {
-    const role = checkRole();
+    // Check role to navigate the sidebar
+    const role = checkRole.getRole();
     let navItems = menuItems.items;
 
     switch (role) {

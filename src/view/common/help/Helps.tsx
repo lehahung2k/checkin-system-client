@@ -1,8 +1,13 @@
+import { Typography } from "@mui/material";
+import MainCard from "../../../components/cards/MainCard";
+
 const Helps = () => {
     return(
-        <>
-        <h1>Helps</h1>
-        </>
+        <MainCard title='Hướng dẫn sử dụng'>
+            <Typography variant="body2">
+                Đây là hướng dẫn sử dụng hệ thống!
+            </Typography>
+        </MainCard>
     );
 }
 
