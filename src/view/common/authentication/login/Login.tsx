@@ -39,6 +39,7 @@ const Login = () => {
                     // Save accessToken to cookie and other to storage
                     Cookies.set('accessToken', accessToken);
                     localStorage.setItem('fullName', user.fullName);
+                    localStorage.setItem('companyName', user.companyName);
                     switch (user.role) {
                         case 'admin':
                         case 'tenant':
