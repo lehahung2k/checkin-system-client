@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import MainCard from "../../components/cards/MainCard";
+import MainCard from "../../../components/cards/MainCard";
 
 const ViewGuests = () => {
     return (

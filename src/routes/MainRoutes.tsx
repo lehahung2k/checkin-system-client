@@ -24,10 +24,11 @@ const Summary = Loadable(lazy(() => import('../view/admin/sumary/SummaryAll')));
 // tenant routing
 const TenantView = Loadable(lazy(() => import('../view/tenant/tenant-view/TenantView')));
 const ManagePoc = Loadable(lazy(() => import('../view/tenant/mange-poc/ManagePoc')));
+const CreateNewTenant = Loadable(lazy(() => import('../view/tenant/create-tenant/CreateNewTenant')));
 
 // poc routing
-const CheckinPage = Loadable(lazy(() => import('../view/poc/Checkin')));
-const ViewGuests = Loadable(lazy(() => import('../view/poc/ViewGuests')));
+const CheckinPage = Loadable(lazy(() => import('../view/poc/checkin/Checkin')));
+const ViewGuests = Loadable(lazy(() => import('../view/poc/view-guests/ViewGuests')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -56,6 +57,10 @@ const tenantRoutes = checkRole.getRole() === 'tenant' && [
     {
         path: 'manage-poc',
         element: <ManagePoc />
+    }, 
+    {
+        path: 'create-tenant',
+        element: <CreateNewTenant />
     }
 ]
 
