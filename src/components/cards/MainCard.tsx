@@ -1,4 +1,4 @@
-import { forwardRef, ForwardRefRenderFunction } from 'react';
+import { CSSProperties, forwardRef, ForwardRefRenderFunction } from 'react';
 
 // material-ui imports...
 import { useTheme } from '@mui/material/styles';
@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, Divider, Typography } from '@mui/materia
 
 // constant
 const headerSX = {
-	'& .MuiCardHeader-action': { marginRight: 0 },
+	'& .MuiCardHeader-action': { marginRight: 0, backgroundColor: '#b39ddb' },
 };
 
 type MainCardProps = {
@@ -15,11 +15,11 @@ type MainCardProps = {
 	children?: React.ReactNode;
 	content?: boolean;
 	contentClass?: string;
-	contentSX?: Record<string, any>;
+	contentSX?: CSSProperties | Record<string, any>;
 	darkTitle?: boolean;
 	secondary?: React.ReactNode | string | object | any;
 	shadow?: string;
-	sx?: Record<string, any>;
+	sx?: CSSProperties;
 	title?: React.ReactNode; // Update the type to React.ReactNode
 };
 
