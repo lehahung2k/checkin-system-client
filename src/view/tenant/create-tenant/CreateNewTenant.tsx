@@ -1,9 +1,10 @@
-import { Button, Typography, TextField, Grid, InputAdornment, Snackbar, Alert } from "@mui/material";
+import { Button, Typography, TextField, Grid, InputAdornment } from "@mui/material";
 import MainCard from "../../../components/cards/MainCard";
 import tenantApi from "../../../services/tenantApi";
 import { useEffect, useState } from "react";
 import { IconSettingsAutomation } from "@tabler/icons-react";
 import { useNavigate } from "react-router";
+import MuiNotification from "../../../components/Notification";
 
 interface CreateTenantFormValues {
     tenantCode: string;
@@ -204,19 +205,12 @@ const CreateNewTenant = () => {
                     </Button>
                 </Grid>
             </Grid>
-            <Snackbar
-                open={isSnackbarOpen}
-                autoHideDuration={3000}
+            <MuiNotification
+                isOpen={isSnackbarOpen}
+                successMessage={successMessage}
+                errorMessage={errorMessage}
                 onClose={handleSnackbarClose}
-                anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                }}
-            >
-                <Alert severity={successMessage ? "success" : "error"} onClose={handleSnackbarClose}>
-                    {successMessage || errorMessage}
-                </Alert>
-            </Snackbar>
+            />
         </MainCard>
     );
 };
