@@ -3,6 +3,7 @@ import tenantApi from "../../services/tenantApi";
 import { useNavigate } from 'react-router';
 import { Typography } from '@mui/material';
 import MainCard from '../../components/cards/MainCard';
+import SkeletonLoading from "../../components/cards/SkeletonLoading";
 
 const TenantDashboard = () => {
     const [tenantExists, setTenantExists] = useState(false);
@@ -38,7 +39,9 @@ const TenantDashboard = () => {
     return (
         <>
             {!tenantExists ? (
-                <p>Tenant doesn't exist. You must create first!</p>
+                <MainCard title='Chào mừng đến với trang quản trị của doanh nghiệp đối tác'>
+                    <SkeletonLoading/>
+                </MainCard>
             ) : (
                 <MainCard title='Chào mừng đến với trang quản trị của doanh nghiệp đối tác'>
                     <Typography variant="body2">

@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { Grid, Typography, TextField, Button } from '@mui/material';
+import { Grid, TextField, Button } from '@mui/material';
 import MainCard from "../../../components/cards/MainCard";
+import SubCard from "../../../components/cards/SubCard";
 
 const CreateEvent = () => {
 
@@ -39,69 +40,74 @@ const CreateEvent = () => {
 
     return (
         <MainCard title="Tạo mới sự kiện">
-            <Typography variant="body2">Nhập thông tin của sự kiện</Typography>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <TextField
-                        label="Mã sự kiện"
-                        variant="outlined"
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        label="Tên sự kiện"
-                        variant="outlined"
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        label="Mô tả sự kiện"
-                        variant="outlined"
-                        multiline
-                        rows={4}
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    <TextField
-                        label="Thời gian bắt đầu"
-                        type="datetime-local"
-                        variant="outlined"
-                        fullWidth
-                        value={formatDateTime(startTime)}
-                        onChange={(e) => setStartTime(new Date(e.target.value))}
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    <TextField
-                        label="Thời gian kết thúc"
-                        type="datetime-local"
-                        variant="outlined"
-                        fullWidth
-                        value={formatDateTime(endTime)}
-                        onChange={(e) => setEndTime(new Date(e.target.value))}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <input
-                        accept="image/*"
-                        id="image-upload"
-                        type="file"
-                        style={{ display: 'none' }}
-                        onChange={handleImageChange}
-                    />
-                    <label htmlFor="image-upload">
-                        <Button variant="outlined" component="span">
-                            Chọn ảnh
-                        </Button>
-                    </label>
-                    {selectedImage && (
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                            <img src={URL.createObjectURL(selectedImage)} alt="Ảnh review" style={{ width: '33vw', borderRadius: '14px' }} />
-                        </div>
-                    )}
+                    <SubCard title="Nhập thông tin của sự kiện">
+                        <Grid container spacing={3}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Mã sự kiện"
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Tên sự kiện"
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Mô tả sự kiện"
+                                    variant="outlined"
+                                    multiline
+                                    rows={4}
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    label="Thời gian bắt đầu"
+                                    type="datetime-local"
+                                    variant="outlined"
+                                    fullWidth
+                                    value={formatDateTime(startTime)}
+                                    onChange={(e) => setStartTime(new Date(e.target.value))}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    label="Thời gian kết thúc"
+                                    type="datetime-local"
+                                    variant="outlined"
+                                    fullWidth
+                                    value={formatDateTime(endTime)}
+                                    onChange={(e) => setEndTime(new Date(e.target.value))}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <input
+                                    accept="image/*"
+                                    id="image-upload"
+                                    type="file"
+                                    style={{ display: 'none' }}
+                                    onChange={handleImageChange}
+                                />
+                                <label htmlFor="image-upload">
+                                    <Button variant="outlined" component="span">
+                                        Chọn ảnh
+                                    </Button>
+                                </label>
+                                {selectedImage && (
+                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                        <img src={URL.createObjectURL(selectedImage)} alt="Ảnh review" style={{ width: '33vw', borderRadius: '14px' }} />
+                                    </div>
+                                )}
+                            </Grid>
+                        </Grid>
+                    </SubCard>
                 </Grid>
                 <Grid item xs={12}>
                     <Button variant="contained" sx={{backgroundColor: 'secondary.dark'}} onClick={createEvent}>
