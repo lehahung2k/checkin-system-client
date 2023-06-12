@@ -1,7 +1,7 @@
 import React from 'react';
 import './Welcome.scss';
 import style from './Welcome.module.scss'
-import { Box, Container, Grid, Typography, Button, CardContent, Card, CardMedia } from "@mui/material";
+import {Box, Container, Grid, Typography, Button, CardContent, Card, CardMedia} from "@mui/material";
 import { Link } from 'react-router-dom';
 import { IconArrowBigRightFilled } from '@tabler/icons-react' 
 
@@ -119,7 +119,7 @@ const Welcome = () => {
                     <Grid container direction="column" alignItems="center">
                         <Grid item xs={12}>
                             <Typography color="white" variant="h5">
-                                Event Checkin Managemant
+                                Event Checkin Management
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
