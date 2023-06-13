@@ -13,8 +13,8 @@ const AboutUs = Loadable(lazy(() => import('../view/common/about-us/AboutUs')));
 const Helps = Loadable(lazy(() => import('../view/common/help/Helps')))
 
 // admin and tenant routing
-const EventLists = Loadable(lazy(() => import('../view/admin/event-lists/EventLists')));
-const CreateEvent = Loadable(lazy(() => import('../view/admin/create-event/CreateEvent')));
+const EventLists = Loadable(lazy(() => import('../view/tenant/event-lists/EventLists')));
+const CreateEvent = Loadable(lazy(() => import('../view/tenant/create-event/CreateEvent')));
 
 // admin routing
 const TenantLists = Loadable(lazy(() => import('../view/admin/tenants/TenantLists')));

@@ -1,6 +1,6 @@
 import MainCard from "../../../components/cards/MainCard";
 import React, {useEffect, useState} from "react";
-import {Grid, IconButton} from "@mui/material";
+import {Grid, IconButton, Tooltip} from "@mui/material";
 import tenantApi from "../../../services/tenantApi";
 import SubCard from "../../../components/cards/SubCard";
 import {FileCopy, Launch} from "@mui/icons-material";
@@ -39,13 +39,15 @@ const TenantView = () => {
                         <SubCard title="Tên doanh nghiệp">
                             <div style={{display: 'flex', alignItems: 'center'}}>
                                 <span>{tenantData.tenantName}</span>
-                                <IconButton
-                                    aria-label="Copy to clipboard"
-                                    onClick={() => handleCopyToClipboard(tenantData.tenantName)}
-                                    sx={{marginLeft: "auto"}}
-                                >
-                                    <FileCopy/>
-                                </IconButton>
+                                <Tooltip title={'Copy'}>
+                                    <IconButton
+                                        aria-label="Copy to clipboard"
+                                        onClick={() => handleCopyToClipboard(tenantData.tenantName)}
+                                        sx={{marginLeft: "auto"}}
+                                    >
+                                        <FileCopy/>
+                                    </IconButton>
+                                </Tooltip>
                             </div>
                         </SubCard>
                     </Grid>
@@ -53,13 +55,15 @@ const TenantView = () => {
                         <SubCard title="Mã doanh nghiệp">
                             <div style={{display: 'flex', alignItems: 'center'}}>
                                 <span>{tenantData.tenantCode}</span>
-                                <IconButton
-                                    aria-label="Copy to clipboard"
-                                    onClick={() => handleCopyToClipboard(tenantData.tenantCode)}
-                                    sx={{marginLeft: "auto"}}
-                                >
-                                    <FileCopy/>
-                                </IconButton>
+                                <Tooltip title={'Copy'}>
+                                    <IconButton
+                                        aria-label="Copy to clipboard"
+                                        onClick={() => handleCopyToClipboard(tenantData.tenantCode)}
+                                        sx={{marginLeft: "auto"}}
+                                    >
+                                        <FileCopy/>
+                                    </IconButton>
+                                </Tooltip>
                             </div>
                         </SubCard>
                     </Grid>
@@ -67,13 +71,15 @@ const TenantView = () => {
                         <SubCard title="Địa chỉ">
                             <div style={{display: 'flex', alignItems: 'center'}}>
                                 <span>{tenantData.tenantAddress}</span>
-                                <IconButton
-                                    aria-label="Copy to clipboard"
-                                    onClick={() => handleCopyToClipboard(tenantData.tenantAddress)}
-                                    sx={{marginLeft: "auto"}}
-                                >
-                                    <FileCopy/>
-                                </IconButton>
+                                <Tooltip title={'Copy'}>
+                                    <IconButton
+                                        aria-label="Copy to clipboard"
+                                        onClick={() => handleCopyToClipboard(tenantData.tenantAddress)}
+                                        sx={{marginLeft: "auto"}}
+                                    >
+                                        <FileCopy/>
+                                    </IconButton>
+                                </Tooltip>
                             </div>
                         </SubCard>
                     </Grid>
@@ -83,13 +89,15 @@ const TenantView = () => {
                                 <a href={tenantData.website} target="_blank" rel="noopener noreferrer">
                                     {tenantData.website}
                                 </a>
-                                <IconButton
-                                    aria-label="Open website"
-                                    onClick={() => handleWebsiteRedirect(tenantData.website)}
-                                    sx={{marginLeft: "auto"}}
-                                >
-                                    <Launch/>
-                                </IconButton>
+                                <Tooltip title={'Open'}>
+                                    <IconButton
+                                        aria-label="Open website"
+                                        onClick={() => handleWebsiteRedirect(tenantData.website)}
+                                        sx={{marginLeft: "auto"}}
+                                    >
+                                        <Launch/>
+                                    </IconButton>
+                                </Tooltip>
                             </div>
                         </SubCard>
                     </Grid>
