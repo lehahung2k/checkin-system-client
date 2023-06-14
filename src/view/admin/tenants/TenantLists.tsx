@@ -17,6 +17,8 @@ interface TenantAccountData {
 
 const TenantLists = () => {
     const [tenants, setTenants] = useState<TenantAccountData[]>([]);
+    const [index, setIndex] = useState(0);
+
     const getTenants = () => {
         accountApi
             .getTenantAccounts()
@@ -24,6 +26,7 @@ const TenantLists = () => {
                 const tenants = res.data.payload;
                 console.log(tenants);
                 setTenants(tenants);
+                setIndex(0);
             })
             .catch((err) => {
                 console.log(err.response.data.message);
@@ -46,6 +49,7 @@ const TenantLists = () => {
                                     <Table>
                                         <TableHead>
                                             <TableRow>
+                                                <TableCell>STT</TableCell>
                                                 <TableCell>Tên đăng nhập</TableCell>
                                                 <TableCell>Quản trị viên</TableCell>
                                                 <TableCell>Email</TableCell>
@@ -55,13 +59,14 @@ const TenantLists = () => {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {tenants.map((tenant) => (
+                                            {tenants.map((tenant, i) => (
                                                 <TableRow key={tenant.userId}>
+                                                    <TableCell>{index + i + 1}</TableCell>
                                                     <TableCell>{tenant.username}</TableCell>
                                                     <TableCell>{tenant.fullName}</TableCell>
                                                     <TableCell>{tenant.email}</TableCell>
                                                     <TableCell>{tenant.companyName}</TableCell>
-                                                    <TableCell>{tenant.active}</TableCell>
+                                                    <TableCell>{tenant.active ? 'Hoạt động' : 'Ngừng hoạt động'}</TableCell>
                                                 </TableRow>
                                             ))}
                                         </TableBody>

@@ -15,6 +15,10 @@ class EventsApi {
         });
     }
 
+    getEventsByAdmin = async () => {
+        return this.api.get('');
+    }
+
     getAllEvents = async () => {
         return this.api.get("/events");
     }

@@ -5,6 +5,7 @@ import SubCard from "../../../components/cards/SubCard";
 import eventsApi from "../../../services/eventsApi";
 import EventDetail from "../event-detail/EventDetail";
 import {DataGrid, GridColDef} from "@mui/x-data-grid";
+import dateTimeCalc from "../../../services/dateTimeCalc";
 
 const columns: GridColDef[] = [
     {field: 'id', headerName: 'STT', flex: 0.02},
@@ -45,39 +46,16 @@ const EventLists = () => {
         getEvents();
     }, []);
 
-    const formatDateTime = (dateTime: Date) => {
-        const year = dateTime.getFullYear();
-        const month = String(dateTime.getMonth() + 1).padStart(2, '0');
-        const day = String(dateTime.getDate()).padStart(2, '0');
-        const hours = String(dateTime.getHours()).padStart(2, '0');
-        const minutes = String(dateTime.getMinutes()).padStart(2, '0');
-
-        return `${day}/${month}/${year} ${hours}:${minutes}`;
-    };
-
-    const calculateEventStatus = (startTime: string, endTime: string): string => {
-        const currentDate = new Date();
-        const startDate = new Date(startTime);
-        const endDate = new Date(endTime);
-
-        if (currentDate < startDate) {
-            return 'Chưa bắt đầu';
-        } else if (currentDate >= startDate && currentDate <= endDate) {
-            return 'Đang diễn ra';
-        } else {
-            return 'Đã kết thúc';
-        }
-    };
     const rows = events.map((event: any, index) => {
         const startTime = new Date(event.startTime);
         const endTime = new Date(event.endTime);
         return {
             id: index + 1,
             eventName: event.eventName,
-            startTime: formatDateTime(startTime),
-            endTime: formatDateTime(endTime),
+            startTime: dateTimeCalc.formatDateTime(startTime),
+            endTime: dateTimeCalc.formatDateTime(endTime),
             eventCode: event.eventCode,
-            status: calculateEventStatus(event.startTime, event.endTime),
+            status: dateTimeCalc.calculateEventStatus(event.startTime, event.endTime),
         }
     });
     return (
