@@ -1,9 +1,18 @@
 import React from 'react';
-const EventDetail = () => {
+import {Typography} from "@mui/material";
+import SubCard from "../../../components/cards/SubCard";
+
+class EventDetailProps {
+    eventId: string | any;
+}
+
+const EventDetail: React.FC<EventDetailProps> = ({eventId}) => {
     return (
-        <div>
-        <h1>Event Detail</h1>
-        </div>
+        <SubCard title="Chi tiết sự kiện:">
+            <Typography variant="body2" component="div" gutterBottom>
+                Hello {eventId}
+            </Typography>
+        </SubCard>
     );
 }
 

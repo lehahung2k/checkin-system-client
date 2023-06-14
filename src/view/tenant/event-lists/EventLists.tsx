@@ -1,9 +1,10 @@
 import MainCard from "../../../components/cards/MainCard";
-import {Grid} from "@mui/material";
+import {Box, Grid, Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import SubCard from "../../../components/cards/SubCard";
-import {DataGrid, GridColDef} from '@mui/x-data-grid';
 import eventsApi from "../../../services/eventsApi";
+import EventDetail from "../event-detail/EventDetail";
+import {DataGrid, GridColDef} from "@mui/x-data-grid";
 
 const columns: GridColDef[] = [
     {field: 'id', headerName: 'STT', flex: 0.02},
@@ -21,10 +22,15 @@ const columns: GridColDef[] = [
 const EventLists = () => {
     const [events, setEvents] = useState([]);
     const [selectedEventId, setSelectedEventId] = React.useState<string>('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [sortedField, setSortedField] = useState('');
+    const [sortOrder, setSortOrder] = useState('asc');
+    const [filteredEvents, setFilteredEvents] = useState(events);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const handleEventClick = (eventId: string) => {
         setSelectedEventId(eventId);
-        // Show the modal or perform any other action
+        setIsModalOpen(true);
     };
 
     const getEvents = () => {
@@ -43,6 +49,16 @@ const EventLists = () => {
         getEvents();
     }, []);
 
+    const formatDateTime = (dateTime: Date) => {
+        const year = dateTime.getFullYear();
+        const month = String(dateTime.getMonth() + 1).padStart(2, '0');
+        const day = String(dateTime.getDate()).padStart(2, '0');
+        const hours = String(dateTime.getHours()).padStart(2, '0');
+        const minutes = String(dateTime.getMinutes()).padStart(2, '0');
+
+        return `${day}/${month}/${year} ${hours}:${minutes}`;
+    };
+
     const calculateEventStatus = (startTime: string, endTime: string): string => {
         const currentDate = new Date();
         const startDate = new Date(startTime);
@@ -59,16 +75,6 @@ const EventLists = () => {
     const rows = events.map((event: any, index) => {
         const startTime = new Date(event.startTime);
         const endTime = new Date(event.endTime);
-
-        const formatDateTime = (dateTime: Date) => {
-            const year = dateTime.getFullYear();
-            const month = String(dateTime.getMonth() + 1).padStart(2, '0');
-            const day = String(dateTime.getDate()).padStart(2, '0');
-            const hours = String(dateTime.getHours()).padStart(2, '0');
-            const minutes = String(dateTime.getMinutes()).padStart(2, '0');
-
-            return `${day}/${month}/${year} ${hours}:${minutes}`;
-        };
         return {
             id: index + 1,
             eventName: event.eventName,
@@ -101,6 +107,18 @@ const EventLists = () => {
                     </SubCard>
                 </Grid>
             </Grid>
+            <Modal keepMounted open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                <Box sx={{
+                    position: 'absolute',
+                    top: '25%',
+                    left: '55%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '80%',
+                    boxShadow: 10,
+                }}>
+                    <EventDetail eventId={selectedEventId} />
+                </Box>
+            </Modal>
         </MainCard>
     );
 }
