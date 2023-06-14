@@ -7,23 +7,23 @@
   justify-content: center;
   align-items: center;
 
-  .right-login {
+  .register-form {
     width: 50vw;
-    height: 100vh;
+    height: 80vh;
     display: flex;
     justify-content: center;
     align-items: center;
 
-    .card-login {
-      width: 60%;
+    .card-register {
+      width: 50vw;
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      padding: 30px 35px;
+      padding: 2rem;
       background-image: linear-gradient(#ebebf9, rgb(245, 253, 255));
       border-radius: 20px;
-      box-shadow: 0px 0px 20px #00000056;
+      box-shadow: 0 0 20px #00000056;
       z-index: 1;
 
       h1 {
@@ -36,12 +36,12 @@
       }
 
       .form-group {
-        width: 100%;
+        width: 40vw;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
         justify-content: center;
-        margin: 10px 0px;
+        margin: 10px 0;
 
         label {
           color: #000000de;

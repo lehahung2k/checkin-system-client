@@ -1,8 +1,10 @@
+import MainCard from "../../../components/cards/MainCard";
+
 const ViewProfile = () => {
     return (
-    <div>
+    <MainCard title='Xem thông tin cá nhân'>
       <h1>View Profile</h1>
-    </div>
+    </MainCard>
   );
 };
 export default ViewProfile;

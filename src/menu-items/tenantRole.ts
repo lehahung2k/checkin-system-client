@@ -12,6 +12,21 @@ const tenantRole = {
     type: 'group',
     children: [
         {
+            id: 'tenant',
+            title: 'Ban tổ chức',
+            type: 'collapse',
+            icon: icons.IconBuilding,
+            children: [
+                {
+                    id: 'view-tenant',
+                    title: 'Thông tin ban tổ chức',
+                    type: 'item',
+                    url: '/tenant/view-tenant',
+                    breadcrumbs: true
+                }
+            ]
+        },
+        {
             id: 'event',
             title: 'Sự kiện',
             type: 'collapse',
@@ -29,21 +44,6 @@ const tenantRole = {
                     title: 'Tạo mới sự kiện',
                     type: 'item',
                     url: '/event/create',
-                    breadcrumbs: true
-                }
-            ]
-        },
-        {
-            id: 'tenant',
-            title: 'Ban tổ chức',
-            type: 'collapse',
-            icon: icons.IconBuilding,
-            children: [
-                {
-                    id: 'view-tenant',
-                    title: 'Thông tin ban tổ chức',
-                    type: 'item',
-                    url: '/tenant/view-tenant',
                     breadcrumbs: true
                 }
             ]

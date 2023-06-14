@@ -1,14 +1,14 @@
 import { Typography } from "@mui/material";
 import MainCard from "../../../components/cards/MainCard";
 
-const Helps = () => {
-    return(
-        <MainCard title='Hướng dẫn sử dụng'>
+const ViewGuests = () => {
+    return (
+        <MainCard title='Xem danh sách khách checkin'>
             <Typography variant="body2">
-                Đây là hướng dẫn sử dụng hệ thống!
+                Xem danh sách khách checkin
             </Typography>
         </MainCard>
     );
 }
 
-export default Helps;
+export default ViewGuests;
