@@ -12,19 +12,18 @@ const DashboardDefault = Loadable(lazy(() => import('../view/dashboard/Dashboard
 const AboutUs = Loadable(lazy(() => import('../view/common/about-us/AboutUs')));
 const Helps = Loadable(lazy(() => import('../view/common/help/Helps')))
 
-// admin and tenant routing
-const EventLists = Loadable(lazy(() => import('../view/admin/event-lists/EventLists')));
-const CreateEvent = Loadable(lazy(() => import('../view/admin/create-event/CreateEvent')));
-
 // admin routing
 const TenantLists = Loadable(lazy(() => import('../view/admin/tenants/TenantLists')));
 const PocLists = Loadable(lazy(() => import('../view/admin/poc/PocLists')));
-const Summary = Loadable(lazy(() => import('../view/admin/sumary/SummaryAll')));
+const Summary = Loadable(lazy(() => import('../view/admin/summary/SummaryAll')));
+const EventListsAdmin = Loadable(lazy(() => import('../view/admin/event/EventListsAdmin')));
 
 // tenant routing
 const TenantView = Loadable(lazy(() => import('../view/tenant/tenant-view/TenantView')));
 const ManagePoc = Loadable(lazy(() => import('../view/tenant/mange-poc/ManagePoc')));
 const CreateNewTenant = Loadable(lazy(() => import('../view/tenant/create-tenant/CreateNewTenant')));
+const EventLists = Loadable(lazy(() => import('../view/tenant/event-lists/EventLists')));
+const CreateEvent = Loadable(lazy(() => import('../view/tenant/create-event/CreateEvent')));
 
 // poc routing
 const CheckinPage = Loadable(lazy(() => import('../view/poc/checkin/Checkin')));
@@ -77,7 +76,7 @@ const pocRoutes = checkRole.getRole() === 'poc' && [
 ]
 
 // admin and tenant routes
-const adminAndTenantRoutes = (checkRole.getRole() === 'admin' || checkRole.getRole() === 'tenant') && [
+const eventTenantRoutes = (checkRole.getRole() === 'tenant') && [
     {
         path: 'lists',
         element: <EventLists />
@@ -85,6 +84,13 @@ const adminAndTenantRoutes = (checkRole.getRole() === 'admin' || checkRole.getRo
     {
         path: 'create',
         element: <CreateEvent />
+    }
+]
+
+const eventAdminRoutes = (checkRole.getRole() === 'admin') && [
+    {
+        path: 'event-lists',
+        element: <EventListsAdmin />
     }
 ]
 
@@ -126,11 +132,12 @@ const MainRoutes = {
                 ...(tenantRoutes || [])
             ]
         },
-        // admin and tenant can access these routes
+        // event routes (tenant can modify, admin can view)
         {
             path: 'event',
             children: [
-                ...(adminAndTenantRoutes || [])
+                ...(eventTenantRoutes || []),
+                ...(eventAdminRoutes || [])
             ]
         },
         // all roles can access these routes

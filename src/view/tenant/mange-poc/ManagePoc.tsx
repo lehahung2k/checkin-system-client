@@ -1,11 +1,10 @@
-import MainCard from "../../../components/cards/MainCard";
-import {Typography} from "@mui/material";
+import React from 'react';
 
 const ManagePoc = () => {
     return (
-        <MainCard title="Quản lý quầy checkin">
-            <Typography variant="body2">Manage Poc</Typography>
-        </MainCard>
+        <div>
+            ManagePoc
+        </div>
     );
 }
 

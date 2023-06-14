@@ -1,7 +1,7 @@
 import React from 'react';
 import './Welcome.scss';
 import style from './Welcome.module.scss'
-import { Box, Container, Grid, Typography, Button, CardContent, Card, CardMedia } from "@mui/material";
+import {Box, Container, Grid, Typography, Button, CardContent, Card, CardMedia} from "@mui/material";
 import { Link } from 'react-router-dom';
 import { IconArrowBigRightFilled } from '@tabler/icons-react' 
 
@@ -31,10 +31,10 @@ const Welcome = () => {
                 >
                     <Grid container xs={4} alignItems="center" justifyContent="center">
                         <Box>
-                            <Card sx={{ maxWidth: 345 }}>
+                            <Card sx={{ maxWidth: '33vw' }}>
                                 <CardMedia
                                     component="img"
-                                    sx={{ height: 300 }}
+                                    sx={{ height: '30vh' }}
                                     image={require("../../../assets/images/welcome/welcome_item_01.jpg")}
                                     alt="Welcome"
                                 />
@@ -51,12 +51,12 @@ const Welcome = () => {
                     </Grid>
 
                     <Grid container xs={4} alignItems="center" justifyContent="center">
-                        <Card sx={{ maxWidth: 345 }}>
+                        <Card sx={{ maxWidth: '33vw' }}>
                             <CardMedia
                                 component="img"
                                 image={require("../../../assets/images/welcome/welcome_item_02.jpg")}
                                 alt="Welcome"
-                                sx={{ height: 300 }}
+                                sx={{ height: '30vh' }}
                             />
                             <CardContent>
                                 <Typography gutterBottom variant="h5" component="div">
@@ -70,10 +70,10 @@ const Welcome = () => {
                     </Grid>
 
                     <Grid container xs={4} alignItems="center" justifyContent="center">
-                        <Card sx={{ maxWidth: 345 }}>
+                        <Card sx={{ maxWidth: '33vw' }}>
                             <CardMedia
                                 component="img"
-                                sx={{ height: 300 }}
+                                sx={{ height: '30vh' }}
                                 image={require("../../../assets/images/welcome/welcome_item_03.png")}
                                 alt="Welcome"
                             />
@@ -119,7 +119,7 @@ const Welcome = () => {
                     <Grid container direction="column" alignItems="center">
                         <Grid item xs={12}>
                             <Typography color="white" variant="h5">
-                                Event Checkin Managemant
+                                Event Checkin Management
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
