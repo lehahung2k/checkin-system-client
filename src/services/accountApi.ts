@@ -1,12 +1,12 @@
-import axios, { AxiosInstance } from "axios";
+import axios, {AxiosInstance} from "axios";
 import Cookies from "js-cookie";
 
-class EventApi {
+class AccountApi{
     private api: AxiosInstance;
 
     constructor() {
         this.api = axios.create({
-            baseURL: `${process.env.REACT_APP_BASE_URL}/events-manager`,
+            baseURL: `${process.env.REACT_APP_BASE_URL}/accounts`,
             withCredentials: true,
             headers: {
                 Accept: "*/*",
@@ -14,8 +14,10 @@ class EventApi {
             },
         });
     }
+
+    getTenantAccounts = async () => {
+        return this.api.get("/tenant");
+    }
 }
-
-const eventApi = new EventApi();
-
-export default eventApi;
+const accountApi = new AccountApi();
+export default accountApi;

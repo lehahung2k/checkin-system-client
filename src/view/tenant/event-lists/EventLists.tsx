@@ -23,10 +23,6 @@ const EventLists = () => {
     const [events, setEvents] = useState([]);
     const [selectedEventId, setSelectedEventId] = React.useState<string>('');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [sortedField, setSortedField] = useState('');
-    const [sortOrder, setSortOrder] = useState('asc');
-    const [filteredEvents, setFilteredEvents] = useState(events);
-    const [searchQuery, setSearchQuery] = useState('');
 
     const handleEventClick = (eventId: string) => {
         setSelectedEventId(eventId);

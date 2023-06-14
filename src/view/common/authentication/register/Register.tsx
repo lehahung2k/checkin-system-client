@@ -74,8 +74,8 @@ function Register() {
 
     return (
         <div className="body">
-            <div className="right-login">
-                <div className="card-login">
+            <div className="register-form">
+                <div className="card-register">
                     <h1 style={{marginBottom: "1rem"}}>ĐĂNG KÝ</h1>
                     <Formik
                         initialValues={initialValues}
@@ -83,7 +83,7 @@ function Register() {
                         validationSchema={validationSchema}
                     >
                         {({setFieldValue}) => (
-                            <Form className="login-form">
+                            <Form>
                                 <div className="form-group">
                                     <Field
                                         autoComplete="off"
