@@ -1,10 +1,11 @@
 import MainCard from "../../../components/cards/MainCard";
 import {Grid, Paper, Table, TableBody, TableCell, TableContainer, Typography} from "@mui/material";
 import accountApi from "../../../services/accountApi";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import SubCard from "../../../components/cards/SubCard";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import SearchBoxAction from "../../../components/cards/SearchBoxAction";
 
 interface TenantAccountData {
     userId: number;
@@ -37,11 +38,15 @@ const TenantLists = () => {
         getTenants();
     }, []);
 
+    const handleFilter = () => {
+
+    }
+
     return (
         <MainCard title="Danh sách đối tác">
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <SubCard title="Xem danh sách tài khoản đối tác">
+                    <SubCard title="Xem danh sách tài khoản đối tác" secondary={<SearchBoxAction onChange={handleFilter}/>}>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 {/*table data*/}
