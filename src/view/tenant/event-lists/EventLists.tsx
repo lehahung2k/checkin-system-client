@@ -1,5 +1,5 @@
 import MainCard from "../../../components/cards/MainCard";
-import {Box, Grid, Modal} from "@mui/material";
+import {Box, Button, Grid, Modal} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import SubCard from "../../../components/cards/SubCard";
 import eventsApi from "../../../services/eventsApi";
@@ -7,6 +7,8 @@ import EventDetail from "../event-detail/EventDetail";
 import dateTimeCalc from "../../../services/dateTimeCalc";
 import DataTable from "react-data-table-component";
 import SearchBoxAction from "../../../components/cards/SearchBoxAction";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { IconEye } from "@tabler/icons-react";
 
 interface EventData {
     eventId: string;
@@ -19,7 +21,6 @@ interface EventData {
 
 const EventLists = () => {
     const [events, setEvents] = useState<EventData[]>([]);
-    const [data, setData] = useState([]);
     const [selectedEventId, setSelectedEventId] = React.useState<string>('');
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -44,38 +45,22 @@ const EventLists = () => {
         getEvents();
     }, []);
 
-    const columns = [
-        {
-            name: '#',
-            selector: (row: { id: number; }) => row.id,
-            sortable: true,
-        },
-        {
-            name: 'Tên sự kiện',
-            selector: (row: { eventName: string; }) => row.eventName,
-            sortable: true,
-        },
-        {
-            name: 'Thời gian bắt đầu',
-            selector: (row: { startTime: string; }) => row.startTime,
-            sortable: true,
-        },
-        {
-            name: 'Thời gian kết thúc',
-            selector: (row: { endTime: string; }) => row.endTime,
-            sortable: true,
-        },
-        {
-            name: 'Mã sự kiện',
-            selector: (row: { eventCode: string; }) => row.eventCode,
-            sortable: true,
-        },
-        {
-            name: 'Trạng thái',
-            selector: (row: { status: string; }) => row.status,
-            sortable: true,
-        },
+    const columns: GridColDef[] = [
+        { field: 'id', headerName: '#', minWidth: 50, flex: 0.01 },
+        { field: 'eventName', headerName: 'Tên sự kiện', minWidth: 200, flex: 0.2, resizable: true},
+        { field: 'startTime', headerName: 'Thời gian bắt đầu', minWidth: 150, flex: 0.1},
+        { field: 'endTime', headerName: 'Thời gian kết thúc', minWidth: 150, flex: 0.1 },
+        { field: 'eventCode', headerName: 'Mã sự kiện', minWidth: 150, flex: 0.1},
+        { field: 'status', headerName: 'Trạng thái', minWidth: 150, flex: 0.1 },
+        { field: 'viewDetails', headerName: 'Chi tiết', minWidth: 100, renderCell: (params) => (
+            <Button
+                onClick={() => handleEventClick(params.row.eventId)}
+                endIcon={<IconEye />}
+            >
+            </Button>
+        )}
     ];
+
 
     const rows = events.map((event: any, index) => {
         const startTime = new Date(event.startTime);
@@ -108,11 +93,17 @@ const EventLists = () => {
                     <SubCard title="Xem danh sách sự kiện" secondary={<SearchBoxAction onChange={handleFilter}/>}>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
-                                <DataTable
+                                <DataGrid
                                     columns={columns}
-                                    data={rows}
-                                    pagination={true}
-                                    pointerOnHover={true}
+                                    rows={rows}
+                                    initialState={{
+                                        pagination: {
+                                            paginationModel: { page: 0, pageSize: 5 },
+                                        },
+                                    }}
+                                    pageSizeOptions={[5, 10, 15]}
+                                    checkboxSelection
+                                    autoHeight={true}
                                 />
                             </Grid>
                         </Grid>

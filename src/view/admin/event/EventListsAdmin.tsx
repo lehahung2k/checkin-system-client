@@ -1,11 +1,12 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import MainCard from "../../../components/cards/MainCard";
 import eventsApi from "../../../services/eventsApi";
-import {Grid} from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import SubCard from "../../../components/cards/SubCard";
 import dateTimeCalc from "../../../services/dateTimeCalc";
 import SearchBoxAction from "../../../components/cards/SearchBoxAction";
-import DataTable from 'react-data-table-component';
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { IconEye } from "@tabler/icons-react"
 
 interface EventData {
     eventId: string;
@@ -18,12 +19,12 @@ interface EventData {
 
 const EventListsAdmin = () => {
     const [events, setEvents] = useState<EventData[]>([]);
+
     const getEvents = () => {
         eventsApi
             .getEventsByAdmin()
             .then((res) => {
                 const events = res.data.payload;
-                console.log(events);
                 setEvents(events);
             })
             .catch((err) => {
@@ -35,40 +36,23 @@ const EventListsAdmin = () => {
         getEvents();
     }, []);
 
-    const columns = [
-        {
-            name: '#',
-            selector: (row: { id: number; }) => row.id,
-            sortable: true,
-        },
-        {
-            name: 'Tên sự kiện',
-            selector: (row: { eventName: string; }) => row.eventName,
-            sortable: true,
-        },
-        {
-            name: 'Thời gian bắt đầu',
-            selector: (row: { startTime: string; }) => row.startTime,
-            sortable: true,
-        },
-        {
-            name: 'Thời gian kết thúc',
-            selector: (row: { endTime: string; }) => row.endTime,
-            sortable: true,
-        },
-        {
-            name: 'Mã sự kiện',
-            selector: (row: { eventCode: string; }) => row.eventCode,
-            sortable: true,
-        },
-        {
-            name: 'Trạng thái',
-            selector: (row: { status: string; }) => row.status,
-            sortable: true,
-        },
+    const columns: GridColDef[] = [
+        { field: 'id', headerName: '#', minWidth: 50, flex: 0.01 },
+        { field: 'eventName', headerName: 'Tên sự kiện', minWidth: 200, flex: 0.2, resizable: true},
+        { field: 'startTime', headerName: 'Thời gian bắt đầu', minWidth: 150, flex: 0.1},
+        { field: 'endTime', headerName: 'Thời gian kết thúc', minWidth: 150, flex: 0.1 },
+        { field: 'eventCode', headerName: 'Mã sự kiện', minWidth: 150, flex: 0.1},
+        { field: 'status', headerName: 'Trạng thái', minWidth: 150, flex: 0.1 },
+        { field: 'viewDetails', headerName: 'Chi tiết', minWidth: 100, renderCell: (params) => (
+            <Button
+                onClick={() => handleViewDetails(params.row.eventId)}
+                endIcon={<IconEye />}
+            >
+            </Button>
+        )}
     ];
 
-    const data = events.map((event: any, index) => {
+    const data = events.map((event: EventData, index) => {
         const startTime = new Date(event.startTime);
         const endTime = new Date(event.endTime);
         return {
@@ -81,20 +65,31 @@ const EventListsAdmin = () => {
         }
     });
 
-    const handleFilter = (e: any) => {}
+    console.log(data);
+
+    const handleFilter = (e: any) => { }
+
+    const handleViewDetails = (eventId: string) => {}
 
     return (
         <MainCard title="Danh sách sự kiện:">
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <SubCard title="Xem danh sách toàn bộ sự kiện" secondary={<SearchBoxAction onChange={handleFilter}/>}>
+                    <SubCard title="Xem danh sách toàn bộ sự kiện" secondary={<SearchBoxAction onChange={handleFilter} />}>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
-                                <DataTable
+                                {/*<DataTable*/}
+                                <DataGrid
+                                    rows={data}
                                     columns={columns}
-                                    data={data}
-                                    pointerOnHover={true}
-                                    pagination={true}
+                                    initialState={{
+                                        pagination: {
+                                            paginationModel: { page: 0, pageSize: 5 },
+                                        },
+                                    }}
+                                    pageSizeOptions={[5, 10, 15]}
+                                    checkboxSelection
+                                    autoHeight={true}
                                 />
                             </Grid>
                         </Grid>
