@@ -22,14 +22,7 @@ const adminRole = {
                     id: 'event-list',
                     title: 'Danh sách sự kiện',
                     type: 'item',
-                    url: '/event/lists',
-                    breadcrumbs: true
-                },
-                {
-                    id: 'event-create',
-                    title: 'Tạo mới sự kiện',
-                    type: 'item',
-                    url: '/event/create',
+                    url: '/event/event-lists',
                     breadcrumbs: true
                 }
             ]

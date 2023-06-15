@@ -103,6 +103,7 @@ const CreateNewTenant = () => {
                 ...prevValues,
                 tenantName: tenantNameFromLocalStorage,
                 contactName: contactNameFromLocalStorage || "",
+                website: "https://",
             }));
         }
     }, []);
