@@ -36,7 +36,7 @@ const MuiNotification: React.FC<NotificationSnackbarProps> = ({ isOpen, successM
                 sx={{
                     backgroundColor: successMessage ? "success.light" : "error.light",
                     fontWeight: "bold",
-                    color: "secondary.main",
+                    color: successMessage ? "dark.paper" : "primary.light",
                     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.25)",
                 }}
             >

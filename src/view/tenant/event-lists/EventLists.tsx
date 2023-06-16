@@ -5,7 +5,6 @@ import SubCard from "../../../components/cards/SubCard";
 import eventsApi from "../../../services/eventsApi";
 import EventDetail from "../event-detail/EventDetail";
 import dateTimeCalc from "../../../services/dateTimeCalc";
-import DataTable from "react-data-table-component";
 import SearchBoxAction from "../../../components/cards/SearchBoxAction";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { IconEye } from "@tabler/icons-react";
