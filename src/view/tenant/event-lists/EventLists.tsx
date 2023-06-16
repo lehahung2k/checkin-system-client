@@ -1,27 +1,26 @@
 import MainCard from "../../../components/cards/MainCard";
-import {Box, Grid, Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {Box, Button, Grid, Modal} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import SubCard from "../../../components/cards/SubCard";
 import eventsApi from "../../../services/eventsApi";
 import EventDetail from "../event-detail/EventDetail";
-import {DataGrid, GridColDef} from "@mui/x-data-grid";
 import dateTimeCalc from "../../../services/dateTimeCalc";
+import DataTable from "react-data-table-component";
+import SearchBoxAction from "../../../components/cards/SearchBoxAction";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { IconEye } from "@tabler/icons-react";
 
-const columns: GridColDef[] = [
-    {field: 'id', headerName: 'STT', flex: 0.02},
-    {
-        field: 'eventName',
-        headerName: 'Tên sự kiện',
-        flex: 0.2,
-    },
-    {field: 'startTime', headerName: 'Thời gian bắt đầu', flex: 0.1},
-    {field: 'endTime', headerName: 'Thời gian kết thúc', flex: 0.1},
-    {field: 'eventCode', headerName: 'Mã sự kiện', flex: 0.1},
-    {field: 'status', headerName: 'Trạng thái', flex: 0.1},
-];
+interface EventData {
+    eventId: string;
+    eventCode: string;
+    eventName: string;
+    eventDescription: string;
+    startTime: string;
+    endTime: string;
+}
 
 const EventLists = () => {
-    const [events, setEvents] = useState([]);
+    const [events, setEvents] = useState<EventData[]>([]);
     const [selectedEventId, setSelectedEventId] = React.useState<string>('');
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -46,6 +45,23 @@ const EventLists = () => {
         getEvents();
     }, []);
 
+    const columns: GridColDef[] = [
+        { field: 'id', headerName: '#', minWidth: 50, flex: 0.01 },
+        { field: 'eventName', headerName: 'Tên sự kiện', minWidth: 200, flex: 0.2, resizable: true},
+        { field: 'startTime', headerName: 'Thời gian bắt đầu', minWidth: 150, flex: 0.1},
+        { field: 'endTime', headerName: 'Thời gian kết thúc', minWidth: 150, flex: 0.1 },
+        { field: 'eventCode', headerName: 'Mã sự kiện', minWidth: 150, flex: 0.1},
+        { field: 'status', headerName: 'Trạng thái', minWidth: 150, flex: 0.1 },
+        { field: 'viewDetails', headerName: 'Chi tiết', minWidth: 100, renderCell: (params) => (
+            <Button
+                onClick={() => handleEventClick(params.row.eventId)}
+                endIcon={<IconEye />}
+            >
+            </Button>
+        )}
+    ];
+
+
     const rows = events.map((event: any, index) => {
         const startTime = new Date(event.startTime);
         const endTime = new Date(event.endTime);
@@ -58,23 +74,36 @@ const EventLists = () => {
             status: dateTimeCalc.calculateEventStatus(event.startTime, event.endTime),
         }
     });
+    const [filteredRows, setFilteredRows] = useState(rows);
+    const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const filteredData = rows.filter((row) =>
+            Object.values(row)
+                .join(" ")
+                .toLowerCase()
+                .includes(searchTerm)
+        );
+        setFilteredRows(filteredData);
+    };
+
     return (
         <MainCard title="Danh sách sự kiện">
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <SubCard title="Xem danh sách sự kiện">
+                    <SubCard title="Xem danh sách sự kiện" secondary={<SearchBoxAction onChange={handleFilter}/>}>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <DataGrid
-                                    rows={rows}
                                     columns={columns}
+                                    rows={rows}
                                     initialState={{
                                         pagination: {
-                                            paginationModel: {page: 0, pageSize: 5},
+                                            paginationModel: { page: 0, pageSize: 5 },
                                         },
                                     }}
-                                    pageSizeOptions={[5, 10]}
+                                    pageSizeOptions={[5, 10, 15]}
                                     checkboxSelection
+                                    autoHeight={true}
                                 />
                             </Grid>
                         </Grid>
