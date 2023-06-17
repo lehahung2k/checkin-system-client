@@ -53,6 +53,10 @@
     }
 }
 
+::-webkit-scrollbar {
+    display: none;
+}
+
 // ==============================|| ANIMATION KEYFRAMES ||============================== //
 
 @keyframes wings {

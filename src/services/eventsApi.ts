@@ -34,6 +34,10 @@ class EventsApi {
     addNewEvent = async (data: EventData) => {
         return this.api.post("/add-event", data);
     }
+
+    getEventById = async (eventId: string) => {
+        return this.api.get(`/events/view?eventId=${eventId}`);
+    }
 }
 const eventsApi = new EventsApi();
 export default eventsApi;
