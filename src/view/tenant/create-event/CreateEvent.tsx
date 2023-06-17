@@ -1,41 +1,121 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { Grid, TextField, Button } from '@mui/material';
+import React, {ChangeEvent, useEffect, useState} from "react";
+import {Button, Grid, TextField} from '@mui/material';
 import MainCard from "../../../components/cards/MainCard";
 import SubCard from "../../../components/cards/SubCard";
+import MuiNotification from "../../../components/Notification";
+import {IconUpload} from "@tabler/icons-react";
+import eventsApi from "../../../services/eventsApi";
+import {useNavigate} from "react-router";
 
+interface CreateEventFormValues {
+    eventCode: string;
+    eventName: string;
+    eventDescription: string;
+    startTime: Date;
+    endTime: Date;
+    eventImg: string;
+}
 const CreateEvent = () => {
-
-    const [startTime, setStartTime] = useState(new Date());
-    const [endTime, setEndTime] = useState(new Date());
+    const [formValues, setFormValues] = useState<CreateEventFormValues>({
+        eventCode: "",
+        eventName: "",
+        eventDescription: "",
+        startTime: new Date(),
+        endTime: new Date(),
+        eventImg: "",
+    });
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string>("");
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const [isSnackbarOpen, setIsSnackbarOpen] = useState<boolean>(false);
+    const [formErrors, setFormErrors] = useState<Partial<CreateEventFormValues>>({});
+    const navigate = useNavigate();
+    const handleSnackbarClose = () => {
+        setIsSnackbarOpen(false);
+    };
 
-    useEffect(() => {
-        setStartTime(new Date());
-        setEndTime(new Date());
-    }, []);
-
-    const formatDateTime = (dateTime: { getFullYear: () => any; getMonth: () => number; getDate: () => any; getHours: () => any; getMinutes: () => any; }) => {
-        const year = dateTime.getFullYear();
-        const month = String(dateTime.getMonth() + 1).padStart(2, "0");
-        const date = String(dateTime.getDate()).padStart(2, "0");
-        const hours = String(dateTime.getHours()).padStart(2, "0");
-        const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+    const formatDateTime = (dateTime: Date) => {
+        const year = dateTime.getUTCFullYear();
+        const month = String(dateTime.getUTCMonth() + 1).padStart(2, "0");
+        const date = String(dateTime.getUTCDate()).padStart(2, "0");
+        const hours = String(dateTime.getUTCHours()).padStart(2, "0");
+        const minutes = String(dateTime.getUTCMinutes()).padStart(2, "0");
 
         return `${year}-${month}-${date}T${hours}:${minutes}`;
+    };
+
+    useEffect(() => {
+        setFormValues((prevFormValues) => ({
+            ...prevFormValues,
+            startTime: new Date(),
+            endTime: new Date(),
+        }));
+    }, []);
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setFormValues((prevFormValues) => ({
+            ...prevFormValues,
+            [name]: value,
+        }));
     };
 
     const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
             const file = event.target.files[0];
+            if (file.size > 1242880) { // 5MB (5242880 bytes)
+                alert("Kích thước ảnh không được vượt quá 5MB");
+                return;
+            }
             setSelectedImage(file);
         }
     };
 
-    const createEvent = () => {
-        // Call API here
-        console.log("Start time:", startTime);
-        console.log("End time:", endTime);
-        console.log("Selected image:", selectedImage);
+    const convertImageToBase64 = (imageFile: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                resolve(reader.result as string);
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(imageFile);
+        });
+    };
+
+    const createEvent = async () => {
+        const errors: Partial<CreateEventFormValues> = {};
+        if (!formValues.eventCode) errors.eventCode = "Bấm nút để tạo mã sự kiện";
+        if (!formValues.eventName) errors.eventName = "Tên sự kiện không được để trống";
+
+        if (Object.keys(errors).length > 0) {
+            setFormErrors(errors);
+        } else {
+            // Call API here
+            const eventData: CreateEventFormValues = {
+                ...formValues,
+            }
+            if (selectedImage) {
+                eventData.eventImg = await convertImageToBase64(selectedImage);
+            }
+            console.log(eventData);
+            eventsApi
+                .addNewEvent(eventData)
+                .then((res)=>{
+                    setIsSnackbarOpen(true);
+                    setSuccessMessage("Tạo sự kiện thành công");
+                    setErrorMessage("");
+                    console.log(res);
+                    setTimeout(() => {
+                        navigate("/"); // Redirect to the dashboard after a delay
+                    }, 3000);
+                })
+                .catch((error) => {
+                    setErrorMessage(error.response.data.message);
+                    setIsSnackbarOpen(true);
+                    setSuccessMessage("");
+                    console.log(error.response.data.message);
+                });
+        }
     };
 
     return (
@@ -46,25 +126,38 @@ const CreateEvent = () => {
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <TextField
+                                    name={"eventCode"}
                                     label="Mã sự kiện"
+                                    value={formValues.eventCode}
                                     variant="outlined"
+                                    onChange={handleInputChange}
                                     fullWidth
+                                    error={!!formErrors.eventCode}
+                                    helperText={formErrors.eventCode}
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     label="Tên sự kiện"
                                     variant="outlined"
+                                    name={"eventName"}
+                                    value={formValues.eventName}
                                     fullWidth
+                                    onChange={handleInputChange}
+                                    error={!!formErrors.eventName}
+                                    helperText={formErrors.eventName}
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     label="Mô tả sự kiện"
                                     variant="outlined"
+                                    name={"eventDescription"}
+                                    value={formValues.eventDescription}
                                     multiline
                                     rows={4}
                                     fullWidth
+                                    onChange={handleInputChange}
                                 />
                             </Grid>
                             <Grid item xs={6}>
@@ -73,8 +166,13 @@ const CreateEvent = () => {
                                     type="datetime-local"
                                     variant="outlined"
                                     fullWidth
-                                    value={formatDateTime(startTime)}
-                                    onChange={(e) => setStartTime(new Date(e.target.value))}
+                                    value={formatDateTime(formValues.startTime)}
+                                    onChange={(e) =>
+                                        setFormValues((prevFormValues) => ({
+                                            ...prevFormValues,
+                                            startTime: new Date(e.target.value),
+                                        }))
+                                    }
                                 />
                             </Grid>
                             <Grid item xs={6}>
@@ -83,8 +181,13 @@ const CreateEvent = () => {
                                     type="datetime-local"
                                     variant="outlined"
                                     fullWidth
-                                    value={formatDateTime(endTime)}
-                                    onChange={(e) => setEndTime(new Date(e.target.value))}
+                                    value={formatDateTime(formValues.endTime)}
+                                    onChange={(e) =>
+                                        setFormValues((prevFormValues) => ({
+                                            ...prevFormValues,
+                                            endTime: new Date(e.target.value),
+                                        }))
+                                    }
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -97,12 +200,12 @@ const CreateEvent = () => {
                                 />
                                 <label htmlFor="image-upload">
                                     <Button variant="outlined" component="span">
-                                        Chọn ảnh
+                                        <IconUpload/> Tải lên sơ đồ sự kiện
                                     </Button>
                                 </label>
                                 {selectedImage && (
                                     <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                        <img src={URL.createObjectURL(selectedImage)} alt="Ảnh review" style={{ width: '33vw', borderRadius: '14px' }} />
+                                        <img src={URL.createObjectURL(selectedImage)} alt="Ảnh review" style={{ width: '33vw', borderRadius:'14px' }} />
                                     </div>
                                 )}
                             </Grid>
@@ -115,6 +218,12 @@ const CreateEvent = () => {
                     </Button>
                 </Grid>
             </Grid>
+            <MuiNotification
+                isOpen={isSnackbarOpen}
+                successMessage={successMessage}
+                errorMessage={errorMessage}
+                onClose={handleSnackbarClose}
+            />
         </MainCard>
     );
 }
