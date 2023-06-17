@@ -45,7 +45,7 @@ const EventLists = () => {
     }, []);
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: '#', minWidth: 50, flex: 0.01 },
+        { field: 'id', headerName: '#', minWidth: 50, flex: 0.02 },
         { field: 'eventName', headerName: 'Tên sự kiện', minWidth: 200, flex: 0.2, resizable: true},
         { field: 'startTime', headerName: 'Thời gian bắt đầu', minWidth: 150, flex: 0.1},
         { field: 'endTime', headerName: 'Thời gian kết thúc', minWidth: 150, flex: 0.1 },
@@ -66,6 +66,7 @@ const EventLists = () => {
         const endTime = new Date(event.endTime);
         return {
             id: index + 1,
+            eventId: event.eventId,
             eventName: event.eventName,
             startTime: dateTimeCalc.formatDateTime(startTime),
             endTime: dateTimeCalc.formatDateTime(endTime),
@@ -101,7 +102,6 @@ const EventLists = () => {
                                         },
                                     }}
                                     pageSizeOptions={[5, 10, 15]}
-                                    checkboxSelection
                                     autoHeight={true}
                                 />
                             </Grid>
@@ -112,8 +112,8 @@ const EventLists = () => {
             <Modal keepMounted open={isModalOpen} onClose={() => setIsModalOpen(false)}>
                 <Box sx={{
                     position: 'absolute',
-                    top: '25%',
-                    left: '55%',
+                    top: '50%',
+                    left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '80%',
                     boxShadow: 10,
