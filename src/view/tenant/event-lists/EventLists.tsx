@@ -117,6 +117,7 @@ const EventLists = () => {
                     transform: 'translate(-50%, -50%)',
                     width: '80%',
                     boxShadow: 10,
+                    maxHeight: '80vh', // Giới hạn chiều cao tối đa
                 }}>
                     <EventDetail eventId={selectedEventId} />
                 </Box>

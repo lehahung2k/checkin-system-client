@@ -6,7 +6,7 @@ import SkeletonLoading from '../../../components/cards/SkeletonLoading';
 import dateTimeCalc from '../../../services/dateTimeCalc';
 
 class EventDetailProps {
-    eventId: string | number | any;
+    eventId: string | any | undefined;
 }
 
 const EventDetail: React.FC<EventDetailProps> = ({ eventId }) => {
@@ -33,16 +33,18 @@ const EventDetail: React.FC<EventDetailProps> = ({ eventId }) => {
     }
 
     useEffect(() => {
-        getEventDetail();
+        if (eventId) {
+            getEventDetail();
+        }
     }, [eventId]);
 
     return (
         <SubCard title="Chi tiết sự kiện">
             {/* Hiển thị thông tin event ở đây: */}
-            {event ? (
+            {event && eventId ? (
                 <>
-                    <Grid container spacing={3}>
-                        <Grid item xs={12} md={6}>
+                    <Grid container spacing={3} sx={{ maxHeight: '80vh', overflow: 'auto' }}>
+                        <Grid item xs={12} md={4}>
                             <List>
                                 <ListItem disablePadding>
                                     <ListItemButton>
@@ -65,6 +67,10 @@ const EventDetail: React.FC<EventDetailProps> = ({ eventId }) => {
                                         </ListItemText>
                                     </ListItemButton>
                                 </ListItem>
+                            </List>
+                        </Grid>
+                        <Grid item xs={12} md={4}>
+                            <List>
                                 <ListItem disablePadding>
                                     <ListItemButton>
                                         <ListItemText primaryTypographyProps={{ variant: 'subtitle1', gutterBottom: true }}>
@@ -81,18 +87,30 @@ const EventDetail: React.FC<EventDetailProps> = ({ eventId }) => {
                                 </ListItem>
                             </List>
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12} md={4}>
                             {/* Ảnh sự kiện */}
                             <List>
                                 <ListItem disablePadding>
                                     <ListItemButton>
                                         <ListItemText primaryTypographyProps={{ variant: 'subtitle1' }}>
-                                            <b>Ảnh sự kiện</b>
+                                            <b>Ảnh sơ đồ sự kiện</b>
                                         </ListItemText>
                                     </ListItemButton>
                                 </ListItem>
                                 <ListItem disablePadding>
-                                    <img src={event.eventImg} alt="Ảnh sự kiện" style={{ width: '80%', borderRadius: '14px' }} />
+                                    <img src={event.eventImg} alt="Ảnh sự kiện" style={{ width: '100%', borderRadius: '14px', border: '1px solid' }} />
+                                </ListItem>
+                            </List>
+                        </Grid>
+                        <Grid item xs={12} md={12}>
+                            {/* Danh sách quầy check-in */}
+                            <List>
+                                <ListItem disablePadding>
+                                    <ListItemButton>
+                                        <ListItemText primaryTypographyProps={{ variant: 'subtitle1' }}>
+                                            <b>Danh sách quầy check-in</b>
+                                        </ListItemText>
+                                    </ListItemButton>
                                 </ListItem>
                             </List>
                         </Grid>
