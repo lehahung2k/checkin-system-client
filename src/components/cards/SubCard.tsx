@@ -66,7 +66,7 @@ const SubCard = forwardRef(function SubCard(
             {!darkTitle && title && (
                 <CardHeader
                     sx={{ p: 2.5, backgroundColor: theme.palette.secondary.light }}
-                    title={<Typography variant="h5">{title}</Typography>}
+                    title={<Typography variant="h4"><b>{title}</b></Typography>}
                     action={isMobile ? null : secondary}
                 />
             )}
