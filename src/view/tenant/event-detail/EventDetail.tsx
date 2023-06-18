@@ -98,7 +98,7 @@ const EventDetail: React.FC<EventDetailProps> = ({ eventId }) => {
                                     </ListItemButton>
                                 </ListItem>
                                 <ListItem disablePadding>
-                                    <img src={event.eventImg} alt="Ảnh sự kiện" style={{ width: '100%', borderRadius: '14px', border: '1px solid' }} />
+                                    <img src={event.eventImg} alt="Ảnh sự kiện" style={{ width: '100%', borderRadius: '14px', border: '1px solid #b39ddb' }} />
                                 </ListItem>
                             </List>
                         </Grid>
