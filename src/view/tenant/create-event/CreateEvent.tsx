@@ -63,8 +63,8 @@ const CreateEvent = () => {
     const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
             const file = event.target.files[0];
-            if (file.size > 1242880) { // 5MB (5242880 bytes)
-                alert("Kích thước ảnh không được vượt quá 5MB");
+            if (file.size > 3670016) { // 5MB (5242880 bytes)
+                alert("Kích thước ảnh không được vượt quá 3MB");
                 return;
             }
             setSelectedImage(file);
