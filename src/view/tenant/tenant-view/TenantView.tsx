@@ -4,6 +4,7 @@ import {Grid, IconButton, Tooltip} from "@mui/material";
 import tenantApi from "../../../services/tenantApi";
 import SubCard from "../../../components/cards/SubCard";
 import {FileCopy, Launch} from "@mui/icons-material";
+import SkeletonLoading from "../../../components/cards/SkeletonLoading";
 
 const TenantView = () => {
     const [tenantData, setTenantData] = useState<any>(null);
@@ -33,7 +34,7 @@ const TenantView = () => {
 
     return (
         <MainCard title="Thông tin ban tổ chức">
-            {tenantData && (
+            {tenantData ? (
                 <Grid container spacing={3}>
                     <Grid item xs={12} sm={6}>
                         <SubCard title="Tên doanh nghiệp">
@@ -131,6 +132,8 @@ const TenantView = () => {
                     </Grid>
                     {/* Add other fields here */}
                 </Grid>
+            ) : (
+                <SkeletonLoading/>
             )}
         </MainCard>
     );

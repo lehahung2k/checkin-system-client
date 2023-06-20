@@ -8,6 +8,7 @@ import dateTimeCalc from "../../../services/dateTimeCalc";
 import SearchBoxAction from "../../../components/cards/SearchBoxAction";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { IconEye } from "@tabler/icons-react";
+import {useNavigate} from "react-router";
 
 interface EventData {
     eventId: string;
@@ -22,6 +23,7 @@ const EventLists = () => {
     const [events, setEvents] = useState<EventData[]>([]);
     const [selectedEventId, setSelectedEventId] = React.useState<string>('');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const navigate = useNavigate();
 
     const handleEventClick = (eventId: string) => {
         setSelectedEventId(eventId);
@@ -93,6 +95,15 @@ const EventLists = () => {
                     <SubCard title="Xem danh sách sự kiện" secondary={<SearchBoxAction onChange={handleFilter}/>}>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
+                                <Grid container justifyContent="flex-end" marginBottom={2}>
+                                    <Button variant="contained" sx={{backgroundColor: 'secondary.dark'}}
+                                            onClick={()=>{
+                                               navigate('/event/create');
+                                            }}
+                                    >
+                                        Thêm mới
+                                    </Button>
+                                </Grid>
                                 <DataGrid
                                     columns={columns}
                                     rows={rows}
