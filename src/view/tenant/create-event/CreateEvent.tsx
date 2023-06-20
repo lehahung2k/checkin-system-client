@@ -1,11 +1,11 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
-import {Button, Grid, TextField} from '@mui/material';
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { Button, Grid, TextField } from '@mui/material';
 import MainCard from "../../../components/cards/MainCard";
 import SubCard from "../../../components/cards/SubCard";
 import MuiNotification from "../../../components/Notification";
-import {IconUpload} from "@tabler/icons-react";
+import { IconUpload } from "@tabler/icons-react";
 import eventsApi from "../../../services/eventsApi";
-import {useNavigate} from "react-router";
+import { useNavigate } from "react-router";
 
 interface CreateEventFormValues {
     eventCode: string;
@@ -100,7 +100,7 @@ const CreateEvent = () => {
             console.log(eventData);
             eventsApi
                 .addNewEvent(eventData)
-                .then((res)=>{
+                .then((res) => {
                     setIsSnackbarOpen(true);
                     setSuccessMessage("Tạo sự kiện thành công");
                     setErrorMessage("");
@@ -129,7 +129,6 @@ const CreateEvent = () => {
                                     name={"eventCode"}
                                     label="Mã sự kiện"
                                     value={formValues.eventCode}
-                                    variant="outlined"
                                     onChange={handleInputChange}
                                     fullWidth
                                     error={!!formErrors.eventCode}
@@ -200,12 +199,12 @@ const CreateEvent = () => {
                                 />
                                 <label htmlFor="image-upload">
                                     <Button variant="outlined" component="span">
-                                        <IconUpload/> Tải lên sơ đồ sự kiện
+                                        <IconUpload /> Tải lên sơ đồ sự kiện
                                     </Button>
                                 </label>
                                 {selectedImage && (
                                     <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                        <img src={URL.createObjectURL(selectedImage)} alt="Ảnh review" style={{ width: '33vw', borderRadius:'14px' }} />
+                                        <img src={URL.createObjectURL(selectedImage)} alt="Ảnh review" style={{ width: '33vw', borderRadius: '14px' }} />
                                     </div>
                                 )}
                             </Grid>
@@ -213,7 +212,7 @@ const CreateEvent = () => {
                     </SubCard>
                 </Grid>
                 <Grid item xs={12}>
-                    <Button variant="contained" sx={{backgroundColor: 'secondary.dark'}} onClick={createEvent}>
+                    <Button variant="contained" sx={{ backgroundColor: 'secondary.dark' }} onClick={createEvent}>
                         Tạo mới
                     </Button>
                 </Grid>
