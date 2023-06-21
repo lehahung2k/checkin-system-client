@@ -25,7 +25,11 @@ class PocApi {
     }
 
     addNewPoc = async (data: PocData) => {
-        return this.api.post("/add-poc", data);
+        return this.api.post("/create", data);
+    }
+
+    getAllPocByPoc = async () => {
+        return this.api.get('/poc/poc-view');
     }
 }
 const pocApi = new PocApi();

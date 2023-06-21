@@ -15,6 +15,9 @@ class AccountApi{
         });
     }
 
+    getAccountInfo = async () => {
+        return this.api.get("/details");
+    }
     getTenantAccounts = async () => {
         return this.api.get("/tenant");
     }

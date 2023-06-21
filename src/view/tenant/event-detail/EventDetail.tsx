@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
-import { Grid, List, ListItem, ListItemButton, ListItemText, Typography } from "@mui/material";
+import {Grid, List, ListItem, ListItemButton, ListItemText, Tooltip, Typography} from "@mui/material";
 import SubCard from "../../../components/cards/SubCard";
 import eventsApi from '../../../services/eventsApi';
 import SkeletonLoading from '../../../components/cards/SkeletonLoading';
 import dateTimeCalc from '../../../services/dateTimeCalc';
+import {FileCopy} from "@mui/icons-material";
 
 class EventDetailProps {
     eventId: string | any | undefined;
@@ -13,6 +14,7 @@ const EventDetail: React.FC<EventDetailProps> = ({ eventId }) => {
     const [event, setEvent] = React.useState<any>(null);
     const [startTimeFormat, setStartTimeFormat] = React.useState<string>("");
     const [endTimeFormat, setEndTimeFormat] = React.useState<string>("");
+    const [isImageExpanded, setIsImageExpanded] = React.useState<boolean>(false);
 
     const getEventDetail = () => {
         // call api
@@ -31,11 +33,19 @@ const EventDetail: React.FC<EventDetailProps> = ({ eventId }) => {
                 console.log(err);
             });
     }
+    const copyToClipboard = (text : string) => {
+        navigator.clipboard.writeText(text);
+    };
 
     useEffect(() => {
         if (eventId) {
             getEventDetail();
         }
+    }, [eventId]);
+
+    // Reset isImageExpanded when eventId changes
+    useEffect(() => {
+        setIsImageExpanded(false);
     }, [eventId]);
 
     return (
@@ -47,17 +57,27 @@ const EventDetail: React.FC<EventDetailProps> = ({ eventId }) => {
                         <Grid item xs={12} md={4}>
                             <List>
                                 <ListItem disablePadding>
-                                    <ListItemButton>
+                                    <ListItemButton onClick={() => copyToClipboard(event.eventName)}>
                                         <ListItemText primaryTypographyProps={{ variant: 'subtitle1', gutterBottom: true }}>
                                             <b>Tên sự kiện:</b> {event.eventName}
                                         </ListItemText>
+                                        <Typography variant="body2" color="textSecondary">
+                                            <Tooltip title={'Copy'}>
+                                                <FileCopy/>
+                                            </Tooltip>
+                                        </Typography>
                                     </ListItemButton>
                                 </ListItem>
                                 <ListItem disablePadding>
-                                    <ListItemButton>
+                                    <ListItemButton onClick={() => copyToClipboard(event.eventCode)}>
                                         <ListItemText primaryTypographyProps={{ variant: 'subtitle1' }}>
                                             <b>Mã sự kiện:</b> {event.eventCode}
                                         </ListItemText>
+                                        <Typography variant="body2" color="textSecondary">
+                                            <Tooltip title={'Copy'}>
+                                                <FileCopy/>
+                                            </Tooltip>
+                                        </Typography>
                                     </ListItemButton>
                                 </ListItem>
                                 <ListItem disablePadding>
@@ -98,7 +118,12 @@ const EventDetail: React.FC<EventDetailProps> = ({ eventId }) => {
                                     </ListItemButton>
                                 </ListItem>
                                 <ListItem disablePadding>
-                                    <img src={event.eventImg} alt="Ảnh sự kiện" style={{ width: '100%', borderRadius: '14px', border: '1px solid #b39ddb' }} />
+                                    <img
+                                        src={event.eventImg}
+                                        alt="Ảnh sự kiện"
+                                        style={{ width: '100%', borderRadius: '14px', border: '1px solid #b39ddb', cursor: 'pointer' }}
+                                        onClick={() => setIsImageExpanded(true)}
+                                    />
                                 </ListItem>
                             </List>
                         </Grid>
@@ -115,6 +140,30 @@ const EventDetail: React.FC<EventDetailProps> = ({ eventId }) => {
                             </List>
                         </Grid>
                     </Grid>
+                    {/* Ảnh sơ đồ sự kiện phóng to khi nhấn vào*/}
+                    {isImageExpanded && (
+                        <div
+                            style={{
+                                position: 'fixed',
+                                top: 0,
+                                left: 0,
+                                width: '100%',
+                                height: '100%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                backgroundColor: 'darkgrey',
+                                zIndex: 9999,
+                            }}
+                            onClick={() => setIsImageExpanded(false)}
+                        >
+                            <img
+                                src={event.eventImg}
+                                alt="Ảnh sự kiện"
+                                style={{ maxWidth: '95%', maxHeight: '95%', borderRadius: '14px', border: '1px solid #b39ddb' }}
+                            />
+                        </div>
+                    )}
                 </>
             ) : (
                 <SkeletonLoading />

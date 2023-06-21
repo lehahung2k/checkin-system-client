@@ -31,4 +31,4 @@ npm start
 ```
 - Truy cập vào đường dẫn http://localhost:{port} (port mặc định là 3000)
 ## Deployment:
-[Hệ thống quản lý checkin](https://checkin.love)
+[Hệ thống quản lý checkin](https://dangky.app)
