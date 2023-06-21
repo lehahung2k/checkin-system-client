@@ -37,13 +37,13 @@ const ManagePoc = () => {
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: '#', minWidth: 50, flex: 0.02 },
-        { field: 'pointName', headerName: 'Tên gian hàng', minWidth: 200, flex: 0.2, resizable: true },
+        { field: 'pointName', headerName: 'Tên gian hàng', minWidth: 200, flex: 0.2 },
         { field: 'pointCode', headerName: 'Mã gian hàng', minWidth: 150, flex: 0.1 },
         { field: 'status', headerName: 'Trạng thái', minWidth: 150, flex: 0.1 },
         {
             field: 'viewDetails', headerName: 'Chi tiết', minWidth: 100, renderCell: (params) => (
                 <Button
-                    // onClick={() => handleEventClick(params.row.eventId)}
+                    onClick={() => {}}
                     endIcon={<IconEye />}
                 >
                 </Button>

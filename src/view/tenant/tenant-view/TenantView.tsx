@@ -9,10 +9,6 @@ import SkeletonLoading from "../../../components/cards/SkeletonLoading";
 const TenantView = () => {
     const [tenantData, setTenantData] = useState<any>(null);
 
-    useEffect(() => {
-        getTenantData();
-    }, []);
-
     const getTenantData = () => {
         // Call API here
         tenantApi
@@ -25,6 +21,10 @@ const TenantView = () => {
                 console.log("Error retrieving tenant data:", error);
             });
     };
+
+    useEffect(() => {
+        getTenantData();
+    }, []);
     const handleCopyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text);
     };

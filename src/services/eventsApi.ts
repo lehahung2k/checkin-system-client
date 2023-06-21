@@ -38,6 +38,10 @@ class EventsApi {
     getEventById = async (eventId: string) => {
         return this.api.get(`/events/view?eventId=${eventId}`);
     }
+
+    getEventByEventCode = async (eventCode: string) => {
+        return this.api.get(`/events/poc-view?eventCode=${eventCode}`);
+    }
 }
 const eventsApi = new EventsApi();
 export default eventsApi;
