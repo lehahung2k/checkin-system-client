@@ -27,7 +27,6 @@ const EventDetail: React.FC<EventDetailProps> = ({ eventId }) => {
                 const endTime = new Date(eventData.endTime);
                 setStartTimeFormat(dateTimeCalc.formatDateTime(startTime));
                 setEndTimeFormat(dateTimeCalc.formatDateTime(endTime));
-                console.log(eventData);
             })
             .catch((err) => {
                 console.log(err);
