@@ -113,10 +113,10 @@ const CreateEvent = () => {
                     }, 3000);
                 })
                 .catch((error) => {
+                    setIsLoading(false);
                     setErrorMessage(error.response.data.message);
                     setIsSnackbarOpen(true);
                     setSuccessMessage("");
-                    setIsLoading(false);
                     console.log(error.response.data.message);
                 });
         }

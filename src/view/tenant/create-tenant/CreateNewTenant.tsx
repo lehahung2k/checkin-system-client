@@ -50,12 +50,11 @@ const CreateNewTenant = () => {
                   }, 3000);
             })
             .catch((e) => {
-                // Handle error response
+                setIsLoading(false);
                 console.log(e.response.data.message);
                 setSuccessMessage("");
                 setErrorMessage(e.response.data.message);
                 setIsSnackbarOpen(true);
-                setIsLoading(false);
             });
     };
 
