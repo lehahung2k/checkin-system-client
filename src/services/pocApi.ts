@@ -32,6 +32,9 @@ class PocApi {
     getAllPocByPoc = async () => {
         return this.api.get('/poc/poc-view');
     }
+    getPocByPointCode = async (pointCode: string) => {
+        return this.api.get(`/poc/details?pointCode=${pointCode}`);
+    }
 }
 const pocApi = new PocApi();
 export default pocApi;
