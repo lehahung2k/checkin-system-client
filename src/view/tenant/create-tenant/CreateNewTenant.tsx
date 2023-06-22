@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { IconSettingsAutomation } from "@tabler/icons-react";
 import { useNavigate } from "react-router";
 import MuiNotification from "../../../components/Notification";
+import accountApi from "../../../services/accountApi";
 
 interface CreateTenantFormValues {
     tenantCode: string;
@@ -32,6 +33,7 @@ const CreateNewTenant = () => {
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [isSnackbarOpen, setIsSnackbarOpen] = useState<boolean>(false);
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const createTenant = (data: CreateTenantFormValues) => {
         tenantApi
@@ -43,7 +45,8 @@ const CreateNewTenant = () => {
                 setErrorMessage("");
                 setIsSnackbarOpen(true);
                 setTimeout(() => {
-                    navigate("/"); // Redirect to the dashboard after a delay
+                    setIsLoading(false);
+                    navigate("/");
                   }, 3000);
             })
             .catch((e) => {
@@ -52,8 +55,29 @@ const CreateNewTenant = () => {
                 setSuccessMessage("");
                 setErrorMessage(e.response.data.message);
                 setIsSnackbarOpen(true);
+                setIsLoading(false);
             });
     };
+
+    const tenantInfo = () => {
+        accountApi
+            .getAccountInfo()
+            .then((res) => {
+                const userData = res.data.payload;
+                setFormValues((prevValues) => ({
+                    ...prevValues,
+                    contactPhone: userData.phoneNumber,
+                    contactEmail: userData.email,
+                }));
+            })
+            .catch((e) => {
+                console.log(e.response.data.message);
+            });
+    }
+
+    useEffect(() => {
+        tenantInfo();
+    }, []);
 
     const handleFormSubmit = () => {
         const errors: Partial<CreateTenantFormValues> = {};
@@ -70,7 +94,7 @@ const CreateNewTenant = () => {
         if (Object.keys(errors).length > 0) {
             setFormErrors(errors);
         } else {
-            // Call createTenant function with formValues
+            setIsLoading(true);
             createTenant(formValues);
         }
     };
@@ -201,8 +225,8 @@ const CreateNewTenant = () => {
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <Button onClick={handleFormSubmit} variant="contained" color="primary">
-                        Tạo doanh nghiệp
+                    <Button onClick={handleFormSubmit} variant="contained" color="primary" disabled={isLoading}>
+                        {isLoading ? "Đang tạo..." : "Tạo doanh nghiệp"}
                     </Button>
                 </Grid>
             </Grid>

@@ -3,8 +3,9 @@ import Cookies from "js-cookie";
 
 interface PocData {
     pointCode: string;
+    eventCode: string
     pointName: string;
-    pointDescription: string;
+    pointNote: string;
 }
 class PocApi {
     private api: AxiosInstance;
