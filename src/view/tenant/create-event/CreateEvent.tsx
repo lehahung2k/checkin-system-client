@@ -33,6 +33,7 @@ const CreateEvent = () => {
     const handleSnackbarClose = () => {
         setIsSnackbarOpen(false);
     };
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const formatDateTime = (dateTime: Date) => {
         const year = dateTime.getFullYear();
@@ -98,6 +99,7 @@ const CreateEvent = () => {
                 eventData.eventImg = await convertImageToBase64(selectedImage);
             }
             console.log(eventData);
+            setIsLoading(true);
             eventsApi
                 .addNewEvent(eventData)
                 .then((res) => {
@@ -106,6 +108,7 @@ const CreateEvent = () => {
                     setErrorMessage("");
                     console.log(res);
                     setTimeout(() => {
+                        setIsLoading(false);
                         navigate("/"); // Redirect to the dashboard after a delay
                     }, 3000);
                 })
@@ -113,6 +116,7 @@ const CreateEvent = () => {
                     setErrorMessage(error.response.data.message);
                     setIsSnackbarOpen(true);
                     setSuccessMessage("");
+                    setIsLoading(false);
                     console.log(error.response.data.message);
                 });
         }
@@ -212,8 +216,8 @@ const CreateEvent = () => {
                     </SubCard>
                 </Grid>
                 <Grid item xs={12}>
-                    <Button variant="contained" sx={{ backgroundColor: 'secondary.dark' }} onClick={createEvent}>
-                        Tạo mới
+                    <Button variant="contained" sx={{ backgroundColor: 'secondary.dark' }} onClick={createEvent} disabled={isLoading}>
+                        {isLoading ? "Đang tạo..." : "Tạo mới"}
                     </Button>
                 </Grid>
             </Grid>

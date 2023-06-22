@@ -14,6 +14,8 @@ import React, {SetStateAction, useEffect, useState} from "react";
 import eventsApi from "../../../services/eventsApi";
 import SubCard from "../../../components/cards/SubCard";
 import {FileCopy} from "@mui/icons-material";
+import CreatePocForm from "./CreatePocForm";
+import dateTimeCalc from "../../../services/dateTimeCalc";
 
 interface EventData {
     eventId: string;
@@ -27,6 +29,8 @@ interface EventData {
 const CreatePoc = () => {
     const [eventCode, setEventCode] = useState("");
     const [eventInfo, setEventInfo] = useState<EventData>();
+    const [startTimeFormat, setStartTimeFormat] = React.useState<string>("");
+    const [endTimeFormat, setEndTimeFormat] = React.useState<string>("");
     const [openModal, setOpenModal] = useState(false);
 
     const getEventInfo = () => {
@@ -35,12 +39,14 @@ const CreatePoc = () => {
             .then((res) => {
                 const eventData = res.data.payload;
                 setEventInfo(eventData);
+                const startTime = new Date(eventData.startTime);
+                const endTime = new Date(eventData.endTime);
+                setStartTimeFormat(dateTimeCalc.formatDateTime(startTime));
+                setEndTimeFormat(dateTimeCalc.formatDateTime(endTime));
             })
             .catch((err) => {
                 alert(err.response.data.message);
             });
-        // Sau khi có kết quả kiểm tra, bạn có thể lưu vào state `eventInfo`
-        // setEventInfo(eventData);
     };
 
     const handleJoinButtonClick = () => {
@@ -121,14 +127,14 @@ const CreatePoc = () => {
                                         <ListItem disablePadding>
                                             <ListItemButton>
                                                 <ListItemText primaryTypographyProps={{ variant: 'subtitle1', gutterBottom: true }}>
-                                                    <b>Thời gian bắt đầu</b> {eventInfo.startTime}
+                                                    <b>Thời gian bắt đầu</b> {startTimeFormat}
                                                 </ListItemText>
                                             </ListItemButton>
                                         </ListItem>
                                         <ListItem disablePadding>
                                             <ListItemButton>
                                                 <ListItemText primaryTypographyProps={{ variant: 'subtitle1', gutterBottom: true }}>
-                                                    <b>Thời gian kết thúc</b> {eventInfo.endTime}
+                                                    <b>Thời gian kết thúc</b> {endTimeFormat}
                                                 </ListItemText>
                                             </ListItemButton>
                                         </ListItem>
@@ -148,7 +154,7 @@ const CreatePoc = () => {
                                             <img
                                                 src={eventInfo.eventImg}
                                                 alt="Ảnh sự kiện"
-                                                style={{ width: '100%', borderRadius: '14px', border: '1px solid #b39ddb', cursor: 'pointer' }}
+                                                style={{ width: '100%', borderRadius: '14px', border: '1px solid #b39ddb' }}
                                             />
                                         </ListItem>
                                     </List>
@@ -159,6 +165,7 @@ const CreatePoc = () => {
                                 onClick={handleJoinButtonClick}
                                 variant="contained"
                                 color="primary"
+                                sx={{backgroundColor: 'secondary.dark'}}
                             >
                                 Tham gia
                             </Button>
@@ -175,13 +182,7 @@ const CreatePoc = () => {
                         boxShadow: 10,
                         maxHeight: '80vh', // Giới hạn chiều cao tối đa
                     }}>
-                        <SubCard title={'Thông tin gian hàng'}>
-                            <Grid container spacing={3} sx={{ maxHeight: '80vh', overflow: 'auto' }}>
-                                <Grid item xs={12} md={4}>
-                                    Nhập thông tin gian hàng
-                                </Grid>
-                            </Grid>
-                        </SubCard>
+                        <CreatePocForm eventCode={eventCode}/>
                     </Box>
                 </Modal>
             </Grid>
