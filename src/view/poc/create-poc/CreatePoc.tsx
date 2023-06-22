@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import React, {SetStateAction, useEffect, useState} from "react";
 import eventsApi from "../../../services/eventsApi";
-import {IconSettingsAutomation} from "@tabler/icons-react";
 import SubCard from "../../../components/cards/SubCard";
 import {FileCopy} from "@mui/icons-material";
 
