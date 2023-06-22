@@ -1,10 +1,10 @@
 class DateTimeCalc {
     formatDateTime = (dateTime: Date) => {
-        const year = dateTime.getUTCFullYear();
-        const month = String(dateTime.getUTCMonth() + 1).padStart(2, '0');
-        const day = String(dateTime.getUTCDate()).padStart(2, '0');
-        const hours = String(dateTime.getUTCHours()).padStart(2, '0');
-        const minutes = String(dateTime.getUTCMinutes()).padStart(2, '0');
+        const year = dateTime.getFullYear();
+        const month = String(dateTime.getMonth() + 1).padStart(2, '0');
+        const day = String(dateTime.getDate()).padStart(2, '0');
+        const hours = String(dateTime.getHours()).padStart(2, '0');
+        const minutes = String(dateTime.getMinutes()).padStart(2, '0');
     
         return `${day}-${month}-${year} ${hours}:${minutes}`;
       };
