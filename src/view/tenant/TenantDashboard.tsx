@@ -33,6 +33,10 @@ const TenantDashboard = () => {
             })
             .catch((e) => {
                 setTenantExists(false);
+                showAlertAndRedirect(
+                    'Doanh nghiệp của bạn chưa tồn tại, tạo ngay',
+                    '/tenant/create-tenant'
+                );
             });
     };
 
