@@ -59,14 +59,15 @@ const CreatePocForm: React.FC<EventCodeProps> = ({ eventCode }) => {
         if (Object.keys(errors).length > 0) setFormErrors(errors);
         else {
             const pocData: CreatePocFormValues = {
-                ...formValues
+                ...formValues,
+                eventCode: eventCode
             }
             setIsLoading(true);
             pocApi
                 .addNewPoc(pocData)
                 .then((res) => {
                     setIsSnackbarOpen(true);
-                    setSuccessMessage("Tạo sự kiện thành công");
+                    setSuccessMessage("Tạo quầy check-in thành công");
                     setErrorMessage("");
                     console.log(pocData);
                     setTimeout(() => {
@@ -75,10 +76,10 @@ const CreatePocForm: React.FC<EventCodeProps> = ({ eventCode }) => {
                     }, 2000);
                 })
                 .catch((err) => {
+                    setIsLoading(false);
                     setIsSnackbarOpen(true);
                     setSuccessMessage("");
-                    setErrorMessage(err.data.message);
-                    setIsLoading(false);
+                    setErrorMessage(err.response.data.message);
                 })
         }
     };
