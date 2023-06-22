@@ -24,7 +24,7 @@ const TenantDashboard = () => {
         tenantApi
             .getDataFromTenantRole()
             .then((res) => {
-                if (res.data.payload) setTenantExists(true);
+                if (res.data.payload !== null) setTenantExists(true);
                 else
                     showAlertAndRedirect(
                         'Doanh nghiệp của bạn chưa tồn tại, tạo ngay',
@@ -34,10 +34,6 @@ const TenantDashboard = () => {
             .catch((e) => {
                 setTenantExists(false);
                 console.log(e)
-                showAlertAndRedirect(
-                    'Doanh nghiệp của bạn chưa tồn tại, tạo ngay',
-                    '/tenant/create-tenant'
-                );
             });
     };
 

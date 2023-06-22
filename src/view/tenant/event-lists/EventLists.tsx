@@ -48,7 +48,7 @@ const EventLists = () => {
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: '#', minWidth: 50, flex: 0.02 },
-        { field: 'eventName', headerName: 'Tên sự kiện', minWidth: 200, flex: 0.2, resizable: true},
+        { field: 'eventName', headerName: 'Tên sự kiện', minWidth: 200, flex: 0.2 },
         { field: 'startTime', headerName: 'Thời gian bắt đầu', minWidth: 150, flex: 0.1},
         { field: 'endTime', headerName: 'Thời gian kết thúc', minWidth: 150, flex: 0.1 },
         { field: 'eventCode', headerName: 'Mã sự kiện', minWidth: 150, flex: 0.1},
