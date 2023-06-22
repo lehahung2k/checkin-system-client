@@ -33,6 +33,7 @@ const TenantDashboard = () => {
             })
             .catch((e) => {
                 setTenantExists(false);
+                console.log(e)
                 showAlertAndRedirect(
                     'Doanh nghiệp của bạn chưa tồn tại, tạo ngay',
                     '/tenant/create-tenant'

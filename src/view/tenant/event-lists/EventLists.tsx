@@ -36,7 +36,6 @@ const EventLists = () => {
             .then((res) => {
                 const events = res.data.payload;
                 setEvents(events);
-                console.log(events);
             })
             .catch((err) => {
                 console.log(err.response.data.message);
