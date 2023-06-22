@@ -1,6 +1,14 @@
 import axios, {AxiosInstance} from "axios";
 import Cookies from "js-cookie";
 
+interface EventData {
+    eventCode: string;
+    eventName: string;
+    eventDescription: string;
+    startTime: Date;
+    endTime: Date;
+    eventImg: string;
+}
 class EventsApi {
     private api: AxiosInstance;
 
@@ -21,6 +29,18 @@ class EventsApi {
 
     getAllEvents = async () => {
         return this.api.get("/events");
+    }
+
+    addNewEvent = async (data: EventData) => {
+        return this.api.post("/add-event", data);
+    }
+
+    getEventById = async (eventId: string) => {
+        return this.api.get(`/events/view?eventId=${eventId}`);
+    }
+
+    getEventByEventCode = async (eventCode: string) => {
+        return this.api.get(`/events/poc-view?eventCode=${eventCode}`);
     }
 }
 const eventsApi = new EventsApi();

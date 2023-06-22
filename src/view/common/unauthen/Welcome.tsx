@@ -1,9 +1,9 @@
 import React from 'react';
 import './Welcome.scss';
 import style from './Welcome.module.scss'
-import {Box, Container, Grid, Typography, Button, CardContent, Card, CardMedia} from "@mui/material";
+import { Box, Container, Grid, Typography, Button, CardContent, Card, CardMedia } from "@mui/material";
 import { Link } from 'react-router-dom';
-import { IconArrowBigRightFilled } from '@tabler/icons-react' 
+import { IconArrowBigRightFilled } from '@tabler/icons-react'
 
 const Welcome = () => {
     return (
@@ -16,8 +16,11 @@ const Welcome = () => {
                     fontWeight: 550,
                 }}>
                     <CardContent>
+                        <Typography variant='h1' gutterBottom>
+                            <b>Hệ thống quản lý check-in sự kiện</b>
+                        </Typography>
                         <Typography variant='h1'>
-                            Hệ thống quản lý check-in sự kiện ECM
+                            <b>Event Check-in Management (ECM)</b>
                         </Typography>
                     </CardContent>
                 </Box>
@@ -25,7 +28,7 @@ const Welcome = () => {
             <div className={style.body__row}>
                 <Grid
                     container
-                    // spacing={3}
+                    spacing={3}
                     alignItems="center"
                     justifyContent="center"
                 >
@@ -95,7 +98,7 @@ const Welcome = () => {
                 </Grid>
                 <div className="buttons">
                     <Link to="/auth/login">
-                        <Button startIcon={<IconArrowBigRightFilled/>}
+                        <Button startIcon={<IconArrowBigRightFilled />}
                         >
                             Tham gia với chúng tôi ngay
                         </Button>
@@ -119,7 +122,7 @@ const Welcome = () => {
                     <Grid container direction="column" alignItems="center">
                         <Grid item xs={12}>
                             <Typography color="white" variant="h5">
-                                Event Checkin Management
+                                <b>{`Copyright © ${new Date().getFullYear()}`}</b>
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
@@ -129,7 +132,10 @@ const Welcome = () => {
                                     paddingTop: "1rem"
                                 }}
                             >
-                                {`© Copy right ${new Date().getFullYear()} - Author: Le Ha Hung references PhD. Nguyen Duc Tien`}
+                                {`Author `}
+                                <Link to="https://www.facebook.com/lehahung2000/" target='_blank' className="footer-link"><b>Le Ha Hung</b></Link>
+                                {` references `}
+                                <Link to="https://www.facebook.com/nguyenductien000/" target='_blank' className="footer-link"><b>MSc. Nguyen Duc Tien</b></Link>
                             </Typography>
                         </Grid>
                     </Grid>

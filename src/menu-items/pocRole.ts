@@ -1,9 +1,9 @@
 // assets
 
 // constant
-import {IconCheckbox} from "@tabler/icons-react";
+import { IconCheckbox, IconLiveView } from "@tabler/icons-react";
 
-const icons = { IconCheckbox };
+const icons = { IconCheckbox, IconLiveView };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -12,10 +12,32 @@ const pocRole = {
     type: 'group',
     children: [
         {
-            id: 'poc',
-            title: 'Quầy check-in',
+            id: 'manage-poc',
+            title: 'Quản lý quầy',
             type: 'collapse',
             icon: icons.IconCheckbox,
+            children: [
+                {
+                    id: 'poc-info',
+                    title: 'Thông tin quầy',
+                    type: 'item',
+                    url: '/poc/view-poc',
+                    breadcrumbs: true
+                },
+                {
+                    id: 'create-poc',
+                    title: 'Tạo mới quầy check-in',
+                    type: 'item',
+                    url: '/poc/create-poc',
+                    breadcrumbs: true
+                }
+            ]
+        },
+        {
+            id: 'poc',
+            title: 'Check-in',
+            type: 'collapse',
+            icon: icons.IconLiveView,
             children: [
                 {
                     id: 'poc-lists',

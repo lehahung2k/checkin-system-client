@@ -4,13 +4,10 @@ import {Grid, IconButton, Tooltip} from "@mui/material";
 import tenantApi from "../../../services/tenantApi";
 import SubCard from "../../../components/cards/SubCard";
 import {FileCopy, Launch} from "@mui/icons-material";
+import SkeletonLoading from "../../../components/cards/SkeletonLoading";
 
 const TenantView = () => {
     const [tenantData, setTenantData] = useState<any>(null);
-
-    useEffect(() => {
-        getTenantData();
-    }, []);
 
     const getTenantData = () => {
         // Call API here
@@ -24,6 +21,10 @@ const TenantView = () => {
                 console.log("Error retrieving tenant data:", error);
             });
     };
+
+    useEffect(() => {
+        getTenantData();
+    }, []);
     const handleCopyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text);
     };
@@ -33,7 +34,7 @@ const TenantView = () => {
 
     return (
         <MainCard title="Thông tin ban tổ chức">
-            {tenantData && (
+            {tenantData ? (
                 <Grid container spacing={3}>
                     <Grid item xs={12} sm={6}>
                         <SubCard title="Tên doanh nghiệp">
@@ -131,6 +132,8 @@ const TenantView = () => {
                     </Grid>
                     {/* Add other fields here */}
                 </Grid>
+            ) : (
+                <SkeletonLoading/>
             )}
         </MainCard>
     );

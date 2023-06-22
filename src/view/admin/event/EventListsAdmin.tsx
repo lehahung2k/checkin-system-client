@@ -1,42 +1,30 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import MainCard from "../../../components/cards/MainCard";
 import eventsApi from "../../../services/eventsApi";
-import {Grid} from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import SubCard from "../../../components/cards/SubCard";
-import {DataGrid, GridColDef} from "@mui/x-data-grid";
 import dateTimeCalc from "../../../services/dateTimeCalc";
-const EventListsAdmin = () => {
-    const [events, setEvents] = useState([]);
-    const columns: GridColDef[] = [
-        {field: 'id', headerName: 'STT'},
-        {
-            field: 'eventName',
-            headerName: 'Tên sự kiện',
-        },
-        {field: 'startTime', headerName: 'Thời gian bắt đầu'},
-        {field: 'endTime', headerName: 'Thời gian kết thúc'},
-        {field: 'eventCode', headerName: 'Mã sự kiện'},
-        {field: 'status', headerName: 'Trạng thái'},
-    ];
+import SearchBoxAction from "../../../components/cards/SearchBoxAction";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { IconEye } from "@tabler/icons-react"
 
-    const rows = events.map((event: any, index) => {
-        const startTime = new Date(event.startTime);
-        const endTime = new Date(event.endTime);
-        return {
-            id: index + 1,
-            eventName: event.eventName,
-            startTime: dateTimeCalc.formatDateTime(startTime),
-            endTime: dateTimeCalc.formatDateTime(endTime),
-            eventCode: event.eventCode,
-            status: dateTimeCalc.calculateEventStatus(event.startTime, event.endTime),
-        }
-    });
+interface EventData {
+    eventId: string;
+    eventCode: string;
+    eventName: string;
+    eventDescription: string;
+    startTime: string;
+    endTime: string;
+}
+
+const EventListsAdmin = () => {
+    const [events, setEvents] = useState<EventData[]>([]);
+
     const getEvents = () => {
         eventsApi
             .getEventsByAdmin()
             .then((res) => {
                 const events = res.data.payload;
-                console.log(events);
                 setEvents(events);
             })
             .catch((err) => {
@@ -48,23 +36,60 @@ const EventListsAdmin = () => {
         getEvents();
     }, []);
 
+    const columns: GridColDef[] = [
+        { field: 'id', headerName: '#', minWidth: 50, flex: 0.01 },
+        { field: 'eventName', headerName: 'Tên sự kiện', minWidth: 200, flex: 0.2, resizable: true},
+        { field: 'startTime', headerName: 'Thời gian bắt đầu', minWidth: 150, flex: 0.1},
+        { field: 'endTime', headerName: 'Thời gian kết thúc', minWidth: 150, flex: 0.1 },
+        { field: 'eventCode', headerName: 'Mã sự kiện', minWidth: 150, flex: 0.1},
+        { field: 'status', headerName: 'Trạng thái', minWidth: 150, flex: 0.1 },
+        { field: 'viewDetails', headerName: 'Chi tiết', minWidth: 100, renderCell: (params) => (
+            <Button
+                onClick={() => handleViewDetails(params.row.eventId)}
+                endIcon={<IconEye />}
+            >
+            </Button>
+        )}
+    ];
+
+    const data = events.map((event: EventData, index) => {
+        const startTime = new Date(event.startTime);
+        const endTime = new Date(event.endTime);
+        return {
+            id: index + 1,
+            eventName: event.eventName,
+            startTime: dateTimeCalc.formatDateTime(startTime),
+            endTime: dateTimeCalc.formatDateTime(endTime),
+            eventCode: event.eventCode,
+            status: dateTimeCalc.calculateEventStatus(event.startTime, event.endTime),
+        }
+    });
+
+    console.log(data);
+
+    const handleFilter = (e: any) => { }
+
+    const handleViewDetails = (eventId: string) => {}
+
     return (
         <MainCard title="Danh sách sự kiện:">
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <SubCard title="Xem danh sách toàn bộ sự kiện">
+                    <SubCard title="Xem danh sách toàn bộ sự kiện" secondary={<SearchBoxAction onChange={handleFilter} />}>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
+                                {/*<DataTable*/}
                                 <DataGrid
-                                    rows={rows}
+                                    rows={data}
                                     columns={columns}
                                     initialState={{
                                         pagination: {
-                                            paginationModel: {page: 0, pageSize: 5},
+                                            paginationModel: { page: 0, pageSize: 5 },
                                         },
                                     }}
-                                    pageSizeOptions={[5, 10]}
+                                    pageSizeOptions={[5, 10, 15]}
                                     checkboxSelection
+                                    autoHeight={true}
                                 />
                             </Grid>
                         </Grid>
