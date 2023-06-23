@@ -44,7 +44,7 @@ const pocRole = {
                     title: 'Check-in',
                     type: 'item',
                     url: '/poc/checkin',
-                    breadcrumbs: true
+                    breadcrumbs: false
                 },
                 {
                     id: 'view-guests',
