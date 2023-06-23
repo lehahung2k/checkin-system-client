@@ -58,8 +58,8 @@ const PocInfo = () => {
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: '#', minWidth: 50, flex: 0.02 },
-        { field: 'pointName', headerName: 'Tên quầy check-in', minWidth: 150, flex: 0.1, resizable: true},
-        { field: 'eventCode', headerName: 'Mã sự kiện', minWidth: 150, flex: 0.1, resizable: true},
+        { field: 'pointName', headerName: 'Tên quầy check-in', minWidth: 150, flex: 0.1 },
+        { field: 'eventCode', headerName: 'Mã sự kiện', minWidth: 150, flex: 0.1 },
         { field: 'pointCode', headerName: 'Mã quầy', minWidth: 150, flex: 0.1},
         { field: 'pointNote', headerName: 'Ghi chú', minWidth: 150, flex: 0.2 },
         { field: 'status', headerName: 'Trạng thái', minWidth: 150, flex: 0.1 },
