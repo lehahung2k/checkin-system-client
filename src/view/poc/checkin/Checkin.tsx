@@ -9,6 +9,7 @@ import React, {useEffect, useState} from "react";
 import BarcodeScanner from "../../../components/devices/BarcodeScanner";
 import SubCard from "../../../components/cards/SubCard";
 import SearchInfoForm from "./SearchInfoForm";
+import MuiNotification from "../../../components/Notification";
 
 interface EventData {
     eventName: string;
@@ -39,6 +40,14 @@ const Checkin = () => {
         backImg: '',
         pointCode: '',
     });
+    {/* Thanh thông báo */}
+    const [isSnackbarOpen, setIsSnackbarOpen] = useState<boolean>(false);
+    const [successMessage, setSuccessMessage] = useState<string>("");
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const handleSnackbarClose = () => {
+        setIsSnackbarOpen(false);
+    };
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleCaptureFrontImage = (imageData: string) => {
         setCheckinData((prevState) => ({
@@ -64,8 +73,17 @@ const Checkin = () => {
             ...checkinData,
             pointCode: pointCode,
         });
+        setIsSnackbarOpen(true);
+        setSuccessMessage("");
+        setErrorMessage("Lỗi! Vui lòng thử lại!");
         console.log(checkinData);
-        console.log(pointCode);
+        setCheckinData({
+            guestCode: '',
+            guestNote: '',
+            frontImg: '',
+            backImg: '',
+            pointCode: pointCode,
+        });
     }
 
     return (
@@ -87,10 +105,22 @@ const Checkin = () => {
                             <SubCard title='Kết quả quét'>
                                 <Grid container spacing={3}>
                                     <Grid item xs={12} md={12}>
-                                        <TextField fullWidth name={'guestCode'} label='Mã định danh'/>
+                                        <TextField
+                                            fullWidth
+                                            name={'guestCode'}
+                                            label='Mã định danh'
+                                            value={checkinData.guestCode}
+                                            onChange={(e) => setCheckinData((prevState) => ({ ...prevState, guestCode: e.target.value }))}
+                                        />
                                     </Grid>
                                     <Grid item xs={12} md={12}>
-                                        <TextField fullWidth name={'guestNote'} label='Ghi chú'/>
+                                        <TextField
+                                            fullWidth
+                                            name={'guestNote'}
+                                            label='Ghi chú'
+                                            value={checkinData.guestNote}
+                                            onChange={(e) => setCheckinData((prevState) => ({ ...prevState, guestNote: e.target.value }))}
+                                        />
                                     </Grid>
                                     <Grid item xs={12} md={12}>
                                         <Button
@@ -107,6 +137,12 @@ const Checkin = () => {
                         </Grid>
                     </>
                 )}
+                <MuiNotification
+                    isOpen={isSnackbarOpen}
+                    successMessage={successMessage}
+                    errorMessage={errorMessage}
+                    onClose={handleSnackbarClose}
+                />
             </Grid>
         </MainCard>
     )

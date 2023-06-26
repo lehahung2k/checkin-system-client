@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
-import { Grid } from '@mui/material';
+import { Grid, Button } from '@mui/material';
 
 interface CameraCaptureProps {
     onCaptureImage: (imageData: string) => void;
@@ -20,7 +20,6 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCaptureImage }) => {
             if (capturedImage) {
                 setCapturedImage(capturedImage);
                 onCaptureImage(capturedImage);
-                setIsCameraOn(false); // Stop showing camera video
             }
         }
     };
@@ -52,7 +51,6 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCaptureImage }) => {
 
     const handleRetakePhoto = () => {
         setCapturedImage('');
-        setIsCameraOn(true); // Show camera video again
     };
 
     return (
@@ -69,9 +67,14 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCaptureImage }) => {
             {selectedCamera ? (
                 <>
                     {isCameraOn && capturedImage === '' ? (
-                        <Webcam ref={webcamRef} audio={false} videoConstraints={{ deviceId: selectedCamera }} width={'100%'} />
+                        <Webcam
+                            ref={webcamRef}
+                            audio={false}
+                            videoConstraints={{ deviceId: selectedCamera }}
+                            width={'100%'}
+                        />
                     ) : capturedImage !== '' ? (
-                        <img src={capturedImage} alt="Captured" />
+                        <img src={capturedImage} alt="Captured" width={'100%'} />
                     ) : (
                         <div>Camera đang tắt</div>
                     )}
@@ -80,19 +83,19 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCaptureImage }) => {
                 <div>Không có camera nào</div>
             )}
             <br />
-            <Grid container justifyContent="space-between" alignItems="flex-end" paddingTop={'1rem'}>
+            <Grid container justifyContent="space-between" alignItems="flex-end" sx={{ paddingTop: '1rem' }}>
                 <Grid item>
-                    <button onClick={toggleCamera}>
+                    <Button onClick={toggleCamera} color='secondary' variant='outlined'>
                         {isCameraOn ? 'Tắt Camera' : 'Bật Camera'}
-                    </button>
+                    </Button>
                 </Grid>
                 <Grid item>
                     {capturedImage === '' ? (
-                        <button disabled={!selectedCamera} onClick={handleCaptureImage}>
+                        <Button disabled={!selectedCamera} onClick={handleCaptureImage} color='secondary' variant='outlined'>
                             Chụp ảnh
-                        </button>
+                        </Button>
                     ) : (
-                        <button onClick={handleRetakePhoto}>Chụp ảnh mới</button>
+                        <Button onClick={handleRetakePhoto} color='secondary' variant='outlined'>Chụp ảnh mới</Button>
                     )}
                 </Grid>
             </Grid>
