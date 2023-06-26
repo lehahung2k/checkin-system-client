@@ -37,7 +37,18 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCaptureImage }) => {
             }
         };
 
-        getCameras();
+        const requestCameraPermission = async () => {
+            try {
+                await navigator.mediaDevices.getUserMedia({ video: true });
+                // Permission granted, get the available cameras
+                getCameras();
+            } catch (error) {
+                console.error(error);
+                alert('Không thể truy cập camera, vui lòng cho phép truy cập!');
+            }
+        };
+
+        requestCameraPermission();
     }, []);
 
     const handleCameraChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

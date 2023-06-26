@@ -1,5 +1,5 @@
 import MainCard from "../../../components/cards/MainCard";
-import {Box, Button, Grid, Modal} from "@mui/material";
+import {Box, Button, Grid, IconButton, Modal} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import SubCard from "../../../components/cards/SubCard";
 import eventsApi from "../../../services/eventsApi";
@@ -54,11 +54,12 @@ const EventLists = () => {
         { field: 'eventCode', headerName: 'Mã sự kiện', minWidth: 150, flex: 0.1},
         { field: 'status', headerName: 'Trạng thái', minWidth: 150, flex: 0.1 },
         { field: 'viewDetails', headerName: 'Chi tiết', minWidth: 100, renderCell: (params) => (
-            <Button
+            <IconButton
                 onClick={() => handleEventClick(params.row.eventId)}
-                endIcon={<IconEye />}
+                color="primary"
             >
-            </Button>
+                <IconEye />
+            </IconButton>
         )}
     ];
 

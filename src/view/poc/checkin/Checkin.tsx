@@ -23,9 +23,10 @@ interface PocData {
 
 interface CheckinData {
     guestCode: string;
-    guestNote: string;
+    guestDescription: string;
     frontImg: string;
     backImg: string;
+    identityType: string;
     pointCode: string;
 }
 
@@ -35,9 +36,10 @@ const Checkin = () => {
     const [pointCode, setPointCode] = useState("");
     const [checkinData, setCheckinData] = useState<CheckinData>({
         guestCode: '',
-        guestNote: '',
+        guestDescription: '',
         frontImg: '',
         backImg: '',
+        identityType: '',
         pointCode: '',
     });
     {/* Thanh thông báo */}
@@ -65,8 +67,9 @@ const Checkin = () => {
     useEffect(() => {
         setCheckinData((prevState) => ({
             ...prevState,
+            pointCode: pointCode,
         }));
-    }, []);
+    }, [pointCode]);
 
     const handleCheckin = () => {
         setCheckinData({
@@ -79,9 +82,10 @@ const Checkin = () => {
         console.log(checkinData);
         setCheckinData({
             guestCode: '',
-            guestNote: '',
+            guestDescription: '',
             frontImg: '',
             backImg: '',
+            identityType: '',
             pointCode: pointCode,
         });
     }
@@ -118,8 +122,17 @@ const Checkin = () => {
                                             fullWidth
                                             name={'guestNote'}
                                             label='Ghi chú'
-                                            value={checkinData.guestNote}
-                                            onChange={(e) => setCheckinData((prevState) => ({ ...prevState, guestNote: e.target.value }))}
+                                            value={checkinData.guestDescription}
+                                            onChange={(e) => setCheckinData((prevState) => ({ ...prevState, guestDescription: e.target.value }))}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} md={12}>
+                                        <TextField
+                                            fullWidth
+                                            name={'identityType'}
+                                            label='Loại giấy tờ'
+                                            value={checkinData.identityType}
+                                            onChange={(e) => setCheckinData((prevState) => ({ ...prevState, identityType: e.target.value }))}
                                         />
                                     </Grid>
                                     <Grid item xs={12} md={12}>
