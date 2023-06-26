@@ -24,7 +24,7 @@ const SearchInfoForm: React.FC<SearchInfoFormProps> = ({ setEvent, setPoc, setPo
     const [event, setEventLocal] = useState<EventData>();
     const [poc, setPocLocal] = useState<PocData>();
 
-    const getDataByPointCode = () => {
+    const getDataByPointCode = async () => {
         eventsApi
             .getEventByPointCode(pointCode)
             .then((res) => {

@@ -1,13 +1,29 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
-import { Grid, Button } from '@mui/material';
+import { Grid } from '@mui/material';
 
-const CameraCapture: React.FC = () => {
+interface CameraCaptureProps {
+    onCaptureImage: (imageData: string) => void;
+}
+
+const CameraCapture: React.FC<CameraCaptureProps> = ({ onCaptureImage }) => {
     const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
     const [selectedCamera, setSelectedCamera] = useState<string | null>(null);
     const [isCameraOn, setIsCameraOn] = useState<boolean>(true);
+    const [capturedImage, setCapturedImage] = useState<string>('');
 
     const webcamRef = useRef<Webcam>(null);
+
+    const handleCaptureImage = () => {
+        if (webcamRef.current) {
+            const capturedImage = webcamRef.current.getScreenshot();
+            if (capturedImage) {
+                setCapturedImage(capturedImage);
+                onCaptureImage(capturedImage);
+                setIsCameraOn(false); // Stop showing camera video
+            }
+        }
+    };
 
     useEffect(() => {
         const getCameras = async () => {
@@ -34,11 +50,9 @@ const CameraCapture: React.FC = () => {
         setIsCameraOn((prevIsCameraOn) => !prevIsCameraOn);
     };
 
-    const handleCaptureImage = () => {
-        if (webcamRef.current) {
-            const capturedImage = webcamRef.current.getScreenshot();
-            // TODO: Handle the captured image (e.g., display or save it)
-        }
+    const handleRetakePhoto = () => {
+        setCapturedImage('');
+        setIsCameraOn(true); // Show camera video again
     };
 
     return (
@@ -54,8 +68,10 @@ const CameraCapture: React.FC = () => {
             <br />
             {selectedCamera ? (
                 <>
-                    {isCameraOn ? (
+                    {isCameraOn && capturedImage === '' ? (
                         <Webcam ref={webcamRef} audio={false} videoConstraints={{ deviceId: selectedCamera }} width={'100%'} />
+                    ) : capturedImage !== '' ? (
+                        <img src={capturedImage} alt="Captured" />
                     ) : (
                         <div>Camera đang tắt</div>
                     )}
@@ -71,9 +87,13 @@ const CameraCapture: React.FC = () => {
                     </button>
                 </Grid>
                 <Grid item>
-                    <button disabled={!selectedCamera} onClick={handleCaptureImage}>
-                        Chụp ảnh
-                    </button>
+                    {capturedImage === '' ? (
+                        <button disabled={!selectedCamera} onClick={handleCaptureImage}>
+                            Chụp ảnh
+                        </button>
+                    ) : (
+                        <button onClick={handleRetakePhoto}>Chụp ảnh mới</button>
+                    )}
                 </Grid>
             </Grid>
         </Grid>

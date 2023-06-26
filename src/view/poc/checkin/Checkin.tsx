@@ -5,7 +5,7 @@ import {
     TextField,
 } from "@mui/material";
 import CameraCapture from "../../../components/devices/CameraCapture";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import BarcodeScanner from "../../../components/devices/BarcodeScanner";
 import SubCard from "../../../components/cards/SubCard";
 import SearchInfoForm from "./SearchInfoForm";
@@ -40,6 +40,19 @@ const Checkin = () => {
         pointCode: '',
     });
 
+    const handleCaptureFrontImage = (imageData: string) => {
+        setCheckinData((prevState) => ({
+            ...prevState,
+            frontImg: imageData,
+        }));
+    };
+    const handleCaptureBackImage = (imageData: string) => {
+        setCheckinData((prevState) => ({
+            ...prevState,
+            backImg: imageData,
+        }));
+    }
+
     useEffect(() => {
         setCheckinData((prevState) => ({
             ...prevState,
@@ -65,10 +78,10 @@ const Checkin = () => {
                 {event && (
                     <>
                         <Grid item xs={12} md={4}>
-                            <CameraCapture/>
+                            <CameraCapture onCaptureImage={handleCaptureFrontImage}/>
                         </Grid>
                         <Grid item xs={12} md={4}>
-                            <CameraCapture/>
+                            <CameraCapture onCaptureImage={handleCaptureBackImage}/>
                         </Grid>
                         <Grid item xs={12} md={4}>
                             <SubCard title='Kết quả quét'>

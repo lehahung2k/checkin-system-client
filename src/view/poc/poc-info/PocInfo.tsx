@@ -29,7 +29,6 @@ const PocInfo = () => {
         accountApi
             .getAccountInfo()
             .then((res) => {
-                console.log("POC data:", res.data.payload);
                 setPocAccountData(res.data.payload);
             })
             .catch ((err) => {
