@@ -1,5 +1,14 @@
 import MainCard from "../../../components/cards/MainCard";
-import {Button, Grid, List, ListItem, ListItemButton, ListItemText, Tooltip, Typography} from "@mui/material";
+import {
+    Grid,
+    IconButton,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemText,
+    Tooltip,
+    Typography
+} from "@mui/material";
 import SubCard from "../../../components/cards/SubCard";
 import accountApi from "../../../services/accountApi";
 import React, {useEffect, useState} from "react";
@@ -63,11 +72,9 @@ const PocInfo = () => {
         { field: 'pointNote', headerName: 'Ghi chú', minWidth: 150, flex: 0.2 },
         { field: 'status', headerName: 'Trạng thái', minWidth: 150, flex: 0.1 },
         { field: 'viewDetails', headerName: 'Chi tiết', minWidth: 100, renderCell: (params) => (
-                <Button
-                    onClick={() => {}}
-                    endIcon={<IconEye />}
-                >
-                </Button>
+                <IconButton color='primary' onClick={() => {}}>
+                    <IconEye />
+                </IconButton>
             )}
     ];
 
