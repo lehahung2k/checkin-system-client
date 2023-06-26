@@ -42,6 +42,7 @@ const SearchInfoForm: React.FC<SearchInfoFormProps> = ({ setEvent, setPoc, setPo
                 const pocData = res.data.payload;
                 setPoc(pocData);
                 setPocLocal(pocData);
+                setPointCode(pocData.pointCode);
             })
             .catch((err) => {
                 console.log(err.response.data.message);
