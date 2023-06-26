@@ -11,42 +11,49 @@ import SubCard from "../../../components/cards/SubCard";
 import SearchInfoForm from "./SearchInfoForm";
 
 interface EventData {
-    eventName: string,
+    eventName: string;
 }
 
 interface PocData {
-    pointName: string,
-    pointNote: string,
-    pointCode: string,
+    pointName: string;
+    pointNote: string;
+    pointCode: string;
 }
 
 interface CheckinData {
-    guestCode: string,
-    guestNote: string,
-    frontImg: string,
-    backImg: string,
-    pointCode: string,
+    guestCode: string;
+    guestNote: string;
+    frontImg: string;
+    backImg: string;
+    pointCode: string;
 }
 
 const Checkin = () => {
     const [event, setEvent] = useState<EventData>()
     const [poc, setPoc] = useState<PocData>()
+    const [pointCode, setPointCode] = useState("");
     const [checkinData, setCheckinData] = useState<CheckinData>({
         guestCode: '',
         guestNote: '',
         frontImg: '',
         backImg: '',
-        pointCode: '',
+        pointCode: pointCode,
     });
 
     const handleCheckin = () => {
-        console.log(checkinData)
+        setCheckinData({
+            ...checkinData,
+            pointCode: pointCode,
+        });
+        console.log(checkinData);
+        console.log(poc);
+        console.log(pointCode);
     }
 
     return (
         <MainCard title='Check-in'>
             <Grid container spacing={3}>
-                <SearchInfoForm setEvent={setEvent} setPoc={setPoc}/>
+                <SearchInfoForm setEvent={setEvent} setPoc={setPoc} setPointCode={setPointCode}/>
 
                 <Grid item xs={12} md={12} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }} />
 

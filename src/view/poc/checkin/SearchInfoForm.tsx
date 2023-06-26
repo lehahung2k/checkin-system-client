@@ -1,26 +1,29 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import eventsApi from "../../../services/eventsApi";
 import pocApi from "../../../services/pocApi";
-import {Button, Grid, InputAdornment, ListItemButton, ListItemText, TextField} from "@mui/material";
+import { Button, Grid, InputAdornment, ListItemButton, ListItemText, TextField } from "@mui/material";
 
 interface EventData {
-    eventName: string,
+    eventName: string;
 }
 
 interface PocData {
-    pointName: string,
-    pointNote: string,
-    pointCode: string,
+    pointName: string;
+    pointNote: string;
+    pointCode: string;
 }
 
 interface SearchInfoFormProps {
-    setEvent: React.Dispatch<React.SetStateAction<EventData | undefined>>,
-    setPoc: React.Dispatch<React.SetStateAction<PocData | undefined>>,
+    setEvent: React.Dispatch<React.SetStateAction<EventData | undefined>>;
+    setPoc: React.Dispatch<React.SetStateAction<PocData | undefined>>;
+    setPointCode: React.Dispatch<React.SetStateAction<string>>;
 }
-const SearchInfoForm: React.FC<SearchInfoFormProps> = ({ setEvent, setPoc }) => {
-    const [pointCode, setPointCode] = useState("");
+
+const SearchInfoForm: React.FC<SearchInfoFormProps> = ({ setEvent, setPoc, setPointCode }) => {
+    const [pointCode, setLocalPointCode] = useState("");
     const [event, setEventLocal] = useState<EventData>();
     const [poc, setPocLocal] = useState<PocData>();
+
     const getDataByPointCode = () => {
         eventsApi
             .getEventByPointCode(pointCode)
@@ -32,6 +35,7 @@ const SearchInfoForm: React.FC<SearchInfoFormProps> = ({ setEvent, setPoc }) => 
             .catch((err) => {
                 alert(err.response.data.message);
             });
+
         pocApi
             .getPocByPointCode(pointCode)
             .then((res) => {
@@ -42,7 +46,8 @@ const SearchInfoForm: React.FC<SearchInfoFormProps> = ({ setEvent, setPoc }) => 
             .catch((err) => {
                 console.log(err.response.data.message);
             });
-    }
+    };
+
     return (
         <Grid item xs={12} md={12}>
             <Grid container spacing={3}>
@@ -51,7 +56,7 @@ const SearchInfoForm: React.FC<SearchInfoFormProps> = ({ setEvent, setPoc }) => 
                         label="Mã quầy check-in"
                         variant="outlined"
                         value={pointCode}
-                        onChange={(e) => setPointCode(e.target.value)}
+                        onChange={(e) => setLocalPointCode(e.target.value)}
                         fullWidth
                         InputProps={{
                             endAdornment: (
@@ -67,10 +72,12 @@ const SearchInfoForm: React.FC<SearchInfoFormProps> = ({ setEvent, setPoc }) => 
                 <Grid item xs={12} md={3}>
                     {event && (
                         <ListItemButton>
-                            <ListItemText primaryTypographyProps={{
-                                variant: 'subtitle1',
-                                gutterBottom: true,
-                            }}>
+                            <ListItemText
+                                primaryTypographyProps={{
+                                    variant: "subtitle1",
+                                    gutterBottom: true,
+                                }}
+                            >
                                 <b>Sự kiện:</b> {event.eventName}
                             </ListItemText>
                         </ListItemButton>
@@ -80,19 +87,19 @@ const SearchInfoForm: React.FC<SearchInfoFormProps> = ({ setEvent, setPoc }) => 
                     <>
                         <Grid item xs={12} md={3}>
                             <ListItemButton>
-                                <ListItemText primaryTypographyProps={{
-                                    variant: 'subtitle1',
-                                    gutterBottom: true,
-                                }}>
+                                <ListItemText
+                                    primaryTypographyProps={{
+                                        variant: "subtitle1",
+                                        gutterBottom: true,
+                                    }}
+                                >
                                     <b>Tên quầy:</b> {poc.pointName}
                                 </ListItemText>
                             </ListItemButton>
                         </Grid>
                         <Grid item xs={12} md={3}>
                             <ListItemButton>
-                                <ListItemText primaryTypographyProps={{
-                                    variant: 'subtitle1',
-                                }}>
+                                <ListItemText primaryTypographyProps={{ variant: "subtitle1" }}>
                                     <b>Ghi chú:</b> {poc.pointNote}
                                 </ListItemText>
                             </ListItemButton>
@@ -102,6 +109,6 @@ const SearchInfoForm: React.FC<SearchInfoFormProps> = ({ setEvent, setPoc }) => 
             </Grid>
         </Grid>
     );
-}
+};
 
 export default SearchInfoForm;
