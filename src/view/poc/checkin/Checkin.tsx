@@ -5,7 +5,7 @@ import {
     TextField,
 } from "@mui/material";
 import CameraCapture from "../../../components/devices/CameraCapture";
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import BarcodeScanner from "../../../components/devices/BarcodeScanner";
 import SubCard from "../../../components/cards/SubCard";
 import SearchInfoForm from "./SearchInfoForm";
@@ -37,8 +37,14 @@ const Checkin = () => {
         guestNote: '',
         frontImg: '',
         backImg: '',
-        pointCode: pointCode,
+        pointCode: '',
     });
+
+    useEffect(() => {
+        setCheckinData((prevState) => ({
+            ...prevState,
+        }));
+    }, []);
 
     const handleCheckin = () => {
         setCheckinData({
@@ -46,7 +52,6 @@ const Checkin = () => {
             pointCode: pointCode,
         });
         console.log(checkinData);
-        console.log(poc);
         console.log(pointCode);
     }
 
