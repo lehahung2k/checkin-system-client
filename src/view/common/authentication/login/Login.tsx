@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 import Img from "../../../../assets/images/Frame-1729.webp";
 import './Login.scss'
@@ -13,24 +13,19 @@ import authApi from "../../../../services/authApi";
 const Login = () => {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [formErrors, setFormErrors] = useState({username: "", password: ""});
+    const [formErrors, setFormErrors] = useState({ username: "", password: "" });
     const [accessToken, setAccessToken] = useState<string | null>(null);
+    const [rememberMe, setRememberMe] = useState(false);
 
     const navigate = useNavigate();
-    if (Cookies.get('accessToken'))  {
+    if (Cookies.get('accessToken')) {
         navigate('/');
     }
 
-    // const showAlertAndRedirect = (message: string, redirectPath: string) => {
-    //     alert(message);
-    //     setTimeout(() => {
-    //         navigate(redirectPath);
-    //     }, 1000); // Redirect after 3 seconds
-    // };
     const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (validateForm()) {
-            const data = {username: username, password: password};
+            const data = { username: username, password: password };
             authApi
                 .loginApi(data)
                 .then((res) => {
@@ -43,8 +38,8 @@ const Login = () => {
                     switch (user.role) {
                         case 'admin':
                         case 'tenant':
-                        case 'poc': 
-                            return  navigate('');
+                        case 'poc':
+                            return navigate('');
                         default: return navigate('/auth/login');
                     }
                 })
@@ -64,7 +59,7 @@ const Login = () => {
     }, [accessToken, navigate]);
 
     const validateForm = () => {
-        let errors = {username: "", password: ""};
+        let errors = { username: "", password: "" };
         let formIsValid = true;
 
         // Validate username
@@ -87,12 +82,12 @@ const Login = () => {
         <div className="body">
             <div className="left-login">
                 <h1 className="pageName">EVENT CHECK-IN MANAGEMENT</h1>
-                <img src={Img} alt="Logo web" className="chart"/>
+                <img src={Img} alt="Logo web" className="chart" />
                 <div className="center"></div>
             </div>
             <form className="right-login" onSubmit={handleLogin}>
                 <div className="card-login">
-                    <h1 style={{marginBottom: "1rem"}}>ĐĂNG NHẬP</h1>
+                    <h1 style={{ marginBottom: "1rem" }}>ĐĂNG NHẬP</h1>
 
                     <div className="form-group">
                         <input
@@ -120,6 +115,19 @@ const Login = () => {
                         {formErrors.password && (
                             <div className="invalid-feedback">{formErrors.password}</div>
                         )}
+                    </div>
+                    <div className="inline-container">
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={rememberMe}
+                                onChange={(event) => setRememberMe(event.target.checked)}
+                            />
+                            Ghi nhớ đăng nhập
+                        </label>
+                        <Link to="/auth/forgot-password" className="forgot-password">
+                            Quên mật khẩu?
+                        </Link>
                     </div>
                     <button className="button">
                         <div>ĐĂNG NHẬP</div>
