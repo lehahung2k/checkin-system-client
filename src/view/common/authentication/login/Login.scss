@@ -135,7 +135,9 @@ $body-size: 16px;
     background: #a2d9f9;
     color: rgb(255, 255, 255);
 }
-
+.button:active {
+    background-color: #ede7f6;
+}
 .register {
     margin-top: 10px;
     color: black;

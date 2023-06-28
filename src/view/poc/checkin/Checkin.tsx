@@ -1,12 +1,15 @@
 import MainCard from "../../../components/cards/MainCard";
 import {
     Button,
+    FormControl,
     Grid,
+    InputLabel,
+    MenuItem,
+    Select,
     TextField,
 } from "@mui/material";
 import CameraCapture from "../../../components/devices/CameraCapture";
-import React, {useEffect, useState} from "react";
-import BarcodeScanner from "../../../components/devices/BarcodeScanner";
+import React, { useEffect, useState } from "react";
 import SubCard from "../../../components/cards/SubCard";
 import SearchInfoForm from "./SearchInfoForm";
 import MuiNotification from "../../../components/Notification";
@@ -42,7 +45,7 @@ const Checkin = () => {
         identityType: '',
         pointCode: '',
     });
-    {/* Thanh thông báo */}
+    // Thanh thông báo
     const [isSnackbarOpen, setIsSnackbarOpen] = useState<boolean>(false);
     const [successMessage, setSuccessMessage] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
@@ -81,11 +84,11 @@ const Checkin = () => {
         setErrorMessage("Lỗi! Vui lòng thử lại!");
         console.log(checkinData);
         setCheckinData({
+            ...checkinData,
             guestCode: '',
             guestDescription: '',
             frontImg: '',
             backImg: '',
-            identityType: '',
             pointCode: pointCode,
         });
     }
@@ -93,21 +96,46 @@ const Checkin = () => {
     return (
         <MainCard title='Check-in'>
             <Grid container spacing={3}>
-                <SearchInfoForm setEvent={setEvent} setPoc={setPoc} setPointCode={setPointCode}/>
+                <SearchInfoForm setEvent={setEvent} setPoc={setPoc} setPointCode={setPointCode} />
 
                 <Grid item xs={12} md={12} sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }} />
 
                 {event && (
                     <>
                         <Grid item xs={12} md={4}>
-                            <CameraCapture onCaptureImage={handleCaptureFrontImage}/>
+                            <CameraCapture onCaptureImage={handleCaptureFrontImage} />
                         </Grid>
                         <Grid item xs={12} md={4}>
-                            <CameraCapture onCaptureImage={handleCaptureBackImage}/>
+                            <CameraCapture onCaptureImage={handleCaptureBackImage} />
                         </Grid>
                         <Grid item xs={12} md={4}>
+                            {/* Lấy kết quả quét và tự động điền vào các textfield: */}
                             <SubCard title='Kết quả quét'>
                                 <Grid container spacing={3}>
+                                    <Grid item xs={12} md={12}>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="identityType">Loại giấy tờ</InputLabel>
+                                            <Select
+                                                labelId="identityType"
+                                                fullWidth
+                                                name="identityType"
+                                                value={checkinData.identityType}
+                                                label="Loại giấy tờ"
+                                                onChange={(e) =>
+                                                    setCheckinData((prevState) => ({
+                                                        ...prevState,
+                                                        identityType: e.target.value,
+                                                    }))
+                                                }
+                                            >
+                                                <MenuItem value="event_card">Thẻ sự kiện</MenuItem>
+                                                <MenuItem value="citizen_identity_card">Căn cước công dân</MenuItem>
+                                                <MenuItem value="student_card">Thẻ sinh viên</MenuItem>
+                                                <MenuItem value="others">Khác</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+
                                     <Grid item xs={12} md={12}>
                                         <TextField
                                             fullWidth
@@ -127,22 +155,14 @@ const Checkin = () => {
                                         />
                                     </Grid>
                                     <Grid item xs={12} md={12}>
-                                        <TextField
-                                            fullWidth
-                                            name={'identityType'}
-                                            label='Loại giấy tờ'
-                                            value={checkinData.identityType}
-                                            onChange={(e) => setCheckinData((prevState) => ({ ...prevState, identityType: e.target.value }))}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} md={12}>
                                         <Button
                                             fullWidth
                                             variant="contained"
-                                            sx={{backgroundColor: 'secondary.main'}}
+                                            sx={{ backgroundColor: 'secondary.main' }}
                                             onClick={handleCheckin}
+                                            disabled={isLoading}
                                         >
-                                            Check-in
+                                            {isLoading ? "Checking..." : "Check-in"}
                                         </Button>
                                     </Grid>
                                 </Grid>
