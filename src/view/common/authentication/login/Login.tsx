@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import Img from "../../../../assets/images/Frame-1729.webp";
 import './Login.scss'
 import authApi from "../../../../services/authApi";
+import MuiNotification from "../../../../components/Notification";
 
 // const AccessTokenContext = createContext<string | null>(null);
 
@@ -16,6 +17,12 @@ const Login = () => {
     const [formErrors, setFormErrors] = useState({ username: "", password: "" });
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const [rememberMe, setRememberMe] = useState(false);
+    const [isSnackbarOpen, setIsSnackbarOpen] = useState<boolean>(false);
+    const [successMessage] = useState<string>("");
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const handleSnackbarClose = () => {
+        setIsSnackbarOpen(false);
+    };
 
     const navigate = useNavigate();
     if (Cookies.get('accessToken')) {
@@ -44,8 +51,9 @@ const Login = () => {
                     }
                 })
                 .catch((e) => {
-                    if (e.response === undefined) alert('Network error');
-                    else alert(e.response.data.message);
+                    setIsSnackbarOpen(true);
+                    if (e.response === undefined) setErrorMessage("Lỗi kết nối đến máy chủ");
+                    else setErrorMessage(e.response.data.message);
                 })
         }
     };
@@ -139,6 +147,12 @@ const Login = () => {
                 </div>
                 <div className="center1"></div>
             </form>
+            <MuiNotification
+                isOpen={isSnackbarOpen}
+                successMessage={successMessage}
+                errorMessage={errorMessage}
+                onClose={handleSnackbarClose}
+            />
         </div>
     );
 }
