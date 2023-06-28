@@ -23,6 +23,8 @@ const EventLists = () => {
     const [events, setEvents] = useState<EventData[]>([]);
     const [selectedEventId, setSelectedEventId] = React.useState<string>('');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [page, setPage] = useState(0);
+    const [perPage, setPerPage] = useState(5);
     const navigate = useNavigate();
 
     const handleEventClick = (eventId: string) => {
