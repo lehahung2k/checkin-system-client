@@ -1,5 +1,5 @@
 import {AxiosInstance} from "axios";
-import axios from "axios/index";
+import axios from "axios";
 import Cookies from "js-cookie";
 
 interface GuestData {
@@ -26,6 +26,10 @@ class GuestApi {
 
     checkinGuest = async (data: GuestData) => {
         return this.api.post("/event/checkin", data);
+    }
+
+    listGuest = async (pointCode: string) => {
+        return this.api.get(`event/list-guests?pointCode=${pointCode}`);
     }
 
 }
