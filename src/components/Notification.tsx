@@ -1,4 +1,4 @@
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar, Alert, Slide, SlideProps } from "@mui/material";
 import { useState, useEffect } from "react";
 
 interface NotificationSnackbarProps {
@@ -27,8 +27,12 @@ const MuiNotification: React.FC<NotificationSnackbarProps> = ({ isOpen, successM
             onClose={handleSnackbarClose}
             anchorOrigin={{
                 vertical: "top",
-                horizontal: "center",
+                horizontal: "right",
             }}
+            TransitionComponent={Slide}
+            TransitionProps={{
+                direction: 'left',
+            } as SlideProps}
         >
             <Alert
                 severity={successMessage ? "success" : "error"}

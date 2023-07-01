@@ -1,10 +1,11 @@
 import React from 'react';
+import MainCard from "../../components/cards/MainCard";
 
 const PocDashboard = () => {
     return (
-        <div>
-            <h1>Poc Dashboard</h1>
-        </div>
+        <MainCard title='Chào mừng đến với trang quản trị quầy check-in của doanh nghiệp đối tác'>
+            <h1>Hello world</h1>
+        </MainCard>
     );
 }
 

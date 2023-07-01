@@ -1,5 +1,5 @@
 import MainCard from "../../../components/cards/MainCard";
-import {Box, Button, Grid, Modal} from "@mui/material";
+import {Box, Button, Grid, IconButton, Modal} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import SubCard from "../../../components/cards/SubCard";
 import eventsApi from "../../../services/eventsApi";
@@ -23,6 +23,8 @@ const EventLists = () => {
     const [events, setEvents] = useState<EventData[]>([]);
     const [selectedEventId, setSelectedEventId] = React.useState<string>('');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [page, setPage] = useState(0);
+    const [perPage, setPerPage] = useState(5);
     const navigate = useNavigate();
 
     const handleEventClick = (eventId: string) => {
@@ -36,7 +38,6 @@ const EventLists = () => {
             .then((res) => {
                 const events = res.data.payload;
                 setEvents(events);
-                console.log(events);
             })
             .catch((err) => {
                 console.log(err.response.data.message);
@@ -49,17 +50,18 @@ const EventLists = () => {
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: '#', minWidth: 50, flex: 0.02 },
-        { field: 'eventName', headerName: 'Tên sự kiện', minWidth: 200, flex: 0.2, resizable: true},
+        { field: 'eventName', headerName: 'Tên sự kiện', minWidth: 200, flex: 0.2 },
         { field: 'startTime', headerName: 'Thời gian bắt đầu', minWidth: 150, flex: 0.1},
         { field: 'endTime', headerName: 'Thời gian kết thúc', minWidth: 150, flex: 0.1 },
         { field: 'eventCode', headerName: 'Mã sự kiện', minWidth: 150, flex: 0.1},
         { field: 'status', headerName: 'Trạng thái', minWidth: 150, flex: 0.1 },
         { field: 'viewDetails', headerName: 'Chi tiết', minWidth: 100, renderCell: (params) => (
-            <Button
+            <IconButton
                 onClick={() => handleEventClick(params.row.eventId)}
-                endIcon={<IconEye />}
+                color="primary"
             >
-            </Button>
+                <IconEye />
+            </IconButton>
         )}
     ];
 

@@ -1,175 +1,202 @@
 .body {
-  margin: 0;
-  width: 100vw;
-  height: 100vh;
-  background: #f5fffb;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	margin: 0;
+	width: 100vw;
+	height: 100vh;
+	background: #f5fffb;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 
-  .register-form {
-    width: 50vw;
-    height: 80vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.left-login {
+	width: 50vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
 
-    .card-register {
-      width: 50vw;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      padding: 2rem;
-      background-image: linear-gradient(#ebebf9, rgb(245, 253, 255));
-      border-radius: 20px;
-      box-shadow: 0 0 20px #00000056;
-      z-index: 1;
+.pageName {
+	color: #000000;
+	font-weight: bolder;
+	font-size: xx-large;
+	margin: 0;
+	z-index: 1;
+	padding: 0 20px;
+	font-family: Arial, Helvetica, sans-serif;
+	text-align: center;
+	line-height: 1.2;
+}
 
-      h1 {
-        color: #000000;
-        margin: 0;
-      }
+.chart {
+	width: 80%;
+}
 
-      .chart {
-        width: 80%;
-      }
+.register-form {
+	width: 50vw;
+	height: 100vh;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding-top: 2rem;
+}
 
-      .form-group {
-        width: 40vw;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
-        margin: 10px 0;
+.card-register {
+	width: 60%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	padding: 30px 35px;
+	background-image: linear-gradient(#ebebf9, rgb(245, 253, 255));
+	border-radius: 20px;
+	box-shadow: 0 0 20px #00000056;
+	z-index: 1;
 
-        label {
-          color: #000000de;
-          margin-bottom: 10px;
-          font-weight: bold;
-        }
+	h1 {
+		color: #000000;
+		font-weight: bold;
+		margin: 0;
+		font-family: Arial, Helvetica, sans-serif;
+	}
+}
 
-        .form-field {
-          width: 100%;
-          border: none;
-          border-radius: 10px;
-          padding: 15px;
-          background-color: #ffffff;
-          color: #000000de;
-          font-size: 12pt;
-          box-shadow: 0px 0px 10px #00000056;
-          box-sizing: border-box;
-          outline: none;
+.form-group {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+	margin: 10px 0;
 
-          ::placeholder {
-            color: #f0ffff94;
-          }
-        }
+	label {
+		color: #000000de;
+		margin-bottom: 10px;
+	}
+}
 
-        select.form-field {
-          appearance: none; /* Remove default appearance */
-          background-position: right 15px center; /* Adjust arrow position */
-          background-size: 12px; /* Adjust arrow size */
-          padding-right: 30px; /* Make space for the arrow */
+.form-field {
+	width: 100%;
+	border: none;
+	border-radius: 10px;
+	padding: 15px;
+	background-color: #ffffff;
+	color: #000000de;
+	font-size: 12pt;
+	box-shadow: 0 0 10px #00000056;
+	box-sizing: border-box;
+	outline: none;
 
-          option[disabled] {
-            color: #999999; // Add a different color for the placeholder option
-          }
-        }
+	::placeholder {
+		color: #f0ffff94;
+	}
+}
 
-        .form-error {
-          display: block;
-          color: #fff;
-          font-size: 0.8em;
-        }
-      }
+select.form-field {
+	appearance: none;
+	/* Remove default appearance */
+	background-position: right 15px center;
+	/* Adjust arrow position */
+	background-size: 12px;
+	/* Adjust arrow size */
+	padding-right: 30px;
+	/* Make space for the arrow */
 
-      .button {
-        width: 100%;
-        padding: 16px 0px;
-        border: none;
-        border-radius: 6px;
-        outline: none;
-        text-transform: uppercase;
-        font-weight: bolder;
-        letter-spacing: 3px;
-        cursor: pointer;
-        margin-top: 15px;
-        background: #a2d9f9;
-        color: rgb(255, 255, 255);
-      }
+	option[disabled] {
+		color: #999999; // Add a different color for the placeholder option
+	}
+}
 
-      .register {
-        margin-top: 10px;
-        color: black;
-      }
+.form-error {
+	display: block;
+	color: #fff;
+	font-size: 0.8em;
+}
 
-      .errorMsg {
-        color: red;
-        font-size: small;
-      }
-    }
-  }
+.button {
+	width: 100%;
+	padding: 16px 0px;
+	border: none;
+	border-radius: 6px;
+	outline: none;
+	text-transform: uppercase;
+	font-weight: bolder;
+	letter-spacing: 3px;
+	cursor: pointer;
+	margin-top: 15px;
+	background: #a2d9f9;
+	color: rgb(255, 255, 255);
+}
+
+.register {
+	margin-top: 10px;
+	color: black;
+}
+
+.errorMsg {
+	color: red;
+	font-size: small;
 }
 
 @media (max-width: 950px) {
-  .card-login {
-    width: 100%;
-  }
+	.card-register {
+		width: 100%;
+	}
 }
 
 @media (max-width: 600px) {
-  .body {
-    flex-direction: column;
-  }
+	.body {
+		flex-direction: column;
+	}
 
-  .left-login {
-    width: 100%;
-    height: auto;
-  }
+	.left-login {
+		width: 100%;
+		height: auto;
+	}
 
-  .right-login {
-    width: 100%;
-    height: auto;
+	.register-form {
+		width: 100%;
+		height: auto;
 
-    .card-login {
-      width: 90%;
-    }
-  }
+		.card-register {
+			width: 90%;
+		}
+	}
 }
 
 .center {
-  background: #a2d9f9;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  display: flex;
-  position: absolute;
-  left: -100px;
-  top: -100px;
-  z-index: 0;
+	background: #a2d9f9;
+	width: 300px;
+	height: 300px;
+	border-radius: 50%;
+	display: flex;
+	position: absolute;
+	left: -100px;
+	top: -100px;
+	z-index: 0;
 }
 
-.center-1 {
-  background: #A2D9F9;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  display: flex;
-  position: absolute;
-  left: 400px;
-  bottom: 100px;
-  z-index: 0;
-}
+// .center-1 {
+// 	background: #A2D9F9;
+// 	width: 500px;
+// 	height: 500px;
+// 	border-radius: 50%;
+// 	display: flex;
+// 	left: 400px;
+// 	bottom: 100px;
+// 	z-index: -1;
+// }
 
 .center2 {
-  background: #a2d9f9;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  display: flex;
-  position: absolute;
-  z-index: 0;
-  top: 300px;
-  right: 100px;
+	background: #a2d9f9;
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	display: flex;
+	position: absolute;
+	z-index: 0;
+	top: 300px;
+	right: 100px;
 }

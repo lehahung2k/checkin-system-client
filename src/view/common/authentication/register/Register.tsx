@@ -83,7 +83,7 @@ function Register() {
                         validationSchema={validationSchema}
                     >
                         {({setFieldValue}) => (
-                            <Form>
+                            <Form style={{width: '100%'}}>
                                 <div className="form-group">
                                     <Field
                                         autoComplete="off"

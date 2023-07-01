@@ -3,8 +3,9 @@ import Cookies from "js-cookie";
 
 interface PocData {
     pointCode: string;
+    eventCode: string
     pointName: string;
-    pointDescription: string;
+    pointNote: string;
 }
 class PocApi {
     private api: AxiosInstance;
@@ -30,6 +31,9 @@ class PocApi {
 
     getAllPocByPoc = async () => {
         return this.api.get('/poc/poc-view');
+    }
+    getPocByPointCode = async (pointCode: string) => {
+        return this.api.get(`/poc/details?pointCode=${pointCode}`);
     }
 }
 const pocApi = new PocApi();

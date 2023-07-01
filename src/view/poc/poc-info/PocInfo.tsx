@@ -1,5 +1,14 @@
 import MainCard from "../../../components/cards/MainCard";
-import {Button, Grid, List, ListItem, ListItemButton, ListItemText, Tooltip, Typography} from "@mui/material";
+import {
+    Grid,
+    IconButton,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemText,
+    Tooltip,
+    Typography
+} from "@mui/material";
 import SubCard from "../../../components/cards/SubCard";
 import accountApi from "../../../services/accountApi";
 import React, {useEffect, useState} from "react";
@@ -29,7 +38,6 @@ const PocInfo = () => {
         accountApi
             .getAccountInfo()
             .then((res) => {
-                console.log("POC data:", res.data.payload);
                 setPocAccountData(res.data.payload);
             })
             .catch ((err) => {
@@ -58,17 +66,15 @@ const PocInfo = () => {
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: '#', minWidth: 50, flex: 0.02 },
-        { field: 'pointName', headerName: 'Tên quầy check-in', minWidth: 150, flex: 0.1, resizable: true},
-        { field: 'eventCode', headerName: 'Mã sự kiện', minWidth: 150, flex: 0.1, resizable: true},
+        { field: 'pointName', headerName: 'Tên quầy check-in', minWidth: 150, flex: 0.1 },
+        { field: 'eventCode', headerName: 'Mã sự kiện', minWidth: 150, flex: 0.1 },
         { field: 'pointCode', headerName: 'Mã quầy', minWidth: 150, flex: 0.1},
         { field: 'pointNote', headerName: 'Ghi chú', minWidth: 150, flex: 0.2 },
         { field: 'status', headerName: 'Trạng thái', minWidth: 150, flex: 0.1 },
         { field: 'viewDetails', headerName: 'Chi tiết', minWidth: 100, renderCell: (params) => (
-                <Button
-                    onClick={() => {}}
-                    endIcon={<IconEye />}
-                >
-                </Button>
+                <IconButton color='primary' onClick={() => {}}>
+                    <IconEye />
+                </IconButton>
             )}
     ];
 

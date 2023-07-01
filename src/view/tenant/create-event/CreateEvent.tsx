@@ -33,15 +33,16 @@ const CreateEvent = () => {
     const handleSnackbarClose = () => {
         setIsSnackbarOpen(false);
     };
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const formatDateTime = (dateTime: Date) => {
-        const year = dateTime.getUTCFullYear();
-        const month = String(dateTime.getUTCMonth() + 1).padStart(2, "0");
-        const date = String(dateTime.getUTCDate()).padStart(2, "0");
-        const hours = String(dateTime.getUTCHours()).padStart(2, "0");
-        const minutes = String(dateTime.getUTCMinutes()).padStart(2, "0");
+        const year = dateTime.getFullYear();
+        const month = String(dateTime.getMonth() + 1).padStart(2, "0");
+        const date = String(dateTime.getDate()).padStart(2, "0");
+        const hours = String(dateTime.getHours()).padStart(2, "0");
+        const minutes = String(dateTime.getMinutes()).padStart(2, "0");
 
-        return `${year}-${month}-${date}T${hours}:${minutes}`;
+        return `${year}-${month}-${date} ${hours}:${minutes}`;
     };
 
     useEffect(() => {
@@ -98,6 +99,7 @@ const CreateEvent = () => {
                 eventData.eventImg = await convertImageToBase64(selectedImage);
             }
             console.log(eventData);
+            setIsLoading(true);
             eventsApi
                 .addNewEvent(eventData)
                 .then((res) => {
@@ -106,10 +108,12 @@ const CreateEvent = () => {
                     setErrorMessage("");
                     console.log(res);
                     setTimeout(() => {
+                        setIsLoading(false);
                         navigate("/"); // Redirect to the dashboard after a delay
                     }, 3000);
                 })
                 .catch((error) => {
+                    setIsLoading(false);
                     setErrorMessage(error.response.data.message);
                     setIsSnackbarOpen(true);
                     setSuccessMessage("");
@@ -212,8 +216,8 @@ const CreateEvent = () => {
                     </SubCard>
                 </Grid>
                 <Grid item xs={12}>
-                    <Button variant="contained" sx={{ backgroundColor: 'secondary.dark' }} onClick={createEvent}>
-                        Tạo mới
+                    <Button variant="contained" sx={{ backgroundColor: 'secondary.dark' }} onClick={createEvent} disabled={isLoading}>
+                        {isLoading ? "Đang tạo..." : "Tạo mới"}
                     </Button>
                 </Grid>
             </Grid>
