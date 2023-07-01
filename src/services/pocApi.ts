@@ -30,7 +30,7 @@ class PocApi {
     }
 
     getAllPocByPoc = async () => {
-        return this.api.get('/poc/poc-view');
+        return this.api.get('/poc/list-poc');
     }
     getPocByPointCode = async (pointCode: string) => {
         return this.api.get(`/poc/details?pointCode=${pointCode}`);
