@@ -33,6 +33,7 @@ const SearchInfoForm: React.FC<SearchInfoFormProps> = ({ setEvent, setPoc, setPo
                 setEventLocal(eventData);
             })
             .catch((err) => {
+                if (err.response === undefined) alert("Lỗi kết nối đến máy chủ");
                 alert(err.response.data.message);
             });
 

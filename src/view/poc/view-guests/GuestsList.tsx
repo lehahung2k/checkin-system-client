@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import MainCard from "../../../components/cards/MainCard";
 import {
     Button,
@@ -16,7 +16,7 @@ import eventsApi from "../../../services/eventsApi";
 import SkeletonLoading from "../../../components/cards/SkeletonLoading";
 import dateTimeCalc from "../../../services/dateTimeCalc";
 import guestApi from "../../../services/guestApi";
-import {DataGrid, GridColDef} from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import SearchBoxAction from "../../../components/cards/SearchBoxAction";
 
 interface PointCodeProps {
@@ -31,7 +31,7 @@ interface GuestsData {
     identityType: string;
 }
 
-const GuestsList: React.FC<PointCodeProps> = ({pointCode}) => {
+const GuestsList: React.FC<PointCodeProps> = ({ pointCode }) => {
     const [guestsList, setGuestsList] = React.useState<GuestsData[]>([]);
     const [eventDetails, setEventDetails] = React.useState<any>({});
     const [startTimeFormat, setStartTimeFormat] = React.useState<string>("");
@@ -85,7 +85,7 @@ const GuestsList: React.FC<PointCodeProps> = ({pointCode}) => {
 
     const renderCellImg = (params: any) => {
         const imageUrl = params.value;
-        return(
+        return (
             <>
                 <Button onClick={() => handleImageClick(imageUrl)}>Xem ảnh</Button>
                 <Dialog open={selectedImage === imageUrl} onClose={handleCloseImage}>
@@ -96,11 +96,25 @@ const GuestsList: React.FC<PointCodeProps> = ({pointCode}) => {
             </>
         );
     }
+    
+    const renderIdentityType = (params: GridValueGetterParams<any>) => {
+        const identityType = params.row.identityType;
+        switch (identityType) {
+          case 'student_card':
+            return 'Thẻ sinh viên';
+          case 'citizen_identity_card':
+            return 'Căn cước công dân';
+          case 'event_card':
+            return 'Thẻ sự kiện';
+          default:
+            return 'Khác';
+        }
+      };
 
     const columns: GridColDef[] = [
-        {field: 'id', headerName: '#', minWidth: 50, flex: 0.02},
-        {field: 'guestCode', headerName: 'Mã định danh', minWidth: 200, flex: 0.15},
-        {field: 'guestDescription', headerName: 'Ghi chú', minWidth: 200, flex: 0.15},
+        { field: 'id', headerName: '#', minWidth: 50, flex: 0.02 },
+        { field: 'guestCode', headerName: 'Mã định danh', minWidth: 200, flex: 0.15 },
+        { field: 'guestDescription', headerName: 'Ghi chú', minWidth: 200, flex: 0.15 },
         {
             field: 'frontImg',
             headerName: 'Ảnh 1',
@@ -108,8 +122,8 @@ const GuestsList: React.FC<PointCodeProps> = ({pointCode}) => {
             flex: 0.1,
             renderCell: renderCellImg
         },
-        {field: 'backImg', headerName: 'Ảnh 2', minWidth: 200, flex: 0.1, renderCell: renderCellImg},
-        {field: 'identityType', headerName: 'Loại giấy tờ', minWidth: 200, flex: 0.1},
+        { field: 'backImg', headerName: 'Ảnh 2', minWidth: 200, flex: 0.1, renderCell: renderCellImg },
+        { field: 'identityType', headerName: 'Loại giấy tờ', minWidth: 200, flex: 0.1, valueGetter: renderIdentityType },
     ];
 
     console.log(guestsList);
@@ -131,7 +145,7 @@ const GuestsList: React.FC<PointCodeProps> = ({pointCode}) => {
     return (
         <MainCard title="Danh sách khách tham dự">
             {/* Hiển thị danh sách khách tham dự ở đây */}
-            <Grid container spacing={3} sx={{maxHeight: '80vh', overflow: 'auto'}}>
+            <Grid container spacing={3} sx={{ maxHeight: '80vh', overflow: 'auto' }}>
                 <Grid item xs={12} md={12}>
                     <SubCard title="Chi tiết sự kiện">
                         {eventDetails && pointCode ?
@@ -151,7 +165,7 @@ const GuestsList: React.FC<PointCodeProps> = ({pointCode}) => {
                                             </ListItem>
                                             <ListItem disablePadding>
                                                 <ListItemButton>
-                                                    <ListItemText primaryTypographyProps={{variant: 'subtitle1'}}>
+                                                    <ListItemText primaryTypographyProps={{ variant: 'subtitle1' }}>
                                                         <b>{`Mã sự kiện: `}</b> {eventDetails.eventCode}
                                                     </ListItemText>
                                                 </ListItemButton>
@@ -198,13 +212,13 @@ const GuestsList: React.FC<PointCodeProps> = ({pointCode}) => {
                                     </Grid>
                                 </Grid>
                             ) : (
-                                <SkeletonLoading/>
+                                <SkeletonLoading />
                             )
                         }
                     </SubCard>
                 </Grid>
                 <Grid item xs={12} md={12}>
-                    <SubCard title="Danh sách khách tham dự" secondary={<SearchBoxAction onChange={() => {}}/>}>
+                    <SubCard title="Danh sách khách tham dự" secondary={<SearchBoxAction onChange={() => { }} />}>
                         {guestsList && pointCode ? (
                             <Grid container spacing={3}>
                                 <Grid item xs={12} md={12}>
@@ -213,7 +227,7 @@ const GuestsList: React.FC<PointCodeProps> = ({pointCode}) => {
                                         rows={rows}
                                         initialState={{
                                             pagination: {
-                                                paginationModel: {page: 0, pageSize: 5},
+                                                paginationModel: { page: 0, pageSize: 5 },
                                             },
                                         }}
                                         pageSizeOptions={[5, 10, 15]}
@@ -222,7 +236,7 @@ const GuestsList: React.FC<PointCodeProps> = ({pointCode}) => {
                                 </Grid>
                             </Grid>
                         ) : (
-                            <SkeletonLoading/>
+                            <SkeletonLoading />
                         )}
                     </SubCard>
                 </Grid>

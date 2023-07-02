@@ -13,6 +13,7 @@ import React, { useEffect, useState } from "react";
 import SubCard from "../../../components/cards/SubCard";
 import SearchInfoForm from "./SearchInfoForm";
 import MuiNotification from "../../../components/Notification";
+import guestApi from "../../../services/guestApi";
 
 interface EventData {
     eventName: string;
@@ -79,18 +80,27 @@ const Checkin = () => {
             ...checkinData,
             pointCode: pointCode,
         });
-        setIsSnackbarOpen(true);
-        setSuccessMessage("");
-        setErrorMessage("Lỗi! Vui lòng thử lại!");
         console.log(checkinData);
-        setCheckinData({
-            ...checkinData,
-            guestCode: '',
-            guestDescription: '',
-            frontImg: '',
-            backImg: '',
-            pointCode: pointCode,
-        });
+        setIsLoading(true);
+        setIsSnackbarOpen(true);
+        guestApi
+            .checkinGuest(checkinData)
+            .then((res) => {
+                setSuccessMessage("Check-in thành công!");
+                setIsLoading(false);
+                setCheckinData({
+                    ...checkinData,
+                    guestCode: '',
+                    guestDescription: '',
+                    frontImg: '',
+                    backImg: '',
+                    pointCode: pointCode,
+                });
+            })
+            .catch((err) => {
+                setErrorMessage(err.response.data.message);
+                setIsLoading(false);
+            });
     }
 
     return (
