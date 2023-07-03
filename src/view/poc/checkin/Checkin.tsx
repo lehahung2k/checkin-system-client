@@ -9,7 +9,7 @@ import {
     TextField,
 } from "@mui/material";
 import CameraCapture from "../../../components/devices/CameraCapture";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import SubCard from "../../../components/cards/SubCard";
 import SearchInfoForm from "./SearchInfoForm";
 import MuiNotification from "../../../components/Notification";
@@ -50,22 +50,41 @@ const Checkin = () => {
     const [isSnackbarOpen, setIsSnackbarOpen] = useState<boolean>(false);
     const [successMessage, setSuccessMessage] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
+    const [isImageCaptured, setIsImageCaptured] = useState<boolean>(false);
     const handleSnackbarClose = () => {
         setIsSnackbarOpen(false);
     };
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [errorFields, setErrorFields] = useState<{ [key: string]: boolean }>({
+        guestCode: false,
+    });
+    const validateFields = () => {
+        const updatedErrorFields = { ...errorFields }; // Sao chép trạng thái lỗi hiện tại
+
+        // Kiểm tra từng trường dữ liệu
+        if (checkinData.guestCode.trim() === "") {
+            updatedErrorFields.guestCode = true; // Trường dữ liệu bị bỏ trống
+        } else {
+            updatedErrorFields.guestCode = false; // Trường dữ liệu không bị bỏ trống
+        }
+
+        setErrorFields(updatedErrorFields);
+        return !Object.values(updatedErrorFields).some((error) => error);
+    };
 
     const handleCaptureFrontImage = (imageData: string) => {
         setCheckinData((prevState) => ({
             ...prevState,
             frontImg: imageData,
         }));
+        setIsImageCaptured(true);
     };
     const handleCaptureBackImage = (imageData: string) => {
         setCheckinData((prevState) => ({
             ...prevState,
             backImg: imageData,
         }));
+        setIsImageCaptured(true);
     }
 
     useEffect(() => {
@@ -76,31 +95,40 @@ const Checkin = () => {
     }, [pointCode]);
 
     const handleCheckin = () => {
-        setCheckinData({
-            ...checkinData,
-            pointCode: pointCode,
-        });
-        console.log(checkinData);
-        setIsLoading(true);
-        setIsSnackbarOpen(true);
-        guestApi
-            .checkinGuest(checkinData)
-            .then((res) => {
-                setSuccessMessage("Check-in thành công!");
-                setIsLoading(false);
-                setCheckinData({
-                    ...checkinData,
-                    guestCode: '',
-                    guestDescription: '',
-                    frontImg: '',
-                    backImg: '',
-                    pointCode: pointCode,
-                });
-            })
-            .catch((err) => {
-                setErrorMessage(err.response.data.message);
-                setIsLoading(false);
+        const isValid = validateFields();
+        if (isValid) {
+            // if (!isImageCaptured) {
+            //     handleCaptureFrontImage();
+            //     handleCaptureBackImage();
+            // }
+            setCheckinData({
+                ...checkinData,
+                pointCode: pointCode,
             });
+            console.log(checkinData);
+            setIsLoading(true);
+            setIsSnackbarOpen(true);
+            guestApi
+                .checkinGuest(checkinData)
+                .then((res) => {
+                    setSuccessMessage("Check-in thành công!");
+                    setIsLoading(false);
+                    setCheckinData({
+                        ...checkinData,
+                        guestCode: '',
+                        guestDescription: '',
+                        frontImg: '',
+                        backImg: '',
+                        pointCode: pointCode,
+                    });
+                })
+                .catch((err) => {
+                    setErrorMessage(err.response.data.message);
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                });
+        }
     }
 
     return (
@@ -152,6 +180,10 @@ const Checkin = () => {
                                             name={'guestCode'}
                                             label='Mã định danh'
                                             value={checkinData.guestCode}
+                                            error={errorFields.guestCode}
+                                            helperText={
+                                                errorFields.guestCode ? "Mã định danh không được bỏ trống" : ""
+                                            }
                                             onChange={(e) => setCheckinData((prevState) => ({ ...prevState, guestCode: e.target.value }))}
                                         />
                                     </Grid>
