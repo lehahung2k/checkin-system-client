@@ -50,7 +50,7 @@ const Checkin = () => {
     const [isSnackbarOpen, setIsSnackbarOpen] = useState<boolean>(false);
     const [successMessage, setSuccessMessage] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
-    const [isImageCaptured, setIsImageCaptured] = useState<boolean>(false);
+
     const handleSnackbarClose = () => {
         setIsSnackbarOpen(false);
     };
@@ -77,14 +77,12 @@ const Checkin = () => {
             ...prevState,
             frontImg: imageData,
         }));
-        setIsImageCaptured(true);
     };
     const handleCaptureBackImage = (imageData: string) => {
         setCheckinData((prevState) => ({
             ...prevState,
             backImg: imageData,
         }));
-        setIsImageCaptured(true);
     }
 
     useEffect(() => {
@@ -177,6 +175,7 @@ const Checkin = () => {
                                     <Grid item xs={12} md={12}>
                                         <TextField
                                             fullWidth
+                                            autoFocus
                                             name={'guestCode'}
                                             label='Mã định danh'
                                             value={checkinData.guestCode}
