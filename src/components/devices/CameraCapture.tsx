@@ -14,7 +14,7 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCaptureImage }) => {
     const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
     const webcamRef = useRef<Webcam>(null);
-
+  
     useEffect(() => {
         const getCameras = async () => {
             try {
