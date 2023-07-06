@@ -104,7 +104,12 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCaptureImage }) => {
                 </Grid>
                 <Grid item>
                     {capturedImage === null ? (
-                        <Button disabled={!selectedCamera} onClick={handleCaptureImage} color="secondary" variant="outlined">
+                        <Button
+                            disabled={!selectedCamera}
+                            onClick={handleCaptureImage}
+                            color="secondary"
+                            variant="outlined"
+                        >
                             Chụp ảnh
                         </Button>
                     ) : (
