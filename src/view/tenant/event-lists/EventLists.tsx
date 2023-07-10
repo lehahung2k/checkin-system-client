@@ -9,6 +9,7 @@ import SearchBoxAction from "../../../components/cards/SearchBoxAction";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { IconEye } from "@tabler/icons-react";
 import {useNavigate} from "react-router";
+import SkeletonLoading from "../../../components/cards/SkeletonLoading";
 
 interface EventData {
     eventId: string;
@@ -97,26 +98,34 @@ const EventLists = () => {
                     <SubCard title="Xem danh sách sự kiện" secondary={<SearchBoxAction onChange={handleFilter}/>}>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
-                                <Grid container justifyContent="flex-end" marginBottom={2}>
-                                    <Button variant="contained" sx={{backgroundColor: 'secondary.dark'}}
-                                            onClick={()=>{
-                                               navigate('/event/create');
-                                            }}
-                                    >
-                                        Thêm mới
-                                    </Button>
-                                </Grid>
-                                <DataGrid
-                                    columns={columns}
-                                    rows={rows}
-                                    initialState={{
-                                        pagination: {
-                                            paginationModel: { page: 0, pageSize: 5 },
-                                        },
-                                    }}
-                                    pageSizeOptions={[5, 10, 15]}
-                                    autoHeight={true}
-                                />
+                                {
+                                    events ? (
+                                      <>
+                                          <Grid container justifyContent="flex-end" marginBottom={2}>
+                                              <Button variant="contained" sx={{backgroundColor: 'secondary.dark'}}
+                                                      onClick={()=>{
+                                                          navigate('/event/create');
+                                                      }}
+                                              >
+                                                  Thêm mới
+                                              </Button>
+                                          </Grid>
+                                          <DataGrid
+                                              columns={columns}
+                                              rows={rows}
+                                              initialState={{
+                                                  pagination: {
+                                                      paginationModel: { page: 0, pageSize: 5 },
+                                                  },
+                                              }}
+                                              pageSizeOptions={[5, 10, 15]}
+                                              autoHeight={true}
+                                          />
+                                      </>
+                                    ) : (
+                                        <SkeletonLoading />
+                                    )
+                                }
                             </Grid>
                         </Grid>
                     </SubCard>
