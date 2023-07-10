@@ -9,10 +9,6 @@ const Dashboard = () => {
 
   let dashboardComponent = null;
 
-  // if role is admin, show admin dashboard
-  // if role is tenant, show tenant dashboard
-  // if role is poc, show poc dashboard
-
   switch (role) {
     case "admin":
       dashboardComponent = <AdminDashboard />;

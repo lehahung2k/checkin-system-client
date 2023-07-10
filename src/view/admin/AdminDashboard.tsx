@@ -6,7 +6,7 @@ const AdminDashboard = () => {
     return (
         <MainCard title={"Chào mừng đến với trang quản trị của hệ thống"}>
             <Typography variant="body2">
-                Hello world
+                Thông tin sự kiện
             </Typography>
         </MainCard>
     );

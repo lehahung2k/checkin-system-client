@@ -95,10 +95,6 @@ const Checkin = () => {
     const handleCheckin = () => {
         const isValid = validateFields();
         if (isValid) {
-            // if (!isImageCaptured) {
-            //     handleCaptureFrontImage();
-            //     handleCaptureBackImage();
-            // }
             setCheckinData({
                 ...checkinData,
                 pointCode: pointCode,
@@ -128,6 +124,19 @@ const Checkin = () => {
                 });
         }
     }
+
+    const handleCaptureImage = () => {
+        console.log("test")
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            handleCheckin();
+            if (checkinData.frontImg === '' && checkinData.backImg === '') {
+                handleCaptureImage();
+            }
+        }
+    };
 
     return (
         <MainCard title='Check-in'>
@@ -184,6 +193,7 @@ const Checkin = () => {
                                                 errorFields.guestCode ? "Mã định danh không được bỏ trống" : ""
                                             }
                                             onChange={(e) => setCheckinData((prevState) => ({ ...prevState, guestCode: e.target.value }))}
+                                            onKeyDown={handleKeyDown}
                                         />
                                     </Grid>
                                     <Grid item xs={12} md={12}>
@@ -199,6 +209,7 @@ const Checkin = () => {
                                         <Button
                                             fullWidth
                                             variant="contained"
+                                            id='checkin'
                                             sx={{ backgroundColor: 'secondary.main' }}
                                             onClick={handleCheckin}
                                             disabled={isLoading}
