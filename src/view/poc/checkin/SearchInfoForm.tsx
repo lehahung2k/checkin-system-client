@@ -60,6 +60,12 @@ const SearchInfoForm: React.FC<SearchInfoFormProps> = ({ setEvent, setPoc, setPo
                         value={pointCode}
                         onChange={(e) => setLocalPointCode(e.target.value)}
                         fullWidth
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                getDataByPointCode();
+                                }
+                            }
+                        }
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
