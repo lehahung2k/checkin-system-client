@@ -4,7 +4,7 @@ import MainCard from "../../components/cards/MainCard";
 const PocDashboard = () => {
     return (
         <MainCard title='Chào mừng đến với trang quản trị quầy check-in của doanh nghiệp đối tác'>
-            <h1>Hello world</h1>
+            <h1>Doashboard</h1>
         </MainCard>
     );
 }

@@ -5,6 +5,8 @@ import { Button, Grid, InputAdornment, ListItemButton, ListItemText, TextField }
 
 interface EventData {
     eventName: string;
+    startTime: Date;
+    endTime: Date;
 }
 
 interface PocData {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import tenantApi from "../../services/tenantApi";
 import { useNavigate } from 'react-router';
-import { Typography } from '@mui/material';
+import {Grid, Typography} from '@mui/material';
 import MainCard from '../../components/cards/MainCard';
 import SkeletonLoading from "../../components/cards/SkeletonLoading";
 
@@ -45,9 +45,11 @@ const TenantDashboard = () => {
                 </MainCard>
             ) : (
                 <MainCard title='Chào mừng đến với trang quản trị của doanh nghiệp đối tác'>
-                    <Typography variant="body2">
-                        Hello world
-                    </Typography>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                            <h1> Doashboard </h1>
+                        </Grid>
+                    </Grid>
                 </MainCard>
             )}
         </>
