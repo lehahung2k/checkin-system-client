@@ -72,6 +72,11 @@ const CreatePoc = () => {
                         value={eventCode}
                         onChange={(e) => setEventCode(e.target.value)}
                         fullWidth
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                getEventInfo();
+                            }
+                        }}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">

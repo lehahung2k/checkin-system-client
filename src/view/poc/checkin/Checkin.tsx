@@ -229,7 +229,7 @@ const Checkin = () => {
                                                 errorFields.guestCode ? "Mã định danh không được bỏ trống" : ""
                                             }
                                             onChange={(e) => setCheckinData((prevState) => ({ ...prevState, guestCode: e.target.value }))}
-                                            onKeyDown={handleKeyDown}
+                                            // onKeyDown={handleKeyDown}
                                         />
                                     </Grid>
                                     <Grid item xs={12} md={12}>
