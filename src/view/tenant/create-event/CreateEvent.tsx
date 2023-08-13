@@ -1,11 +1,12 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { Button, Grid, TextField } from '@mui/material';
+import { Button, Grid, InputAdornment, TextField } from '@mui/material';
 import MainCard from "../../../components/cards/MainCard";
 import SubCard from "../../../components/cards/SubCard";
 import MuiNotification from "../../../components/Notification";
-import { IconUpload } from "@tabler/icons-react";
+import { IconSettingsAutomation, IconUpload } from "@tabler/icons-react";
 import eventsApi from "../../../services/eventsApi";
 import { useNavigate } from "react-router";
+import tenantApi from "../../../services/tenantApi";
 
 interface CreateEventFormValues {
     eventCode: string;
@@ -83,6 +84,14 @@ const CreateEvent = () => {
         });
     };
 
+    const generateCode = () => {
+        const generatedCode = tenantApi.generateTenantCode();
+        setFormValues((prevValues) => ({
+            ...prevValues,
+            eventCode: generatedCode,
+        }));
+    };
+    
     const createEvent = async () => {
         const errors: Partial<CreateEventFormValues> = {};
         if (!formValues.eventCode) errors.eventCode = "Bấm nút để tạo mã sự kiện";
@@ -130,13 +139,23 @@ const CreateEvent = () => {
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <TextField
-                                    name={"eventCode"}
+                                    name="eventCode"
                                     label="Mã sự kiện"
                                     value={formValues.eventCode}
-                                    onChange={handleInputChange}
-                                    fullWidth
                                     error={!!formErrors.eventCode}
                                     helperText={formErrors.eventCode}
+                                    onChange={handleInputChange}
+                                    fullWidth
+                                    disabled
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <Button onClick={generateCode} variant="outlined" startIcon={<IconSettingsAutomation />}>
+                                                    Tạo mã sự kiện
+                                                </Button>
+                                            </InputAdornment>
+                                        ),
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={12}>

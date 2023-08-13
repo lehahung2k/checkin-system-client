@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 import { Grid, Button } from '@mui/material';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface CameraCaptureProps {
     onCaptureImage: (imageData: string) => void;
@@ -9,21 +11,10 @@ interface CameraCaptureProps {
 const CameraCapture: React.FC<CameraCaptureProps> = ({ onCaptureImage }) => {
     const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
     const [selectedCamera, setSelectedCamera] = useState<string | null>(null);
-    const [isCameraOn, setIsCameraOn] = useState<boolean>(true);
-    const [capturedImage, setCapturedImage] = useState<string>('');
+    const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
     const webcamRef = useRef<Webcam>(null);
-
-    const handleCaptureImage = () => {
-        if (webcamRef.current) {
-            const capturedImage = webcamRef.current.getScreenshot();
-            if (capturedImage) {
-                setCapturedImage(capturedImage);
-                onCaptureImage(capturedImage);
-            }
-        }
-    };
-
+  
     useEffect(() => {
         const getCameras = async () => {
             try {
@@ -33,7 +24,7 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCaptureImage }) => {
                 setSelectedCamera(videoDevices[0]?.deviceId || null);
             } catch (error) {
                 console.error(error);
-                alert('Không thể mở camera, vui lòng kiểm tra thiết bị!');
+                toast.error('Không thể mở camera, vui lòng kiểm tra thiết bị!');
             }
         };
 
@@ -44,7 +35,7 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCaptureImage }) => {
                 getCameras();
             } catch (error) {
                 console.error(error);
-                alert('Không thể truy cập camera, vui lòng cho phép truy cập!');
+                toast.error('Không thể truy cập camera, vui lòng cho phép truy cập!');
             }
         };
 
@@ -57,11 +48,24 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCaptureImage }) => {
     };
 
     const toggleCamera = () => {
-        setIsCameraOn((prevIsCameraOn) => !prevIsCameraOn);
+        setSelectedCamera((prevSelectedCamera) => {
+            const newCameraState = prevSelectedCamera ? null : (cameras[0]?.deviceId || null);
+            return newCameraState;
+        });
+    };
+
+    const handleCaptureImage = () => {
+        if (webcamRef.current) {
+            const capturedImageData = webcamRef.current.getScreenshot();
+            if (capturedImageData) {
+                setCapturedImage(capturedImageData);
+                onCaptureImage(capturedImageData);
+            }
+        }
     };
 
     const handleRetakePhoto = () => {
-        setCapturedImage('');
+        setCapturedImage(null);
     };
 
     return (
@@ -77,17 +81,15 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCaptureImage }) => {
             <br />
             {selectedCamera ? (
                 <>
-                    {isCameraOn && capturedImage === '' ? (
+                    {capturedImage === null ? (
                         <Webcam
                             ref={webcamRef}
                             audio={false}
                             videoConstraints={{ deviceId: selectedCamera }}
                             width={'100%'}
                         />
-                    ) : capturedImage !== '' ? (
-                        <img src={capturedImage} alt="Captured" width={'100%'} />
                     ) : (
-                        <div>Camera đang tắt</div>
+                        <img src={capturedImage} alt="Captured" width={'100%'} />
                     )}
                 </>
             ) : (
@@ -96,20 +98,28 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCaptureImage }) => {
             <br />
             <Grid container justifyContent="space-between" alignItems="flex-end" sx={{ paddingTop: '1rem' }}>
                 <Grid item>
-                    <Button onClick={toggleCamera} color='secondary' variant='outlined'>
-                        {isCameraOn ? 'Tắt Camera' : 'Bật Camera'}
+                    <Button onClick={toggleCamera} color="secondary" variant="outlined">
+                        {selectedCamera ? 'Tắt Camera' : 'Bật Camera'}
                     </Button>
                 </Grid>
                 <Grid item>
-                    {capturedImage === '' ? (
-                        <Button disabled={!selectedCamera} onClick={handleCaptureImage} color='secondary' variant='outlined'>
+                    {capturedImage === null ? (
+                        <Button
+                            disabled={!selectedCamera}
+                            onClick={handleCaptureImage}
+                            color="secondary"
+                            variant="outlined"
+                        >
                             Chụp ảnh
                         </Button>
                     ) : (
-                        <Button onClick={handleRetakePhoto} color='secondary' variant='outlined'>Chụp ảnh mới</Button>
+                        <Button onClick={handleRetakePhoto} color="secondary" variant="outlined">
+                            Chụp ảnh mới
+                        </Button>
                     )}
                 </Grid>
             </Grid>
+            <ToastContainer />
         </Grid>
     );
 };

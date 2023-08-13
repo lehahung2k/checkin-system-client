@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import SubCard from "../../../components/cards/SubCard";
-import { Grid, TextField, Button } from "@mui/material";
+import { Grid, TextField, Button, InputAdornment } from "@mui/material";
 import MuiNotification from "../../../components/Notification";
-import {useNavigate} from "react-router";
+import { useNavigate } from "react-router";
 import pocApi from "../../../services/pocApi";
+import { IconSettingsAutomation } from "@tabler/icons-react";
+import tenantApi from "../../../services/tenantApi";
 
 interface CreatePocFormValues {
     pointCode: string;
@@ -50,6 +52,15 @@ const CreatePocForm: React.FC<EventCodeProps> = ({ eventCode }) => {
         }));
     };
 
+    const generateCode = () => {
+        const generatedCode = tenantApi.generateTenantCode();
+        console.log(generatedCode);
+        setFormValues((prevValues) => ({
+            ...prevValues,
+            pointCode: generatedCode,
+        }));
+    };
+    
     const handleSubmit = async (event: { preventDefault: () => void; }) => {
         event.preventDefault();
         const errors: Partial<CreatePocFormValues> = {};
@@ -90,14 +101,23 @@ const CreatePocForm: React.FC<EventCodeProps> = ({ eventCode }) => {
                 <Grid container spacing={3} sx={{ maxHeight: '80vh', overflow: 'auto' }}>
                     <Grid item xs={12} md={6}>
                         <TextField
-                            name={"pointCode"}
+                            name="pointCode"
                             label="Mã quầy check-in"
                             value={formValues.pointCode}
-                            variant="outlined"
-                            fullWidth
-                            onChange={handleInputChange}
                             error={!!formErrors.pointCode}
                             helperText={formErrors.pointCode}
+                            onChange={handleInputChange}
+                            fullWidth
+                            disabled // Disable the TextField
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <Button onClick={generateCode} variant="outlined" startIcon={<IconSettingsAutomation />}>
+                                            Tạo mã
+                                        </Button>
+                                    </InputAdornment>
+                                ),
+                            }}
                         />
                     </Grid>
                     <Grid item xs={12} md={6}>
@@ -129,7 +149,7 @@ const CreatePocForm: React.FC<EventCodeProps> = ({ eventCode }) => {
                             variant="outlined"
                             fullWidth
                             onChange={handleInputChange}
-                            value = {formValues.pointNote}
+                            value={formValues.pointNote}
                             error={!!formErrors.pointNote}
                             helperText={formErrors.pointNote}
                         />

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import MainCard from '../../../components/cards/MainCard';
-import { Button, Grid } from '@mui/material';
+import {Box, Grid, IconButton, Modal} from '@mui/material';
 import SearchBoxAction from '../../../components/cards/SearchBoxAction';
 import SubCard from '../../../components/cards/SubCard';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { IconEye } from '@tabler/icons-react';
 import pocApi from '../../../services/pocApi';
+import GuestsList from "../../poc/view-guests/GuestsList";
 
 interface PocData {
     pointId: string;
@@ -17,6 +18,8 @@ interface PocData {
 
 const ManagePoc = () => {
     const [pocs, setPocs] = useState<PocData[]>([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedPointCode, setSelectedPointCode] = React.useState<string>('');
 
     const getPoc = () => {
         pocApi
@@ -35,6 +38,11 @@ const ManagePoc = () => {
         getPoc();
     }, []);
 
+    const handleEventClick = (pointCode: string) => {
+        setSelectedPointCode(pointCode);
+        setIsModalOpen(true);
+    };
+
     const columns: GridColDef[] = [
         { field: 'id', headerName: '#', minWidth: 50, flex: 0.02 },
         { field: 'pointName', headerName: 'Tên gian hàng', minWidth: 200, flex: 0.2 },
@@ -42,11 +50,9 @@ const ManagePoc = () => {
         { field: 'status', headerName: 'Trạng thái', minWidth: 150, flex: 0.1 },
         {
             field: 'viewDetails', headerName: 'Chi tiết', minWidth: 100, renderCell: (params) => (
-                <Button
-                    onClick={() => {}}
-                    endIcon={<IconEye />}
-                >
-                </Button>
+                <IconButton color='primary' onClick={() => handleEventClick(params.row.pointCode)}>
+                    <IconEye />
+                </IconButton>
             )
         }
     ];
@@ -84,6 +90,19 @@ const ManagePoc = () => {
                     </SubCard>
                 </Grid>
             </Grid>
+            <Modal keepMounted open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                <Box sx={{
+                    position: 'absolute',
+                    top: '45%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '80%',
+                    boxShadow: 10,
+                    maxHeight: '80vh',
+                }}>
+                    <GuestsList pointCode={selectedPointCode}/>
+                </Box>
+            </Modal>
         </MainCard>
     );
 }

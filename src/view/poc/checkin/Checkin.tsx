@@ -9,13 +9,16 @@ import {
     TextField,
 } from "@mui/material";
 import CameraCapture from "../../../components/devices/CameraCapture";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import SubCard from "../../../components/cards/SubCard";
 import SearchInfoForm from "./SearchInfoForm";
 import MuiNotification from "../../../components/Notification";
+import guestApi from "../../../services/guestApi";
 
 interface EventData {
     eventName: string;
+    startTime: Date;
+    endTime: Date;
 }
 
 interface PocData {
@@ -49,11 +52,54 @@ const Checkin = () => {
     const [isSnackbarOpen, setIsSnackbarOpen] = useState<boolean>(false);
     const [successMessage, setSuccessMessage] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
+
     const handleSnackbarClose = () => {
         setIsSnackbarOpen(false);
     };
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [errorFields, setErrorFields] = useState<{ [key: string]: boolean }>({
+        guestCode: false,
+    });
+    // Kiểm tra sự kiện đang diễn ra
+    const [isEventInProgress, setIsEventInProgress] = useState<boolean>(false);
 
+    const checkEventInProgress = () => {
+        if (event) {
+            const currentTime = new Date();
+            const startTime = new Date(event.startTime);
+            const endTime = new Date(event.endTime);
+            console.log(currentTime, startTime, endTime);
+            if (currentTime < startTime || currentTime > endTime) {
+                setIsEventInProgress(false);
+                return false;
+            } else {
+                setIsEventInProgress(true);
+                return true;
+            }
+        }
+        return false;
+    };
+
+    useEffect(() => {
+        checkEventInProgress();
+    }, [event]);
+
+    // Kiểm tra tính hợp lệ của input
+    const validateFields = () => {
+        const updatedErrorFields = { ...errorFields }; // Sao chép trạng thái lỗi hiện tại
+
+        // Kiểm tra từng trường dữ liệu
+        if (checkinData.guestCode.trim() === "") {
+            updatedErrorFields.guestCode = true; // Trường dữ liệu bị bỏ trống
+        } else {
+            updatedErrorFields.guestCode = false; // Trường dữ liệu không bị bỏ trống
+        }
+
+        setErrorFields(updatedErrorFields);
+        return !Object.values(updatedErrorFields).some((error) => error);
+    };
+
+    // Chụp ảnh
     const handleCaptureFrontImage = (imageData: string) => {
         setCheckinData((prevState) => ({
             ...prevState,
@@ -74,24 +120,59 @@ const Checkin = () => {
         }));
     }, [pointCode]);
 
+    // Xử lý sự kiện check-in
     const handleCheckin = () => {
-        setCheckinData({
-            ...checkinData,
-            pointCode: pointCode,
-        });
-        setIsSnackbarOpen(true);
-        setSuccessMessage("");
-        setErrorMessage("Lỗi! Vui lòng thử lại!");
-        console.log(checkinData);
-        setCheckinData({
-            ...checkinData,
-            guestCode: '',
-            guestDescription: '',
-            frontImg: '',
-            backImg: '',
-            pointCode: pointCode,
-        });
+        const isValid = validateFields();
+        if (!isEventInProgress) {
+            setIsSnackbarOpen(true);
+            setErrorMessage("Chỉ check-in khi sự kiện đang diễn ra!");
+        }
+        else {
+            if (isValid) {
+                setCheckinData({
+                    ...checkinData,
+                    pointCode: pointCode,
+                });
+                console.log(checkinData);
+                setIsLoading(true);
+                setIsSnackbarOpen(true);
+                guestApi
+                    .checkinGuest(checkinData)
+                    .then((res) => {
+                        setSuccessMessage("Check-in thành công!");
+                        setIsLoading(false);
+                        setCheckinData({
+                            ...checkinData,
+                            guestCode: '',
+                            guestDescription: '',
+                            frontImg: '',
+                            backImg: '',
+                            pointCode: pointCode,
+                        });
+                    })
+                    .catch((err) => {
+                        setErrorMessage(err.response.data.message);
+                    })
+                    .finally(() => {
+                        setIsLoading(false);
+                    });
+            }
+        }
     }
+
+    const handleCaptureImage = () => {
+        console.log("test")
+    };
+
+    // Xử lý onKeyDown
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            handleCheckin();
+            if (checkinData.frontImg === '' && checkinData.backImg === '') {
+                handleCaptureImage();
+            }
+        }
+    };
 
     return (
         <MainCard title='Check-in'>
@@ -139,10 +220,16 @@ const Checkin = () => {
                                     <Grid item xs={12} md={12}>
                                         <TextField
                                             fullWidth
+                                            autoFocus
                                             name={'guestCode'}
                                             label='Mã định danh'
                                             value={checkinData.guestCode}
+                                            error={errorFields.guestCode}
+                                            helperText={
+                                                errorFields.guestCode ? "Mã định danh không được bỏ trống" : ""
+                                            }
                                             onChange={(e) => setCheckinData((prevState) => ({ ...prevState, guestCode: e.target.value }))}
+                                            // onKeyDown={handleKeyDown}
                                         />
                                     </Grid>
                                     <Grid item xs={12} md={12}>
@@ -158,6 +245,7 @@ const Checkin = () => {
                                         <Button
                                             fullWidth
                                             variant="contained"
+                                            id='checkin'
                                             sx={{ backgroundColor: 'secondary.main' }}
                                             onClick={handleCheckin}
                                             disabled={isLoading}

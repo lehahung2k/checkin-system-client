@@ -5,6 +5,8 @@ import { Button, Grid, InputAdornment, ListItemButton, ListItemText, TextField }
 
 interface EventData {
     eventName: string;
+    startTime: Date;
+    endTime: Date;
 }
 
 interface PocData {
@@ -33,6 +35,7 @@ const SearchInfoForm: React.FC<SearchInfoFormProps> = ({ setEvent, setPoc, setPo
                 setEventLocal(eventData);
             })
             .catch((err) => {
+                if (err.response === undefined) alert("Lỗi kết nối đến máy chủ");
                 alert(err.response.data.message);
             });
 
@@ -59,6 +62,12 @@ const SearchInfoForm: React.FC<SearchInfoFormProps> = ({ setEvent, setPoc, setPo
                         value={pointCode}
                         onChange={(e) => setLocalPointCode(e.target.value)}
                         fullWidth
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                getDataByPointCode();
+                                }
+                            }
+                        }
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">

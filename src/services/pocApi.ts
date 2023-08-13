@@ -7,6 +7,10 @@ interface PocData {
     pointName: string;
     pointNote: string;
 }
+interface PocUpdate {
+    pointName: string;
+    pointNote: string;
+}
 class PocApi {
     private api: AxiosInstance;
 
@@ -30,10 +34,16 @@ class PocApi {
     }
 
     getAllPocByPoc = async () => {
-        return this.api.get('/poc/poc-view');
+        return this.api.get('/poc/list-poc');
     }
     getPocByPointCode = async (pointCode: string) => {
         return this.api.get(`/poc/details?pointCode=${pointCode}`);
+    }
+    getPocByUsername = async (username: string) => {
+        return this.api.get(`/poc/view?username=${username}`);
+    }
+    updatePoc = async (pointCode: string, data: PocUpdate) => {
+        return this.api.post(`/poc/update?pointCode=${pointCode}`, data);
     }
 }
 const pocApi = new PocApi();

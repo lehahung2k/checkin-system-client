@@ -1,7 +1,7 @@
 // assets
 
 // constant
-import {IconHelp} from "@tabler/icons-react";
+import { IconHelp } from "@tabler/icons-react";
 
 const icons = { IconHelp };
 
