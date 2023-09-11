@@ -1,7 +1,7 @@
-import React, {useState} from "react";
-import {Formik, Form, Field, ErrorMessage} from "formik";
+import React, { useState } from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
     Backdrop,
     CircularProgress,
@@ -11,7 +11,7 @@ import {
     DialogActions,
     Button
 } from "@mui/material";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import './Register.scss'
 import authApi from "../../../../services/authApi";
 
@@ -50,8 +50,23 @@ function Register() {
 
     const validationSchema = Yup.object().shape({
         username: Yup.string().required("Tên đăng nhập không được để trống"),
-        password: Yup.string().required("Mật khẩu không được để trống"),
-        confirmPass: Yup.string().required("Nhập lại chính xác mật khẩu"),
+        password: Yup.string()
+            .required("Mật khẩu không được để trống")
+            .min(8, "Mật khẩu phải có ít nhất 8 ký tự"),
+        confirmPass: Yup.string()
+            .required("Nhập lại chính xác mật khẩu")
+            .oneOf(
+                [Yup.ref('password'), ''],
+                'Nhập lại chính xác mật khẩu',
+            ),
+        companyName: Yup.string().required("Tên công ty không được để trống"),
+        fullName: Yup.string().required("Họ và tên không được để trống"),
+        email: Yup.string()
+            .required("Email không được để trống")
+            .email("Email không hợp lệ"),
+        phoneNumber: Yup.string()
+            .required("Số điện thoại không được để trống")
+            .matches(/^[0-9]{10}$/, "Số điện thoại không đúng định dạng"),
         role: Yup.string().required("Role không được để trống"),
     });
 
@@ -76,14 +91,14 @@ function Register() {
         <div className="body">
             <div className="register-form">
                 <div className="card-register">
-                    <h1 style={{marginBottom: "1rem"}}>ĐĂNG KÝ</h1>
+                    <h1 style={{ marginBottom: "1rem" }}>ĐĂNG KÝ</h1>
                     <Formik
                         initialValues={initialValues}
                         onSubmit={handleRegister}
                         validationSchema={validationSchema}
                     >
-                        {({setFieldValue}) => (
-                            <Form>
+                        {({ setFieldValue }) => (
+                            <Form style={{ width: '100%' }}>
                                 <div className="form-group">
                                     <Field
                                         autoComplete="off"
@@ -247,10 +262,10 @@ function Register() {
                 <div className="center2"></div>
             </div>
             <Backdrop
-                sx={{color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1}}
+                sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={loading}
             >
-                <CircularProgress color="inherit"/>
+                <CircularProgress color="inherit" />
             </Backdrop>
 
             <Dialog

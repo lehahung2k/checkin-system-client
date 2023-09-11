@@ -1,11 +1,12 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
-import {Button, Grid, TextField} from '@mui/material';
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { Button, Grid, InputAdornment, TextField } from '@mui/material';
 import MainCard from "../../../components/cards/MainCard";
 import SubCard from "../../../components/cards/SubCard";
 import MuiNotification from "../../../components/Notification";
-import {IconUpload} from "@tabler/icons-react";
+import { IconSettingsAutomation, IconUpload } from "@tabler/icons-react";
 import eventsApi from "../../../services/eventsApi";
-import {useNavigate} from "react-router";
+import { useNavigate } from "react-router";
+import tenantApi from "../../../services/tenantApi";
 
 interface CreateEventFormValues {
     eventCode: string;
@@ -33,15 +34,16 @@ const CreateEvent = () => {
     const handleSnackbarClose = () => {
         setIsSnackbarOpen(false);
     };
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const formatDateTime = (dateTime: Date) => {
-        const year = dateTime.getUTCFullYear();
-        const month = String(dateTime.getUTCMonth() + 1).padStart(2, "0");
-        const date = String(dateTime.getUTCDate()).padStart(2, "0");
-        const hours = String(dateTime.getUTCHours()).padStart(2, "0");
-        const minutes = String(dateTime.getUTCMinutes()).padStart(2, "0");
+        const year = dateTime.getFullYear();
+        const month = String(dateTime.getMonth() + 1).padStart(2, "0");
+        const date = String(dateTime.getDate()).padStart(2, "0");
+        const hours = String(dateTime.getHours()).padStart(2, "0");
+        const minutes = String(dateTime.getMinutes()).padStart(2, "0");
 
-        return `${year}-${month}-${date}T${hours}:${minutes}`;
+        return `${year}-${month}-${date} ${hours}:${minutes}`;
     };
 
     useEffect(() => {
@@ -63,8 +65,8 @@ const CreateEvent = () => {
     const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
             const file = event.target.files[0];
-            if (file.size > 1242880) { // 5MB (5242880 bytes)
-                alert("Kích thước ảnh không được vượt quá 5MB");
+            if (file.size > 3670016) { // 5MB (5242880 bytes)
+                alert("Kích thước ảnh không được vượt quá 3MB");
                 return;
             }
             setSelectedImage(file);
@@ -82,6 +84,14 @@ const CreateEvent = () => {
         });
     };
 
+    const generateCode = () => {
+        const generatedCode = tenantApi.generateTenantCode();
+        setFormValues((prevValues) => ({
+            ...prevValues,
+            eventCode: generatedCode,
+        }));
+    };
+    
     const createEvent = async () => {
         const errors: Partial<CreateEventFormValues> = {};
         if (!formValues.eventCode) errors.eventCode = "Bấm nút để tạo mã sự kiện";
@@ -98,18 +108,21 @@ const CreateEvent = () => {
                 eventData.eventImg = await convertImageToBase64(selectedImage);
             }
             console.log(eventData);
+            setIsLoading(true);
             eventsApi
                 .addNewEvent(eventData)
-                .then((res)=>{
+                .then((res) => {
                     setIsSnackbarOpen(true);
                     setSuccessMessage("Tạo sự kiện thành công");
                     setErrorMessage("");
                     console.log(res);
                     setTimeout(() => {
+                        setIsLoading(false);
                         navigate("/"); // Redirect to the dashboard after a delay
                     }, 3000);
                 })
                 .catch((error) => {
+                    setIsLoading(false);
                     setErrorMessage(error.response.data.message);
                     setIsSnackbarOpen(true);
                     setSuccessMessage("");
@@ -126,14 +139,23 @@ const CreateEvent = () => {
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <TextField
-                                    name={"eventCode"}
+                                    name="eventCode"
                                     label="Mã sự kiện"
                                     value={formValues.eventCode}
-                                    variant="outlined"
-                                    onChange={handleInputChange}
-                                    fullWidth
                                     error={!!formErrors.eventCode}
                                     helperText={formErrors.eventCode}
+                                    onChange={handleInputChange}
+                                    fullWidth
+                                    disabled
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <Button onClick={generateCode} variant="outlined" startIcon={<IconSettingsAutomation />}>
+                                                    Tạo mã sự kiện
+                                                </Button>
+                                            </InputAdornment>
+                                        ),
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -200,12 +222,12 @@ const CreateEvent = () => {
                                 />
                                 <label htmlFor="image-upload">
                                     <Button variant="outlined" component="span">
-                                        <IconUpload/> Tải lên sơ đồ sự kiện
+                                        <IconUpload /> Tải lên sơ đồ sự kiện
                                     </Button>
                                 </label>
                                 {selectedImage && (
                                     <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                        <img src={URL.createObjectURL(selectedImage)} alt="Ảnh review" style={{ width: '33vw', borderRadius:'14px' }} />
+                                        <img src={URL.createObjectURL(selectedImage)} alt="Ảnh review" style={{ width: '33vw', borderRadius: '14px' }} />
                                     </div>
                                 )}
                             </Grid>
@@ -213,8 +235,8 @@ const CreateEvent = () => {
                     </SubCard>
                 </Grid>
                 <Grid item xs={12}>
-                    <Button variant="contained" sx={{backgroundColor: 'secondary.dark'}} onClick={createEvent}>
-                        Tạo mới
+                    <Button variant="contained" sx={{ backgroundColor: 'secondary.dark' }} onClick={createEvent} disabled={isLoading}>
+                        {isLoading ? "Đang tạo..." : "Tạo mới"}
                     </Button>
                 </Grid>
             </Grid>

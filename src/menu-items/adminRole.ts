@@ -1,11 +1,7 @@
-// assets
-
-// constant
 import { IconBuilding, IconCheckbox, IconCalendarEvent, IconSum } from "@tabler/icons-react";
 
 const icons = { IconBuilding, IconCheckbox, IconCalendarEvent, IconSum };
 
-// ==============================|| DASHBOARD MENU ITEMS ||============================== //
 // url phải có / ở trước để breadcrumb hoạt động
 
 const adminRole = {

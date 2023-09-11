@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MainCard from "../../../components/cards/MainCard";
 import eventsApi from "../../../services/eventsApi";
-import { Button, Grid } from "@mui/material";
+import { Grid, IconButton } from "@mui/material";
 import SubCard from "../../../components/cards/SubCard";
 import dateTimeCalc from "../../../services/dateTimeCalc";
 import SearchBoxAction from "../../../components/cards/SearchBoxAction";
@@ -44,11 +44,12 @@ const EventListsAdmin = () => {
         { field: 'eventCode', headerName: 'Mã sự kiện', minWidth: 150, flex: 0.1},
         { field: 'status', headerName: 'Trạng thái', minWidth: 150, flex: 0.1 },
         { field: 'viewDetails', headerName: 'Chi tiết', minWidth: 100, renderCell: (params) => (
-            <Button
+            <IconButton
                 onClick={() => handleViewDetails(params.row.eventId)}
-                endIcon={<IconEye />}
+                color="primary"
             >
-            </Button>
+                <IconEye />
+            </IconButton>
         )}
     ];
 

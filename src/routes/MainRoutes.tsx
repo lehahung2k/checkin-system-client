@@ -26,8 +26,12 @@ const EventLists = Loadable(lazy(() => import('../view/tenant/event-lists/EventL
 const CreateEvent = Loadable(lazy(() => import('../view/tenant/create-event/CreateEvent')));
 
 // poc routing
+const ViewEvents = Loadable(lazy(() => import('../view/poc/view-events/ViewEvents')));
 const CheckinPage = Loadable(lazy(() => import('../view/poc/checkin/Checkin')));
 const ViewGuests = Loadable(lazy(() => import('../view/poc/view-guests/ViewGuests')));
+const PocInfo = Loadable(lazy(() => import('../view/poc/poc-info/PocInfo')));
+const CreatePoc = Loadable(lazy(() => import('../view/poc/create-poc/CreatePoc')));
+const DeviceLists = Loadable(lazy(() => import('../view/poc/devices/DeviceList')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -72,6 +76,18 @@ const pocRoutes = checkRole.getRole() === 'poc' && [
     {
         path: 'view-guests',
         element: <ViewGuests />
+    },
+    {
+        path: 'view-poc',
+        element: <PocInfo />
+    },
+    {
+        path: 'create-poc',
+        element: <CreatePoc />
+    },
+    {
+        path: 'device-lists',
+        element: <DeviceLists />
     }
 ]
 
@@ -91,6 +107,13 @@ const eventAdminRoutes = (checkRole.getRole() === 'admin') && [
     {
         path: 'event-lists',
         element: <EventListsAdmin />
+    }
+]
+
+const pocEventRoutes = (checkRole.getRole() === 'poc') && [
+    {
+        path: 'view-events',
+        element: <ViewEvents />
     }
 ]
 
@@ -132,12 +155,13 @@ const MainRoutes = {
                 ...(tenantRoutes || [])
             ]
         },
-        // event routes (tenant can modify, admin can view)
+        // event routes (tenant can modify, admin can view, poc can view)
         {
             path: 'event',
             children: [
                 ...(eventTenantRoutes || []),
-                ...(eventAdminRoutes || [])
+                ...(eventAdminRoutes || []),
+                ...(pocEventRoutes || [])
             ]
         },
         // all roles can access these routes

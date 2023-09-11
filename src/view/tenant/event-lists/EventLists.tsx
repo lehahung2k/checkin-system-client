@@ -1,5 +1,5 @@
 import MainCard from "../../../components/cards/MainCard";
-import {Box, Button, Grid, Modal} from "@mui/material";
+import {Box, Button, Grid, IconButton, Modal} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import SubCard from "../../../components/cards/SubCard";
 import eventsApi from "../../../services/eventsApi";
@@ -8,6 +8,8 @@ import dateTimeCalc from "../../../services/dateTimeCalc";
 import SearchBoxAction from "../../../components/cards/SearchBoxAction";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { IconEye } from "@tabler/icons-react";
+import {useNavigate} from "react-router";
+import SkeletonLoading from "../../../components/cards/SkeletonLoading";
 
 interface EventData {
     eventId: string;
@@ -22,6 +24,9 @@ const EventLists = () => {
     const [events, setEvents] = useState<EventData[]>([]);
     const [selectedEventId, setSelectedEventId] = React.useState<string>('');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [page, setPage] = useState(0);
+    const [perPage, setPerPage] = useState(5);
+    const navigate = useNavigate();
 
     const handleEventClick = (eventId: string) => {
         setSelectedEventId(eventId);
@@ -46,20 +51,20 @@ const EventLists = () => {
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: '#', minWidth: 50, flex: 0.02 },
-        { field: 'eventName', headerName: 'Tên sự kiện', minWidth: 200, flex: 0.2, resizable: true},
+        { field: 'eventName', headerName: 'Tên sự kiện', minWidth: 200, flex: 0.2 },
         { field: 'startTime', headerName: 'Thời gian bắt đầu', minWidth: 150, flex: 0.1},
         { field: 'endTime', headerName: 'Thời gian kết thúc', minWidth: 150, flex: 0.1 },
         { field: 'eventCode', headerName: 'Mã sự kiện', minWidth: 150, flex: 0.1},
         { field: 'status', headerName: 'Trạng thái', minWidth: 150, flex: 0.1 },
         { field: 'viewDetails', headerName: 'Chi tiết', minWidth: 100, renderCell: (params) => (
-            <Button
+            <IconButton
                 onClick={() => handleEventClick(params.row.eventId)}
-                endIcon={<IconEye />}
+                color="primary"
             >
-            </Button>
+                <IconEye />
+            </IconButton>
         )}
     ];
-
 
     const rows = events.map((event: any, index) => {
         const startTime = new Date(event.startTime);
@@ -93,17 +98,34 @@ const EventLists = () => {
                     <SubCard title="Xem danh sách sự kiện" secondary={<SearchBoxAction onChange={handleFilter}/>}>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
-                                <DataGrid
-                                    columns={columns}
-                                    rows={rows}
-                                    initialState={{
-                                        pagination: {
-                                            paginationModel: { page: 0, pageSize: 5 },
-                                        },
-                                    }}
-                                    pageSizeOptions={[5, 10, 15]}
-                                    autoHeight={true}
-                                />
+                                {
+                                    events ? (
+                                      <>
+                                          <Grid container justifyContent="flex-end" marginBottom={2}>
+                                              <Button variant="contained" sx={{backgroundColor: 'secondary.dark'}}
+                                                      onClick={()=>{
+                                                          navigate('/event/create');
+                                                      }}
+                                              >
+                                                  Thêm mới
+                                              </Button>
+                                          </Grid>
+                                          <DataGrid
+                                              columns={columns}
+                                              rows={rows}
+                                              initialState={{
+                                                  pagination: {
+                                                      paginationModel: { page: 0, pageSize: 5 },
+                                                  },
+                                              }}
+                                              pageSizeOptions={[5, 10, 15]}
+                                              autoHeight={true}
+                                          />
+                                      </>
+                                    ) : (
+                                        <SkeletonLoading />
+                                    )
+                                }
                             </Grid>
                         </Grid>
                     </SubCard>
