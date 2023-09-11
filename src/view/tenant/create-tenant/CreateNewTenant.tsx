@@ -99,7 +99,7 @@ const CreateNewTenant = () => {
     };
 
     const generateCode = () => {
-        const generatedCode = tenantApi.generateTenantCode(); // Replace with your actual code generation logic
+        const generatedCode = tenantApi.generateTenantCode();
         setFormValues((prevValues) => ({
             ...prevValues,
             tenantCode: generatedCode,

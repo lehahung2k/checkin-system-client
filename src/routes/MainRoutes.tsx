@@ -31,6 +31,7 @@ const CheckinPage = Loadable(lazy(() => import('../view/poc/checkin/Checkin')));
 const ViewGuests = Loadable(lazy(() => import('../view/poc/view-guests/ViewGuests')));
 const PocInfo = Loadable(lazy(() => import('../view/poc/poc-info/PocInfo')));
 const CreatePoc = Loadable(lazy(() => import('../view/poc/create-poc/CreatePoc')));
+const DeviceLists = Loadable(lazy(() => import('../view/poc/devices/DeviceList')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -83,6 +84,10 @@ const pocRoutes = checkRole.getRole() === 'poc' && [
     {
         path: 'create-poc',
         element: <CreatePoc />
+    },
+    {
+        path: 'device-lists',
+        element: <DeviceLists />
     }
 ]
 

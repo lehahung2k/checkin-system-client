@@ -17,6 +17,8 @@ import guestApi from "../../../services/guestApi";
 
 interface EventData {
     eventName: string;
+    startTime: Date;
+    endTime: Date;
 }
 
 interface PocData {
@@ -58,6 +60,31 @@ const Checkin = () => {
     const [errorFields, setErrorFields] = useState<{ [key: string]: boolean }>({
         guestCode: false,
     });
+    // Kiểm tra sự kiện đang diễn ra
+    const [isEventInProgress, setIsEventInProgress] = useState<boolean>(false);
+
+    const checkEventInProgress = () => {
+        if (event) {
+            const currentTime = new Date();
+            const startTime = new Date(event.startTime);
+            const endTime = new Date(event.endTime);
+            console.log(currentTime, startTime, endTime);
+            if (currentTime < startTime || currentTime > endTime) {
+                setIsEventInProgress(false);
+                return false;
+            } else {
+                setIsEventInProgress(true);
+                return true;
+            }
+        }
+        return false;
+    };
+
+    useEffect(() => {
+        checkEventInProgress();
+    }, [event]);
+
+    // Kiểm tra tính hợp lệ của input
     const validateFields = () => {
         const updatedErrorFields = { ...errorFields }; // Sao chép trạng thái lỗi hiện tại
 
@@ -72,6 +99,7 @@ const Checkin = () => {
         return !Object.values(updatedErrorFields).some((error) => error);
     };
 
+    // Chụp ảnh
     const handleCaptureFrontImage = (imageData: string) => {
         setCheckinData((prevState) => ({
             ...prevState,
@@ -92,36 +120,43 @@ const Checkin = () => {
         }));
     }, [pointCode]);
 
+    // Xử lý sự kiện check-in
     const handleCheckin = () => {
         const isValid = validateFields();
-        if (isValid) {
-            setCheckinData({
-                ...checkinData,
-                pointCode: pointCode,
-            });
-            console.log(checkinData);
-            setIsLoading(true);
+        if (!isEventInProgress) {
             setIsSnackbarOpen(true);
-            guestApi
-                .checkinGuest(checkinData)
-                .then((res) => {
-                    setSuccessMessage("Check-in thành công!");
-                    setIsLoading(false);
-                    setCheckinData({
-                        ...checkinData,
-                        guestCode: '',
-                        guestDescription: '',
-                        frontImg: '',
-                        backImg: '',
-                        pointCode: pointCode,
-                    });
-                })
-                .catch((err) => {
-                    setErrorMessage(err.response.data.message);
-                })
-                .finally(() => {
-                    setIsLoading(false);
+            setErrorMessage("Chỉ check-in khi sự kiện đang diễn ra!");
+        }
+        else {
+            if (isValid) {
+                setCheckinData({
+                    ...checkinData,
+                    pointCode: pointCode,
                 });
+                console.log(checkinData);
+                setIsLoading(true);
+                setIsSnackbarOpen(true);
+                guestApi
+                    .checkinGuest(checkinData)
+                    .then((res) => {
+                        setSuccessMessage("Check-in thành công!");
+                        setIsLoading(false);
+                        setCheckinData({
+                            ...checkinData,
+                            guestCode: '',
+                            guestDescription: '',
+                            frontImg: '',
+                            backImg: '',
+                            pointCode: pointCode,
+                        });
+                    })
+                    .catch((err) => {
+                        setErrorMessage(err.response.data.message);
+                    })
+                    .finally(() => {
+                        setIsLoading(false);
+                    });
+            }
         }
     }
 
@@ -129,6 +164,7 @@ const Checkin = () => {
         console.log("test")
     };
 
+    // Xử lý onKeyDown
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             handleCheckin();
@@ -193,7 +229,7 @@ const Checkin = () => {
                                                 errorFields.guestCode ? "Mã định danh không được bỏ trống" : ""
                                             }
                                             onChange={(e) => setCheckinData((prevState) => ({ ...prevState, guestCode: e.target.value }))}
-                                            onKeyDown={handleKeyDown}
+                                            // onKeyDown={handleKeyDown}
                                         />
                                     </Grid>
                                     <Grid item xs={12} md={12}>
