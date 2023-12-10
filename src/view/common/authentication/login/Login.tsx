@@ -125,6 +125,16 @@ const Login = () => {
                     <button className="button">
                         <div>ĐĂNG NHẬP</div>
                     </button>
+                    <div className="login-another"> Hoặc đăng nhập bằng:</div>
+                    <div className="inline-container">
+                        <button className="button-facebook">
+                            <div>FACEBOOK </div>
+                        </button>
+
+                        <button className="button-google">
+                            <div>GOOGLE</div>
+                        </button>
+                    </div>
                     <div className="register">
                         Nếu chưa có tài khoản, hãy {<Link to="/auth/register">Đăng ký</Link>} tại
                         đây

@@ -21,6 +21,7 @@
     "apexcharts": "^3.41.0",
     "axios": "^1.6.2",
     "chart.js": "^4.3.3",
+    "export-to-csv": "^1.2.2",
     "formik": "^2.2.9",
     "framer-motion": "^10.12.16",
     "js-cookie": "^3.0.5",

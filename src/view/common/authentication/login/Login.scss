@@ -138,11 +138,42 @@ $body-size: 16px;
 .button:active {
     background-color: #ede7f6;
 }
+.button-facebook {
+    width: 45%;
+    padding: 16px 0;
+    border: none;
+    border-radius: 6px;
+    outline: none;
+    text-transform: uppercase;
+    font-weight: bolder;
+    letter-spacing: 3px;
+    cursor: pointer;
+    margin-top: 5px;
+    background: #3B5998;
+    color: rgb(255, 255, 255);
+}
+.button-google {
+    width: 45%;
+    padding: 16px 0;
+    border: none;
+    border-radius: 6px;
+    outline: none;
+    text-transform: uppercase;
+    font-weight: bolder;
+    letter-spacing: 3px;
+    cursor: pointer;
+    margin-top: 5px;
+    background: #F44336;
+    color: rgb(255, 255, 255);
+}
 .register {
     margin-top: 10px;
     color: black;
 }
-
+.login-another {
+    margin-top: 15px;
+    color: black;
+}
 @media (max-width: 950px) {
     .card-login {
         width: 80%;
