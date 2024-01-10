@@ -9,6 +9,7 @@
     "@mui/material": "^5.12.2",
     "@mui/system": "^5.13.2",
     "@mui/x-data-grid": "^6.7.0",
+    "@reduxjs/toolkit": "^2.0.1",
     "@tabler/icons-react": "^2.17.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -18,7 +19,7 @@
     "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",
     "apexcharts": "^3.41.0",
-    "axios": "^1.4.0",
+    "axios": "^1.6.2",
     "chart.js": "^4.3.3",
     "formik": "^2.2.9",
     "framer-motion": "^10.12.16",
@@ -49,7 +50,7 @@
     "yup": "^1.1.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=2000 react-scripts start",
     "startSSL": "HTTPS=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

@@ -7,7 +7,7 @@ import { ButtonBase } from '@mui/material';
 // project imports
 import config from '../../../../config';
 import Logo from '../../../../components/Logo';
-import { MENU_OPEN } from '../../../../store/actions';
+import { MENU_OPEN } from '../../../../store/actions/actions';
 
 // ==============================|| MAIN LOGO ||============================== //
 

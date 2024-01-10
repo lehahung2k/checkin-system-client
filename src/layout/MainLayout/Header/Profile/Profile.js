@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect} from 'react';
 
 import {useNavigate} from 'react-router-dom';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 // material-ui
 import {useTheme} from '@mui/material/styles';
@@ -32,7 +32,7 @@ import MainCard from '../../../../components/cards/MainCard';
 import Transitions from '../../../../components/extended/Transitions';
 import User1 from '../../../../assets/images/admin.jpg';
 import {IconLogout, IconSearch, IconUser, IconSettings} from "@tabler/icons-react";
-import Cookie from "js-cookie";
+import {LOGOUT} from "../../../../store/actions/authAction";
 
 // ==============================|| PROFILE MENU ||============================== //
 
@@ -40,6 +40,7 @@ const Profile = () => {
     const theme = useTheme();
     const customization = useSelector((state) => state.customization);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [value, setValue] = useState('');
     const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -52,8 +53,8 @@ const Profile = () => {
 	const fullName = localStorage.getItem('fullName');
     const handleLogout = async () => {
         localStorage.removeItem('fullName');
-        Cookie.remove('accessToken');
-        navigate('/');
+        dispatch(LOGOUT());
+        navigate("/auth/login");
     };
 
     const handleClose = (event) => {
