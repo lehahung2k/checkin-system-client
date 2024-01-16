@@ -5,7 +5,7 @@ import {
     Dialog,
     DialogContent,
     DialogTitle,
-    Grid,
+    Grid, IconButton,
     List,
     ListItem,
     ListItemButton,
@@ -18,6 +18,7 @@ import dateTimeCalc from "../../../services/dateTimeCalc";
 import guestApi from "../../../services/guestApi";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import SearchBoxAction from "../../../components/cards/SearchBoxAction";
+import {download, generateCsv, mkConfig} from "export-to-csv";
 
 interface PointCodeProps {
     pointCode: string;
@@ -36,8 +37,9 @@ const GuestsList: React.FC<PointCodeProps> = ({ pointCode }) => {
     const [eventDetails, setEventDetails] = React.useState<any>({});
     const [startTimeFormat, setStartTimeFormat] = React.useState<string>("");
     const [endTimeFormat, setEndTimeFormat] = React.useState<string>("");
-    const [rows, setRows] = React.useState<GuestsData[]>([]);
+    const [rows, setRows] = React.useState<{ [key: string]: unknown }[]>([]);
     const [selectedImage, setSelectedImage] = React.useState<string | null>(null);
+    const csvConfig = mkConfig({ useKeysAsHeaders: true });
 
     const getEventByPointCode = () => {
         eventsApi
@@ -135,12 +137,22 @@ const GuestsList: React.FC<PointCodeProps> = ({ pointCode }) => {
                 id: index + 1,
                 guestCode: guest.guestCode,
                 guestDescription: guest.guestDescription,
-                frontImg: guest.frontImg,
-                backImg: guest.backImg,
                 identityType: guest.identityType,
+                frontImg: '', // Provide a default value or handle image rendering separately
+                backImg: '', // Provide a default value or handle image rendering separately
             }))
         );
     }, [guestsList]);
+
+
+    const handleCsvDownload = () => {
+        if (rows) {
+            const csv = generateCsv(csvConfig)(rows);
+            download({ ...csvConfig, filename: 'GuestsList' })(csv);
+        } else {
+            console.error('Data is undefined or null.');
+        }
+    };
 
     return (
         <MainCard title="Danh sách khách tham dự">
@@ -241,6 +253,9 @@ const GuestsList: React.FC<PointCodeProps> = ({ pointCode }) => {
                     </SubCard>
                 </Grid>
             </Grid>
+            <IconButton onClick={handleCsvDownload} color="primary">
+                Download CSV
+            </IconButton>
         </MainCard>
     );
 }

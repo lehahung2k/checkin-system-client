@@ -51,7 +51,7 @@
     "yup": "^1.1.1"
   },
   "scripts": {
-    "start": "PORT=2000 react-scripts start",
+    "start": "set PORT=2000 && react-scripts start",
     "startSSL": "HTTPS=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
