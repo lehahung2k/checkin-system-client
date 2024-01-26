@@ -13,7 +13,7 @@ import Sidebar from './Sidebar/Sidebar';
 import Customization from '../Customization';
 import navigation from '../../menu-items/menuItems';
 import { drawerWidth } from '../../store/constant';
-import { SET_MENU } from '../../store/actions';
+import { SET_MENU } from '../../store/actions/actions';
 import { IconChevronRight } from "@tabler/icons-react";
 import Welcome from "../../view/common/unauthen/Welcome";
 import jwtDecode from 'jwt-decode'; // Import the JWT decoding library

@@ -23,7 +23,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 // project imports
 import SubCard from "../components/cards/SubCard";
 import AnimateButton from '../components/extended/AnimateButton';
-import { SET_BORDER_RADIUS, SET_FONT_FAMILY } from "../store/actions";
+import { SET_BORDER_RADIUS, SET_FONT_FAMILY } from "../store/actions/actions";
 import { gridSpacing } from "../store/constant";
 import {IconSettings} from "@tabler/icons-react";
 

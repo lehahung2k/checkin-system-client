@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Cookies from 'js-cookie';
 import Img from "../../../../assets/images/Frame-1729.webp";
 import './Login.scss'
 import authApi from "../../../../services/authApi";
 import MuiNotification from "../../../../components/Notification";
-
-// const AccessTokenContext = createContext<string | null>(null);
-
-// const useAccessToken = () => useContext(AccessTokenContext);
-
+import {useDispatch, useSelector} from "react-redux";
+import {LOGIN} from "../../../../store/actions/authAction";
 
 const Login = () => {
+    const dispatch = useDispatch();
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [formErrors, setFormErrors] = useState({ username: "", password: "" });
-    const [accessToken, setAccessToken] = useState<string | null>(null);
     const [rememberMe, setRememberMe] = useState(false);
     const [isSnackbarOpen, setIsSnackbarOpen] = useState<boolean>(false);
     const [successMessage] = useState<string>("");
@@ -25,9 +21,8 @@ const Login = () => {
     };
 
     const navigate = useNavigate();
-    if (Cookies.get('accessToken')) {
-        navigate('/');
-    }
+
+    const userInfo = useSelector((state: any) => state.auth.user);
 
     const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -37,18 +32,9 @@ const Login = () => {
                 .loginApi(data)
                 .then((res) => {
                     const { accessToken, user } = res.data.payload;
-                    setAccessToken(accessToken);
-                    // Save accessToken to cookie and other to storage
-                    Cookies.set('accessToken', accessToken);
+                    dispatch(LOGIN(accessToken, user));
                     localStorage.setItem('fullName', user.fullName);
                     localStorage.setItem('companyName', user.companyName);
-                    switch (user.role) {
-                        case 'admin':
-                        case 'tenant':
-                        case 'poc':
-                            return navigate('');
-                        default: return navigate('/auth/login');
-                    }
                 })
                 .catch((e) => {
                     setIsSnackbarOpen(true);
@@ -59,12 +45,11 @@ const Login = () => {
     };
 
     useEffect(() => {
-        // Do something with the access token when it changes, e.g., redirect the user to a logged-in page
-        if (accessToken) {
-            window.location.reload();
-            navigate('/');
+        if (userInfo.role) {
+            navigate("/", { replace: true });
         }
-    }, [accessToken, navigate]);
+        else navigate("/auth/login", { replace: true });
+    }, [userInfo]);
 
     const validateForm = () => {
         let errors = { username: "", password: "" };
