@@ -7,6 +7,7 @@ import dateTimeCalc from "../../../services/dateTimeCalc";
 import SearchBoxAction from "../../../components/cards/SearchBoxAction";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { IconEye } from "@tabler/icons-react"
+import {download, generateCsv, mkConfig} from "export-to-csv";
 
 interface EventData {
     eventId: string;
@@ -19,6 +20,7 @@ interface EventData {
 
 const EventListsAdmin = () => {
     const [events, setEvents] = useState<EventData[]>([]);
+    const csvConfig = mkConfig({ useKeysAsHeaders: true });
 
     const getEvents = () => {
         eventsApi
@@ -35,6 +37,7 @@ const EventListsAdmin = () => {
     useEffect(() => {
         getEvents();
     }, []);
+
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: '#', minWidth: 50, flex: 0.01 },
@@ -72,6 +75,16 @@ const EventListsAdmin = () => {
 
     const handleViewDetails = (eventId: string) => {}
 
+    const handleCsvDownload = () => {
+        if (data) {
+            const csv = generateCsv(csvConfig)(data);
+            download({ ...csvConfig, filename: 'EventData' })(csv);
+        } else {
+            console.error('Data is undefined or null.');
+        }
+    };
+
+
     return (
         <MainCard title="Danh sách sự kiện:">
             <Grid container spacing={3}>
@@ -97,6 +110,9 @@ const EventListsAdmin = () => {
                     </SubCard>
                 </Grid>
             </Grid>
+            <IconButton onClick={handleCsvDownload} color="primary">
+                Download CSV
+            </IconButton>
         </MainCard>
     );
 }
