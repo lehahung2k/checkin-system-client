@@ -4,6 +4,7 @@ import style from './Welcome.module.scss'
 import { Box, Container, Grid, Typography, Button, CardContent, Card, CardMedia } from "@mui/material";
 import { Link } from 'react-router-dom';
 import { IconArrowBigRightFilled } from '@tabler/icons-react'
+import Footer from "../../../layout/MainLayout/Footer/Footer";
 
 const Welcome = () => {
     return (
@@ -109,38 +110,7 @@ const Welcome = () => {
                 </div>
             </Container>
             {/* Authors and copyright */}
-            <Box
-                sx={{
-                    width: "100%",
-                    height: "auto",
-                    backgroundColor: "secondary.main",
-                    paddingTop: "2rem",
-                    paddingBottom: "2rem",
-                }}
-            >
-                <Container maxWidth="lg">
-                    <Grid container direction="column" alignItems="center">
-                        <Grid item xs={12}>
-                            <Typography color="white" variant="h5">
-                                <b>{`Copyright © ${new Date().getFullYear()}`}</b>
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Typography variant="subtitle1"
-                                sx={{
-                                    color: "white",
-                                    paddingTop: "1rem"
-                                }}
-                            >
-                                {`Author `}
-                                <Link to="https://www.facebook.com/lehahung2000/" target='_blank' className="footer-link"><b>Le Ha Hung</b></Link>
-                                {` references `}
-                                <Link to="https://www.facebook.com/nguyenductien000/" target='_blank' className="footer-link"><b>MSc. Nguyen Duc Tien</b></Link>
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </Container>
-            </Box>
+            <Footer />
         </div>
     );
 };
