@@ -30,6 +30,10 @@ class AuthApi {
         return axios.post(registerUrl, data);
     };
 
+    confirmApi = (confirmMailToken: string): Promise<AxiosResponse> => {
+        const confirmUrl = `${baseUrl}/confirm`;
+        return axios.post(confirmUrl, { confirmMailToken });
+    }
 }
 
 const authApi = new AuthApi();
