@@ -19,6 +19,11 @@ interface RegisterData {
     role: string;
 }
 
+interface forgotPassData {
+    newPassword: string;
+    confirmMailToken: string;
+}
+
 class AuthApi {
     loginApi = (data: LoginData): Promise<AxiosResponse> => {
         const loginUrl = `${baseUrl}/login`;
@@ -31,8 +36,18 @@ class AuthApi {
     };
 
     confirmApi = (confirmMailToken: string): Promise<AxiosResponse> => {
-        const confirmUrl = `${baseUrl}/confirm`;
+        const confirmUrl = `${baseUrl}/register/confirm`;
         return axios.post(confirmUrl, { confirmMailToken });
+    }
+
+    forgetPassApi = (email: string): Promise<AxiosResponse> => {
+        const forgetPassUrl = `${baseUrl}/forget-pass`;
+        return axios.post(forgetPassUrl, { email });
+    }
+
+    confirmForgotPassApi = (data: forgotPassData): Promise<AxiosResponse> => {
+        const confirmForgotPassUrl = `${baseUrl}/forget-pass/confirm`;
+        return axios.post(confirmForgotPassUrl, data);
     }
 }
 

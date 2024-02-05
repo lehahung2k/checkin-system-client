@@ -34,7 +34,6 @@ function Register() {
     const [loading, setLoading] = useState(false);
     const [isPoc, setIsPoc] = useState(false);
     const [verifyCode, setVerifyCode] = useState("");
-    const [activationEmail, setActivationEmail] = useState("");
 
     const navigate = useNavigate();
 
@@ -81,7 +80,6 @@ function Register() {
             .then((res) => {
                 setLoading(false);
                 setOpenSuccess(true);
-                setActivationEmail(data.email);
                 console.log(res.data.message);
             })
             .catch((e) => {
