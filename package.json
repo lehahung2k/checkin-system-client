@@ -35,6 +35,7 @@
     "react-data-table-component": "^7.5.3",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.7.1",
     "react-perfect-scrollbar": "^1.5.8",
     "react-redux": "^8.0.5",
     "react-router": "^6.10.0",
@@ -50,7 +51,7 @@
     "yup": "^1.1.1"
   },
   "scripts": {
-    "start": "PORT=2000 react-scripts start",
+    "start": "react-scripts start",
     "startSSL": "HTTPS=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

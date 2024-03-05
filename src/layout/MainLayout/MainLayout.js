@@ -130,6 +130,7 @@ const MainLayout = () => {
     // Function to remove the access token from Cookies
     const removeAccessToken = () => {
         Cookies.remove('accessToken');
+        Cookies.remove('user');
     };
 
 // Example usage: Check if the access token has expired and remove it if expired

@@ -33,6 +33,8 @@ function Register() {
     const [openFailure, setOpenFailure] = useState(false);
     const [loading, setLoading] = useState(false);
     const [isPoc, setIsPoc] = useState(false);
+    const [verifyCode, setVerifyCode] = useState("");
+
     const navigate = useNavigate();
 
     const initialValues: RegisterFormValues = {
@@ -86,6 +88,18 @@ function Register() {
                 setOpenFailure(true);
             })
     };
+
+    const confirmActivation = () => {
+        authApi
+            .confirmApi(verifyCode)
+            .then((res) => {
+                alert(res.data.message);
+                navigate("/auth/login");
+            })
+            .catch((e) => {
+                alert(e.response.data.message);
+            });
+    }
 
     return (
         <div className="body">
@@ -272,25 +286,27 @@ function Register() {
                 open={openSuccess}
                 onClose={() => {
                     setOpenSuccess(false);
-                    navigate("");
                 }}
                 aria-labelledby="responsive-dialog-title"
                 maxWidth="sm"
             >
                 <DialogContent>
                     <DialogContentText>
-                        Đã đăng ký tài khoản thành công!
+                        Vui lòng kiểm tra mã kích hoạt trong email của bạn
                     </DialogContentText>
+                    <hr />
+                    <input
+                        autoFocus
+                        className={"form-field"}
+                        id="activationCode"
+                        onChange={(event) => {
+                            setVerifyCode(event.target.value);
+                        }}
+                    />
                 </DialogContent>
                 <DialogActions>
-                    <Button
-                        onClick={() => {
-                            setOpenSuccess(false);
-                        }}
-                        autoFocus
-                    >
-                        <Link to="/auth/login">OK</Link>
-                    </Button>
+                    <Button onClick={() => setOpenSuccess(false)}>Hủy</Button>
+                    <Button onClick={() => confirmActivation()}>Xác Nhận</Button>
                 </DialogActions>
             </Dialog>
 
