@@ -32,3 +32,14 @@ npm start
 - Truy cập vào đường dẫn http://localhost:{port} (port mặc định là 3000)
 ## Deployment:
 [Hệ thống quản lý checkin](https://dangky.app)
+
+## Build với Docker:
+- Tạo các file .env.local và .env.prod
+- Build docker image cho local:
+```bash
+docker build --build-arg ENV=local -t checkin-client:local .
+```
+- Build docker image cho production:
+```bash
+docker build --build-arg ENV=prod -t checkin-client:prod .
+```
