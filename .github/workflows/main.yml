@@ -77,8 +77,8 @@ jobs:
           file: Dockerfile
           push: true
           tags: |
-            ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
-            ${{ env.DOCKER_IMAGE }}:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/checkin-system-client:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/checkin-system-client:latest
 
   deploy-production:
     needs: push-docker-image
@@ -86,9 +86,9 @@ jobs:
     
     uses: ./.github/workflows/ssh-deploy.yml
     with:
-      image_name: ${{ env.DOCKER_IMAGE }}
+      image_name: lehahung20/checkin-system-client
       image_tag: ${{ github.sha }}
-      container_name: ${{ env.CONTAINER_NAME }}
+      container_name: checkin-system-client
       host: ubuntu.pro.server
       port: "80"
     secrets:
