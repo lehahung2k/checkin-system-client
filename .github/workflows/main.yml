@@ -38,7 +38,7 @@ jobs:
             ${{ runner.OS }}-node-
 
       - name: Build React app
-        run: npm run build
+        run: CI=false npm run build
         env:
           NODE_ENV: production
 
