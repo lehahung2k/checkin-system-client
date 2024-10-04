@@ -58,19 +58,23 @@ jobs:
     needs: build-code
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:
           name: react-build
           path: ./build
 
-      - name: Create production Dockerfile
-        run: |
-          cat > Dockerfile << 'EOF'
-          FROM nginx:alpine
-          COPY ./build /usr/share/nginx/html
-          EXPOSE 80
-          EOF
+      - name: Build Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile
+          push: false
+          tags: ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+          load: true
 
   push-docker-image:
     needs: build-docker-image
@@ -83,15 +87,11 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: Dockerfile
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/checkin-system-client:${{ github.sha }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/checkin-system-client:latest
+      - name: Push Docker image
+        run: |
+          docker push ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+          docker tag ${{ env.DOCKER_IMAGE }}:${{ github.sha }} ${{ env.DOCKER_IMAGE }}:latest
+          docker push ${{ env.DOCKER_IMAGE }}:latest
 
   deploy-production:
     needs: push-docker-image
