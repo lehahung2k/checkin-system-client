@@ -1,0 +1,55 @@
+name: SSH and Deploy Workflow
+
+on:
+  workflow_call:
+    inputs:
+      image_name:
+        required: true
+        type: string
+      image_tag:
+        required: true
+        type: string
+      container_name:
+        required: true
+        type: string
+      host:
+        required: true
+        type: string
+      port:
+        required: true
+        type: string
+    secrets:
+      PRIVATE_KEY:
+        required: true
+      SSH_CONFIG:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup SSH
+        run: |
+          eval $(ssh-agent -s)
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${{ secrets.PRIVATE_KEY }}" | base64 -d > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-add ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_CONFIG }}" | base64 -d > ~/.ssh/config
+          chmod 600 ~/.ssh/config
+
+      - name: Deploy Container
+        run: |
+          ssh ${{ inputs.host }} "
+            set -e
+            docker pull ${{ inputs.image_name }}:${{ inputs.image_tag }}
+            docker stop ${{ inputs.container_name }} || true
+            docker rm ${{ inputs.container_name }} || true
+            docker run -d \
+              --name ${{ inputs.container_name }} \
+              -p ${{ inputs.port }}:80 \
+              --restart unless-stopped \
+              ${{ inputs.image_name }}:${{ inputs.image_tag }}
+            docker image prune -f
+          "

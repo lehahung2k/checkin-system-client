@@ -1,0 +1,96 @@
+name: Build and Deploy React App
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/*'
+      - develop
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  DOCKER_IMAGE: lehahung20/checkin-system-client
+  CONTAINER_NAME: checkin-system-client
+
+jobs:
+  build-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build React app
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: react-build
+          path: ./build
+
+  build-docker-image:
+    needs: build-code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: react-build
+          path: ./build
+
+      - name: Create production Dockerfile
+        run: |
+          cat > Dockerfile << 'EOF'
+          FROM nginx:alpine
+          COPY ./build /usr/share/nginx/html
+          EXPOSE 80
+          EOF
+
+  push-docker-image:
+    needs: build-docker-image
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+            ${{ env.DOCKER_IMAGE }}:latest
+
+  deploy-production:
+    needs: push-docker-image
+    if: github.ref == 'refs/heads/main' 
+    
+    uses: ./.github/workflows/ssh-deploy.yml
+    with:
+      image_name: ${{ env.DOCKER_IMAGE }}
+      image_tag: ${{ github.sha }}
+      container_name: ${{ env.CONTAINER_NAME }}
+      host: ubuntu.pro.server
+      port: "80"
+    secrets:
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+      SSH_CONFIG: ${{ secrets.SSH_CONFIG }}
