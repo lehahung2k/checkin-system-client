@@ -36,6 +36,12 @@ jobs:
           key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.OS }}-node-
+      
+      - name: Create .env file
+        run: |
+          echo "PORT=${{ secrets.PORT }}" >> .env
+          echo "REACT_APP_BASE_URL=${{ secrets.REACT_APP_BASE_URL }}" >> .env
+          echo "REACT_APP_ACCESS_TOKEN_SECRET_KEY=${{ secrets.REACT_APP_ACCESS_TOKEN_SECRET_KEY }}" >> .env
 
       - name: Build React app
         run: CI=false npm run build
