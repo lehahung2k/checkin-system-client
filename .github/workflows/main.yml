@@ -19,24 +19,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '20.18.0'
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Setup npm cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-node-
-      
       - name: Create .env file
         run: |
           echo "PORT=${{ secrets.PORT }}" >> .env
@@ -46,7 +35,9 @@ jobs:
           cat .env
 
       - name: Build React app
-        run: CI=false npm run build
+        run: |
+          npm install
+          CI=false npm run build
         env:
           NODE_ENV: production
 
@@ -61,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Download build artifacts
         uses: actions/download-artifact@v3
@@ -70,7 +61,7 @@ jobs:
           path: ./build
 
       - name: Build Docker image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           context: .
           file: Dockerfile
@@ -98,7 +89,7 @@ jobs:
   deploy-production:
     needs: push-docker-image
     if: github.ref == 'refs/heads/main' 
-    
+
     uses: ./.github/workflows/ssh-deploy.yml
     with:
       image_name: lehahung20/checkin-system-client
