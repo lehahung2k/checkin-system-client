@@ -34,22 +34,13 @@ jobs:
       github.event.pull_request.base.ref == 'develop' ||
       github.ref == 'refs/heads/main'
     steps:
-      - name: Wait for manual approval
-        if: github.event_name == 'workflow_dispatch' && github.event.inputs.build_type == 'manual'
-        uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ secrets.GITHUB_TOKEN }}
-          approvers: ${{ github.actor }}
-          minimum-approvals: 1
-          message: 'Approve to start building the code'
-          
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v2
         with:
-          node-version: '20.18.0'
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
@@ -91,7 +82,7 @@ jobs:
           path: ./build
 
       - name: Build Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v2
         with:
           context: .
           file: Dockerfile
