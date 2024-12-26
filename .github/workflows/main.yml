@@ -34,6 +34,15 @@ jobs:
       github.event.pull_request.base.ref == 'develop' ||
       github.ref == 'refs/heads/main'
     steps:
+      - name: Wait for manual approval
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.build_type == 'manual'
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ secrets.GITHUB_TOKEN }}
+          approvers: ${{ github.actor }}
+          minimum-approvals: 1
+          message: 'Approve to start building the code'
+          
       - name: Checkout code
         uses: actions/checkout@v3
 
