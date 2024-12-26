@@ -9,6 +9,15 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Select build type'
+        required: true
+        type: choice
+        options:
+          - automatic
+          - manual
+        default: 'automatic'
 
 env:
   DOCKER_IMAGE: lehahung20/checkin-system-client
@@ -17,7 +26,20 @@ env:
 jobs:
   build-code:
     runs-on: ubuntu-latest
+    if: |
+      (github.event_name != 'workflow_dispatch') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.build_type == 'automatic') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.build_type == 'manual')
     steps:
+      - name: Wait for manual approval
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.build_type == 'manual'
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ secrets.GITHUB_TOKEN }}
+          approvers: ${{ github.actor }}
+          minimum-approvals: 1
+          message: 'Approve to start building the code'
+          
       - name: Checkout code
         uses: actions/checkout@v3
 
