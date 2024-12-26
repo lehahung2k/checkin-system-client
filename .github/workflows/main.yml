@@ -8,9 +8,9 @@ on:
         required: true
         type: choice
         options:
-          - automatic
-          - manual
-        default: 'automatic'
+          - build
+          - skip
+        default: 'build'
 
 env:
   DOCKER_IMAGE: lehahung20/checkin-system-client
@@ -19,39 +19,32 @@ env:
 jobs:
   build-code:
     runs-on: ubuntu-latest
-    if: |
-      (github.event_name != 'workflow_dispatch') ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.build_type == 'automatic') ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.build_type == 'manual')
+    if: github.event.inputs.build_type == 'build'
     steps:
-      - name: Wait for manual approval
-        if: github.event_name == 'workflow_dispatch' && github.event.inputs.build_type == 'manual'
-        uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ secrets.GITHUB_TOKEN }}
-          approvers: ${{ github.actor }}
-          minimum-approvals: 1
-          message: 'Approve to start building the code'
-          
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v2
         with:
-          node-version: '20.18.0'
+          node-version: '20'
 
-      - name: Create .env file
+      - name: Install dependencies
+        run: npm install
+
+      - name: Setup npm cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+      
+      - name: Build React app
         run: |
           echo "PORT=${{ secrets.PORT }}" >> .env
           echo "REACT_APP_BASE_URL=${{ secrets.REACT_APP_BASE_URL }}" >> .env
           echo "REACT_APP_ACCESS_TOKEN_SECRET_KEY=${{ secrets.REACT_APP_ACCESS_TOKEN_SECRET_KEY }}" >> .env
-          ls -la
-          cat .env
-
-      - name: Build React app
-        run: |
-          npm install
           CI=false npm run build
         env:
           NODE_ENV: production
@@ -76,7 +69,7 @@ jobs:
           path: ./build
 
       - name: Build Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v2
         with:
           context: .
           file: Dockerfile
@@ -103,7 +96,7 @@ jobs:
 
   deploy-production:
     needs: push-docker-image
-    if: github.ref == 'refs/heads/main' 
+    if: github.ref == 'refs/heads/main'
 
     uses: ./.github/workflows/ssh-deploy.yml
     with:
