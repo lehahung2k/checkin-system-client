@@ -122,5 +122,3 @@ build
 !.vscode/extensions.json
 
 .DS_Store
-
-package-lock.json

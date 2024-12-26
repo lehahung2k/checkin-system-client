@@ -1,0 +1,110 @@
+name: Build and Deploy React App
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Select build type'
+        required: true
+        type: choice
+        options:
+          - build
+          - skip
+        default: 'build'
+
+env:
+  DOCKER_IMAGE: lehahung20/checkin-system-client
+  CONTAINER_NAME: checkin-system-client
+
+jobs:
+  build-code:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.build_type == 'build'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Setup npm cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+      
+      - name: Build React app
+        run: |
+          echo "PORT=${{ secrets.PORT }}" >> .env
+          echo "REACT_APP_BASE_URL=${{ secrets.REACT_APP_BASE_URL }}" >> .env
+          echo "REACT_APP_ACCESS_TOKEN_SECRET_KEY=${{ secrets.REACT_APP_ACCESS_TOKEN_SECRET_KEY }}" >> .env
+          CI=false npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: react-build
+          path: ./build
+
+  build-docker-image:
+    needs: build-code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: react-build
+          path: ./build
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile
+          push: false
+          tags: ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+          load: true
+
+  push-docker-image:
+    needs: build-docker-image
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push Docker image
+        run: |
+          docker push ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+          docker tag ${{ env.DOCKER_IMAGE }}:${{ github.sha }} ${{ env.DOCKER_IMAGE }}:latest
+          docker push ${{ env.DOCKER_IMAGE }}:latest
+
+  deploy-production:
+    needs: push-docker-image
+    if: github.ref == 'refs/heads/main'
+
+    uses: ./.github/workflows/ssh-deploy.yml
+    with:
+      image_name: lehahung20/checkin-system-client
+      image_tag: ${{ github.sha }}
+      container_name: checkin-system-client
+      host: ubuntu.pro.server
+      port: "80"
+    secrets:
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+      SSH_CONFIG: ${{ secrets.SSH_CONFIG }}
