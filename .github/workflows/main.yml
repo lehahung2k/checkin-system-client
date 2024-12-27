@@ -28,7 +28,11 @@ env:
 jobs:
   build-code:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop' || github.head_ref == 'develop' || github.event.pull_request.base.ref == 'develop'
+    if: |
+      github.ref == 'refs/heads/develop' || 
+      github.head_ref == 'develop' || 
+      github.event.pull_request.base.ref == 'develop' ||
+      github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
