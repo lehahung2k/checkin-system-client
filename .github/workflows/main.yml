@@ -1,16 +1,27 @@
 name: Build and Deploy React App
 
 on:
+  push:
+    branches: 
+      - develop
+      - staging
+      - 'feat/*'
+      - main
+  pull_request:
+    branches:
+      - develop
+      - staging
+      - main
   workflow_dispatch:
     inputs:
-      build_type:
-        description: 'Select build type'
+      deploy_type:
+        description: 'Deploy code?'
         required: true
         type: choice
         options:
-          - build
-          - skip
-        default: 'build'
+          - 'yes'
+          - 'no'
+        default: 'no'
 
 env:
   DOCKER_IMAGE: lehahung20/checkin-system-client
@@ -96,7 +107,10 @@ jobs:
 
   deploy-production:
     needs: push-docker-image
-    if: github.ref == 'refs/heads/main'
+    if: |
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch' &&
+      github.event.inputs.deploy_type == 'yes'
 
     uses: ./.github/workflows/ssh-deploy.yml
     with:
