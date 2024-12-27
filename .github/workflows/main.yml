@@ -88,7 +88,10 @@ jobs:
 
   push-docker-image:
     needs: build-docker-image
-    if: github.ref == 'refs/heads/main'
+    if: |
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch' &&
+      github.event.inputs.deploy_type == 'yes'
     runs-on: ubuntu-latest
     steps:
       - name: Login to Docker Hub
