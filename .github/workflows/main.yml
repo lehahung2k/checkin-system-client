@@ -71,9 +71,8 @@ jobs:
   build-and-push-docker:
     needs: build-code
     if: |
-      github.ref == 'refs/heads/main' &&
-      github.event_name == 'workflow_dispatch' &&
-      github.event.inputs.deploy_type == 'yes'
+      github.ref == 'refs/heads/develop' ||
+      github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
