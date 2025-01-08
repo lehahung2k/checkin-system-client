@@ -22,8 +22,7 @@ on:
         default: 'no'
 
 env:
-  DOCKER_IMAGE: lehahung20/checkin-system-client
-  CONTAINER_NAME: checkin-system-client
+  DOCKER_IMAGE: lehahung2k/checkin-system-client
 
 jobs:
   build-code:
@@ -92,11 +91,10 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker info
           docker build -t ${{ env.DOCKER_IMAGE }}:${{ github.sha }} .
           docker push ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
           docker tag ${{ env.DOCKER_IMAGE }}:${{ github.sha }} ${{ env.DOCKER_IMAGE }}:latest
-          docker push ${{ env.DOCKER_IMAGE }}:latest      
+          docker push ${{ env.DOCKER_IMAGE }}:latest
 
   deploy-production:
     needs: build-and-push-docker
@@ -107,7 +105,7 @@ jobs:
 
     uses: ./.github/workflows/ssh-deploy.yml
     with:
-      image_name: lehahung20/checkin-system-client
+      image_name: lehahung2k/checkin-system-client
       image_tag: ${{ github.sha }}
       container_name: checkin-system-client
       host: ubuntu.pro.server
