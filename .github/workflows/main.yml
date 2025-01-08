@@ -52,7 +52,7 @@ jobs:
           key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.OS }}-node-
-      
+
       - name: Build React app
         run: |
           echo "PORT=${{ secrets.PORT }}" >> .env
@@ -68,8 +68,12 @@ jobs:
           name: react-build
           path: ./build
 
-  build-docker-image:
+  build-and-push-docker:
     needs: build-code
+    if: |
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch' &&
+      github.event.inputs.deploy_type == 'yes'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -81,37 +85,24 @@ jobs:
           name: react-build
           path: ./build
 
-      - name: Build Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: Dockerfile
-          push: false
-          tags: ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
-          load: true
-
-  push-docker-image:
-    needs: build-docker-image
-    if: |
-      github.ref == 'refs/heads/main' &&
-      github.event_name == 'workflow_dispatch' &&
-      github.event.inputs.deploy_type == 'yes'
-    runs-on: ubuntu-latest
-    steps:
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push Docker image
-        run: |
-          docker push ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
-          docker tag ${{ env.DOCKER_IMAGE }}:${{ github.sha }} ${{ env.DOCKER_IMAGE }}:latest
-          docker push ${{ env.DOCKER_IMAGE }}:latest
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+            ${{ env.DOCKER_IMAGE }}:latest
 
   deploy-production:
-    needs: push-docker-image
+    needs: build-and-push-docker
     if: |
       github.ref == 'refs/heads/main' &&
       github.event_name == 'workflow_dispatch' &&
