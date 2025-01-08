@@ -108,8 +108,8 @@ jobs:
       image_name: lehahung2k/checkin-system-client
       image_tag: ${{ github.sha }}
       container_name: checkin-system-client
-      host: ubuntu.pro.server
-      port: "80"
+      host: checkin-server
+      port: "2000"
     secrets:
       PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
       SSH_CONFIG: ${{ secrets.SSH_CONFIG }}

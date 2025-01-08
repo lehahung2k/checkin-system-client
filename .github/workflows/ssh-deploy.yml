@@ -48,7 +48,7 @@ jobs:
             docker rm ${{ inputs.container_name }} || true
             docker run -d \
               --name ${{ inputs.container_name }} \
-              -p ${{ inputs.port }}:80 \
+              -p ${{ inputs.port }}:2000 \
               --restart unless-stopped \
               ${{ inputs.image_name }}:${{ inputs.image_tag }}
             docker image prune -f
