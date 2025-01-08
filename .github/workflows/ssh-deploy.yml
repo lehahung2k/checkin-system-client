@@ -27,6 +27,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: 'Production'
     steps:
       - name: Setup SSH
         run: |
